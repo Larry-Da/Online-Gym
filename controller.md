@@ -139,7 +139,7 @@
 
 ```json
 {
-	"request":"getCustomerByName",
+	"request":"getCusIdByName",
 	"payload":{
 		"cusName":"goteng"
 	}
@@ -207,7 +207,7 @@
 
 ```json
 {
-	"request":"getCustomerByGender",
+	"request":"getCusIdsByGender",
 	"payload":{
 		"gender":"M"
 	}
@@ -287,6 +287,7 @@
 		"cusId":"C001"
 	}
 }
+
 ```
 
 **Response-fields**:
@@ -305,6 +306,7 @@
 		"Expiretime":"2020-05-01"
 	}
 }
+
 
 
 ```
@@ -339,6 +341,7 @@
 		"membershipLevel":"L1"
 	}
 }
+
 ```
 
 **Response-fields**:
@@ -357,6 +360,7 @@
 		"num":"100"
 	}
 }
+
 ```
 
 
@@ -389,6 +393,7 @@
 		"month":"June"
 	}
 }
+
 ```
 
 **Response-fields**:
@@ -407,6 +412,7 @@
 		"income":"100000"
 	}
 }
+
 ```
 
 
@@ -439,6 +445,7 @@
 		"cusId":"C001"
 	}
 }
+
 ```
 
 **Response-fields**:
@@ -457,6 +464,7 @@
 		"videoIds":["V001","V002"]
 	}
 }
+
 ```
 
 ### 4.2. Add A Video
@@ -499,6 +507,7 @@
     "level": "easy"
   }
 }
+
 ```
 
 **Response-fields**:
@@ -513,6 +522,7 @@
 {
 	"status":"success",
 }
+
 ```
 
 ### 4.3. Modify A Video
@@ -555,6 +565,7 @@
     "level": "easy"
   }
 }
+
 ```
 
 **Response-fields**:
@@ -569,6 +580,7 @@
 {
 	"status":"success",
 }
+
 ```
 
 ### 
