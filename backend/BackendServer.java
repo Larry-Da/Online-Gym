@@ -11,7 +11,7 @@ public class BackendServer {
         try {
             JSONObject object = JSON.parseObject(clientRequestStr);
 
-            RequestHandler rh = RequestHandlerFactory.creatHandler(object.getString("request"));
+            RequestHandler rh = RequestHandlerFactory.createHandler(object.getString("request"));
 
             return rh.execute(object.getJSONObject("payload").toJSONString());
         } catch (Exception ex) {

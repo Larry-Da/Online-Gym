@@ -1,7 +1,7 @@
 package request;
 
 public class RequestHandlerFactory {
-    public static RequestHandler creatHandler(String type) {
+    public static RequestHandler createHandler(String type) {
         if (type.equals("getSessionIdsByCusId")) {
             return new RequestGetSessionIdsByCusIdHandler();
         } else if (type.equals("getCustomerIds")) {
