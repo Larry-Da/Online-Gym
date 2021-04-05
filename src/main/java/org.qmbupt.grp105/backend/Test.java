@@ -2,7 +2,7 @@ public class Test {
     public static void main(String[] args) {
 
         System.out.println(BackendServer.execute("{\"request\": \"getSessionIdsByCusId\",\"payload\":{\"cusId\": \"Cs13\"}}"));
-        
+
         
         // 1.1
         System.out.println("1.1\n" + BackendServer.execute("{\"request\": \"getCustomerIds\",\"payload\":{}}"));
