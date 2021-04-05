@@ -17,7 +17,7 @@ public class IO {
             return sb.toString();
         }
     }
-protected static void write(String fileName, String str) throws IOException {
+    protected static void write(String fileName, String str) throws IOException {
         File file = new File("./db/" + fileName);
         PrintStream ps = new PrintStream(new FileOutputStream(file));
         ps.println(str);
