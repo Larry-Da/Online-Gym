@@ -5,13 +5,14 @@
         "password": "123456",
         "sessionIds": ["s1", "s3", "s123123"],
         "membershipLevel": 0,
-        "expireDate": null,
+        "expireDate": "",
         "xp": 0,
         "phoneNo": "18235226823",
         "email": "1770927746@qq.com",
         "gender": "M",
         "dateOfBirth": "2000-04-17",
-        "balance": 20
+        "balance": 20,
+        "videosHistory": []
     },
     {
         "cusId": "Cs15",
@@ -25,6 +26,7 @@
         "email": "foo@outlook.com",
         "gender": "F",
         "dateOfBirth": "2010-04-17",
-        "balance": 200
+        "balance": 200,
+        "videosHistory": ["V001"]
     }
 ]

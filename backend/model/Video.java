@@ -9,4 +9,5 @@ public class Video {
     protected String category;
     protected int likes;
     protected int viewsCount;
+    protected String level;
 }
