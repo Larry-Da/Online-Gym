@@ -1,4 +1,4 @@
-package request;
+package org.qmbupt.grp105.backend.request;
 
 public class RequestHandlerFactory {
     public static RequestHandler createHandler(String type) {

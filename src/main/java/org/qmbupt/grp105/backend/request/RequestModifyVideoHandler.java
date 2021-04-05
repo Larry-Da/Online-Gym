@@ -1,4 +1,4 @@
-package request;
+package org.qmbupt.grp105.backend.request;
 
 
 import com.alibaba.fastjson.*;
