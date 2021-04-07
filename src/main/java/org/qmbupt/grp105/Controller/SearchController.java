@@ -1,12 +1,9 @@
-package Controller;
+package org.qmbupt.grp105.Controller;
 
 import java.util.Comparator;
 import java.util.Collections;
 
-import Entity.Customer;
-import Entity.Request;
-import Entity.Response;
-import Entity.Video;
+import org.qmbupt.grp105.Entity.*;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 

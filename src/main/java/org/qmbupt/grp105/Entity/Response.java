@@ -1,6 +1,7 @@
-package Entity;
+package org.qmbupt.grp105.Entity;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+
 
 import java.util.*;
 public class Response {
@@ -10,6 +11,7 @@ public class Response {
         JsonObject jsonObject = new JsonParser().parse(json).getAsJsonObject();
         this.status = jsonObject.get("status").getAsString();
         this.payload = jsonObject.getAsJsonObject("payload");
+
     }
 
     public String getStatus() {

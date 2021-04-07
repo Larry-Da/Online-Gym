@@ -1,5 +1,6 @@
-package Entity;
+package org.qmbupt.grp105.Entity;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Customer {
@@ -15,6 +16,7 @@ public class Customer {
     private String remainTime;//会员剩余时间
     private int balance;//余额
     private int points; //积分
+    private ArrayList<String> videoIds;
     //private String exerciseLevel;
 
     public String getCusId() {
@@ -113,6 +115,16 @@ public class Customer {
         this.points = points;
     }
 
+    public ArrayList<String> getVideoIds() {
+        return videoIds;
+    }
+
+    public void setVideoIds(ArrayList<String> videoIds) {
+        this.videoIds = videoIds;
+    }
+    public static String[] getAllAttibutes() {
+        return new String[]{"cusId","age","name","password","phoneNo","email","gender","dateOfBirth","membershipLevel","remainTime","balance","points","videoIds"};
+    }
     public Customer(String cusId, int age, String name, String password, String phoneNo, String email, char gender,
                     Date dateOfBirth, String membershipLevel, String remainTime, int balance, int points) {
         this.cusId = cusId;
@@ -128,6 +140,7 @@ public class Customer {
         this.balance = balance;
         this.points = points;
     }
+
     @Override
     public String toString() {
         return "Customer{" +
@@ -140,7 +153,7 @@ public class Customer {
                 ", gender=" + gender +
                 ", dateOfBirth=" + dateOfBirth +
                 ", membershipLevel='" + membershipLevel + '\'' +
-                ", remainTime='" + remainTime + '\'' +
+                ", remainTime=" + remainTime +
                 ", balance=" + balance +
                 ", points=" + points +
                 '}';

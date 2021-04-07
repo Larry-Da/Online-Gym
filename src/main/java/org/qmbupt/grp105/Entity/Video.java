@@ -1,4 +1,4 @@
-package Entity;
+package org.qmbupt.grp105.Entity;
 
 public class Video {
     private String videoId;
@@ -17,7 +17,7 @@ public class Video {
 //    }
 //    public ArrayList<Videos> getVideoHistory();
 
-    public Video(String videoId, String url, String name, Double rating, String category, int likes, int viewCounts) {
+    public Video(String videoId, String url, String name, Double rating, String category, int likes, int viewCounts,String level) {
         this.videoId = videoId;
         this.url = url;
         this.name = name;
@@ -25,6 +25,15 @@ public class Video {
         this.category = category;
         this.likes = likes;
         this.viewCounts = viewCounts;
+        this.level = level;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
     }
 
     public String getVideoId() {
@@ -83,6 +92,9 @@ public class Video {
         this.viewCounts = viewCounts;
     }
 
+    public static String[] getAllAttributes() {
+        return new String[]{"videoId","url","name","rating","category","likes","viewCounts","level"};
+    }
     @Override
     public String toString() {
         return "Video{" +

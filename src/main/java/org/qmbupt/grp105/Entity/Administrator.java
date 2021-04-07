@@ -1,4 +1,4 @@
-package Entity;
+package org.qmbupt.grp105.Entity;
 
 public class Administrator {
     private String adminId;

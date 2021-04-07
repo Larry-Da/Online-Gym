@@ -1,4 +1,4 @@
-package Entity;
+package org.qmbupt.grp105.Entity;
 import java.util.Date;
 public class LiveSession {
     private String liveSessionId;
@@ -11,8 +11,12 @@ public class LiveSession {
     private int viewCounts; // 访问量 -> hottest
     private String Customer_cusId;
     private String Coach_coachId;
-
-    public LiveSession(String liveSessionId, String url, Double rating, String category, Date startTime, Date endTime, int likes, int viewCounts, String customer_cusId, String coach_coachId) {
+    private int availableNum;
+    public static String[] getAllAttributes() {
+        return new String[]{"liveSessionId","url","rating","category","startTime","endTime","likes","viewCounts","Customer_cusId","Coach_coachId","availableNum"};
+    }
+    public LiveSession(String liveSessionId, String url, Double rating, String category, Date startTime, Date endTime,
+                       int likes, int viewCounts, String customer_cusId, String coach_coachId, int availableNum) {
         this.liveSessionId = liveSessionId;
         this.url = url;
         this.rating = rating;
@@ -23,7 +27,10 @@ public class LiveSession {
         this.viewCounts = viewCounts;
         Customer_cusId = customer_cusId;
         Coach_coachId = coach_coachId;
+        this.availableNum = availableNum;
     }
+
+
 
     public String getLiveSessionId() {
         return liveSessionId;
@@ -105,6 +112,14 @@ public class LiveSession {
         Coach_coachId = coach_coachId;
     }
 
+    public int getAvailableNum() {
+        return availableNum;
+    }
+
+    public void setAvailableNum(int availableNum) {
+        this.availableNum = availableNum;
+    }
+
     @Override
     public String toString() {
         return "LiveSession{" +
@@ -118,6 +133,7 @@ public class LiveSession {
                 ", viewCounts=" + viewCounts +
                 ", Customer_cusId='" + Customer_cusId + '\'' +
                 ", Coach_coachId='" + Coach_coachId + '\'' +
+                ", availableNum=" + availableNum +
                 '}';
     }
 }

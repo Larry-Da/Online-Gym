@@ -1,5 +1,4 @@
-package Entity;
-
+package org.qmbupt.grp105.Entity;
 public class Coach {
     private String coachId;
     private int age;

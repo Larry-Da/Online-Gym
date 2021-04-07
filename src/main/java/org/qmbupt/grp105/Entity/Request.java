@@ -1,4 +1,4 @@
-package Entity;
+package org.qmbupt.grp105.Entity;
 
 import java.util.HashMap;
 import java.util.Map;
