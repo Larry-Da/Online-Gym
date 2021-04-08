@@ -1,4 +1,8 @@
-package UI;
+package org.qmbupt.grp105.UI;
+
+
+import org.qmbupt.grp105.UI.MyUIComponent.*;
+import org.qmbupt.grp105.UI.MyUIComponent.MenuBar;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,7 +17,7 @@ public class HomePanel extends JPanel
         this.setLayout(null);
         this.add(mb);
 
-        String path = "/Users/daliangrun/Documents/1/src/Fitness-for-10-Home-Licensing-Information.jpg";
+        String path = UIStyle.HomePanel_BackGround;
         int barHeight = (int)(UIStyle.height) / 10;
         int picHeight = (int) UIStyle.height - barHeight;
         JLabel picture = new Picture(path, (int) UIStyle.width, picHeight);

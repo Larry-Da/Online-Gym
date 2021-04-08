@@ -1,4 +1,6 @@
-package UI;
+package org.qmbupt.grp105.UI.MyUIComponent;
+
+import org.qmbupt.grp105.UI.UIStyle;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,9 +15,10 @@ public class MenuBar extends JPanel
     TextButton ClassButton;
     TextButton NewsButton;
     TextButton ContactButton;
+
     public MenuBar(CardLayout cards, JPanel mainPanel)
     {
-        int buttonWidth = (int)(UIStyle.width / 2 / 7);
+        int buttonWidth = (int)(UIStyle.width / 2 / 6);
         int mid = (int)(UIStyle.width / 2);
         int barHeight = (int)(UIStyle.height) / 10;
         UIStyle.barHeight = barHeight;
@@ -25,11 +28,11 @@ public class MenuBar extends JPanel
         this.setBounds(0, 0, (int) UIStyle.width, barHeight);
         this.setBackground(UIStyle.COLOR_1);
 
-        HomePageButton = new TextButton(UIStyle.COLOR_1, UIStyle.COLOR_2, "HOMEPAGE", buttonWidth + mid, buttonHeight / 2, buttonWidth, buttonHeight, "small", false);
-        PersonalButton = new TextButton(UIStyle.COLOR_1, UIStyle.COLOR_2, "PERSONAL", 2 * buttonWidth + mid, buttonHeight / 2, buttonWidth, buttonHeight, "small", false);
-        ClassButton = new TextButton(UIStyle.COLOR_1, UIStyle.COLOR_2, "CLASSES", 3 * buttonWidth + mid, buttonHeight / 2, buttonWidth, buttonHeight, "small", false);
-        NewsButton = new TextButton(UIStyle.COLOR_1, UIStyle.COLOR_2, "NEWS", 4 * buttonWidth + mid, buttonHeight / 2, buttonWidth, buttonHeight, "small", false);
-        ContactButton = new TextButton(UIStyle.COLOR_1, UIStyle.COLOR_2, "CONTACTS", 5 * buttonWidth + mid, buttonHeight / 2, buttonWidth, buttonHeight, "small", false);
+        HomePageButton = new TextButton(buttonWidth + mid, buttonHeight, UIStyle.COLOR_1, UIStyle.COLOR_2, "HOMEPAGE",  buttonWidth, buttonHeight, "small", false);
+        PersonalButton = new TextButton(2 * buttonWidth + mid, buttonHeight, UIStyle.COLOR_1, UIStyle.COLOR_2, "PERSONAL",  buttonWidth, buttonHeight, "small", false);
+        ClassButton = new TextButton(3 * buttonWidth + mid, buttonHeight, UIStyle.COLOR_1, UIStyle.COLOR_2, "CLASSES",  buttonWidth, buttonHeight, "small", false);
+        NewsButton = new TextButton(4 * buttonWidth + mid, buttonHeight,UIStyle.COLOR_1, UIStyle.COLOR_2, "NEWS",  buttonWidth, buttonHeight, "small", false);
+        ContactButton = new TextButton(5 * buttonWidth + mid, buttonHeight, UIStyle.COLOR_1, UIStyle.COLOR_2, "CONTACTS",  buttonWidth, buttonHeight, "small", false);
 
         PersonalButton.addMouseListener(new MouseAdapter() {
             @Override
@@ -47,7 +50,7 @@ public class MenuBar extends JPanel
         ClassButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                cards.show(mainPanel, "classPanel");
+                cards.show(mainPanel, "virtualClassPanel");
             }
         });
         this.setLayout(null);

@@ -1,4 +1,6 @@
-package UI;
+package org.qmbupt.grp105.UI;
+
+import org.qmbupt.grp105.UI.MyUIComponent.MenuBar;
 
 import javax.swing.*;
 import java.awt.*;

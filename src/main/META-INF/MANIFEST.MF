@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Main-Class: org.qmbupt.grp105.UI.main
+Class-Path: commons-lang3-3.11.jar gson-2.8.6.jar
+

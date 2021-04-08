@@ -1,4 +1,4 @@
-package UI;
+package org.qmbupt.grp105.UI.MyUIComponent;
 
 import javax.swing.*;
 import java.awt.*;
@@ -34,10 +34,10 @@ public class Picture extends JLabel
         int originalHeight = icon.getIconHeight();
         int desiredWidth;
         int desiredHeight;
-        if((x / y) > (originalWidth / originalHeight))
+        if(((double)x / y) < ((double)originalWidth / originalHeight))
         {
             desiredHeight = originalHeight;
-            desiredWidth = (int)(originalWidth * (double)x / y);
+            desiredWidth = (int)(originalHeight * (double)x / y);
         }
         else
         {

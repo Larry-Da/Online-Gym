@@ -1,4 +1,4 @@
-package UI;
+package org.qmbupt.grp105.UI;
 
 public class LoginToken
 {

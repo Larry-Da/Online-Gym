@@ -1,13 +1,14 @@
-package UI;
+package org.qmbupt.grp105.UI;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class MainPanel extends JPanel
 {
-    HomePanel homePanel;
-    PersonalPanel personalPanel;
-    ClassPanel classPanel;
+    private HomePanel homePanel;
+    private PersonalPanel personalPanel;
+    private VirtualClassPanel virtualClassPanel;
+
 
     public MainPanel()
     {
@@ -22,8 +23,8 @@ public class MainPanel extends JPanel
         this.add(personalPanel, "personalPanel");
         //personalPanel.setVisible(true);
 
-        classPanel = new ClassPanel(cards, this);
-        this.add(classPanel, "classPanel");
+        virtualClassPanel = new VirtualClassPanel(cards, this);
+        this.add(virtualClassPanel, "virtualClassPanel");
         //classPanel.setVisible(true);
 
 

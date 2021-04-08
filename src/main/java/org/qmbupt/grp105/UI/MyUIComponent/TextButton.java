@@ -1,10 +1,13 @@
-package UI;
+package org.qmbupt.grp105.UI.MyUIComponent;
 
-import java.awt.*;
+import org.qmbupt.grp105.UI.UIStyle;
+
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.*;
+
 public class TextButton extends JLabel implements MouseListener
 {
     private Color[] colors = {Color.BLACK, Color.WHITE};
@@ -12,6 +15,7 @@ public class TextButton extends JLabel implements MouseListener
     private String text;
     private Font font;
     private boolean backgroundChange;
+    private String aligned = "mid";
 
 
     public TextButton(Color background, Color foreground, String text, int x, int y, int width, int height, String size, boolean backgroundChange)
@@ -30,6 +34,53 @@ public class TextButton extends JLabel implements MouseListener
         this.text = text;
         colors[0] = background;
         colors[1] = foreground;
+
+        originalColors[0] = background;
+        originalColors[1] = foreground;
+
+        setBounds(x, y, width, height);
+
+        addMouseListener(this);
+
+    }
+    public TextButton(int centerx, int centery, Color background, Color foreground, String text, int width, int height, String size, boolean backgroundChange)
+    {
+        setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+        this.backgroundChange = backgroundChange;
+        if(size.equals("small"))
+        {
+            this.font = UIStyle.SMALL_FONT;
+        }
+        else if(size.equals("normal"))
+        {
+            this.font = UIStyle.NORMAL_FONT;
+        }
+        this.text = text;
+        colors[0] = background;
+        colors[1] = foreground;
+
+        originalColors[0] = background;
+        originalColors[1] = foreground;
+
+        int x = centerx - width / 2;
+        int y = centery - height / 2;
+        setBounds(x, y, width, height);
+
+        addMouseListener(this);
+
+    }
+
+    public TextButton(Color background, Color foreground, String text, int x, int y, int width, int height, Font font, boolean backgroundChange, String align)// used for specifying align
+    {
+        setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+        this.backgroundChange = backgroundChange;
+        this.font = font;
+        this.text = text;
+        colors[0] = background;
+        colors[1] = foreground;
+        this.aligned = align;
 
         originalColors[0] = background;
         originalColors[1] = foreground;
@@ -90,6 +141,19 @@ public class TextButton extends JLabel implements MouseListener
         FontMetrics metrics = g2.getFontMetrics(font);
         int x2 = (getWidth() - metrics.stringWidth(text)) / 2;
         int y2 = ((getHeight() - metrics.getHeight()) / 2) + metrics.getAscent();
+        if(aligned.equals("mid")) {
+            x2 = (getWidth() - metrics.stringWidth(text)) / 2;
+            y2 = ((getHeight() - metrics.getHeight()) / 2) + metrics.getAscent();
+        }
+        else if(aligned.equals("left")){
+            x2 = 0;
+            y2 = ((getHeight() - metrics.getHeight()) / 2) + metrics.getAscent();
+        }
+        else if (aligned.equals("right"))
+        {
+            x2 = (getWidth() - metrics.stringWidth(text));
+            y2 = ((getHeight() - metrics.getHeight()) / 2) + metrics.getAscent();
+        }
         g2.setPaint(colors[1]);
         g2.setFont(font);
 
