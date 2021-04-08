@@ -18,8 +18,7 @@ public class VideoControllerTest {
 
     @Test
     public void getAllVideos() {
-        ArrayList<Video> videos = new ArrayList<>();
-        videos = videoController.getAllVideos();
+        ArrayList<Video> videos = videoController.getAllVideos();
         for(Video video : videos) {
             System.out.println(video.toString());
         }
@@ -33,22 +32,21 @@ public class VideoControllerTest {
 
     @Test
     public void addVideo() {
-        Video video = new Video("V008","usr/local/bin","Sdfs",8.7,"Yoga",100,1000,"easy");
+        Video video = new Video("V098","usr/local","Sdwerrtyry",8.7,"Yoga",500,1000,"easy");
         boolean status = videoController.AddVideo(video);
         System.out.println(status);
     }
 
     @Test
     public void modifyVideo() {
-        Video video = new Video("V008","usr/local/bin","sldfjslfjskfjslkdfjsl",8.7,"Yoga",100,1000,"easy");
-        boolean status = videoController.AddVideo(video);
+        Video video = new Video("V014","usr/local","456sl",8.7,"Yoga",700,1000,"easy");
+        boolean status = videoController.modifyVideo(video);
         System.out.println(status);
     }
 
     @Test
     public void getVideosByCategory() {
-        ArrayList<Video> videos = new ArrayList<>();
-        videos = videoController.getVideosByCategory("yoga");
+        ArrayList<Video> videos = videoController.getVideosByCategory("Yoga");
         for(Video video : videos) {
             System.out.println(video.toString());
         }
@@ -62,20 +60,27 @@ public class VideoControllerTest {
 
     @Test
     public void addVideoToFavourite() {
-        boolean status = videoController.addVideoToFavourite("C001","V001");
+        boolean status = videoController.addVideoToFavourite("Cs13","V001");
         System.out.println(status);
     }
 
     @Test
     public void commentOnVideo() {
-        boolean status = videoController.commentOnVideo("垃圾","C001","V001");
+        boolean status = videoController.commentOnVideo("垃圾","Cs13","V001");
         System.out.println(status);
     }
 
     @Test
     public void getHotVideo() {
-        ArrayList<Video> videos = new ArrayList<>();
-        videos = videoController.getHotVideo(10);
+        ArrayList<Video> videos = videoController.getHotVideo(10);
+        for (Video video : videos) {
+            System.out.println(video.toString());
+        }
+    }
+
+    @Test
+    public void getVideosByCusId() {
+        ArrayList<Video> videos = videoController.getVideosByCusId("Cs15");
         for(Video video : videos) {
             System.out.println(video.toString());
         }

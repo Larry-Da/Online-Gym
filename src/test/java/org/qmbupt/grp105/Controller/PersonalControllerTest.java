@@ -32,7 +32,7 @@ public class PersonalControllerTest {
     public void getCusInfoByCusId() {
         System.out.println("begin to test getCusInfoByCusId()");
 
-        Customer customer = personalController.getCusInfoByCusId("C001");
+        Customer customer = personalController.getCusInfoByCusId("Cs15");
         System.out.println(customer.toString());
         System.out.println("test for getACusInfoByCusId() end");
         System.out.println("");
@@ -43,7 +43,7 @@ public class PersonalControllerTest {
     @Test
     public void getCusInfoByName() {
         System.out.println("begin to test getCusInfoByName()");
-        Customer customer = personalController.getCusInfoByName("goteng");
+        Customer customer = personalController.getCusInfoByName("Li Hua");
         System.out.println(customer.toString());
         System.out.println("test for getCusInfoByName() end");
         System.out.println("");
@@ -72,7 +72,7 @@ public class PersonalControllerTest {
     @Test
     public void getMonthlyIncome() {
         System.out.println("begin to test getMonthlyIncome()");
-        System.out.println(personalController.getMonthlyIncome(6));
+        System.out.println(personalController.getMonthlyIncome(2));
         System.out.println("test for getMonthlyIncome() end");
         System.out.println("");
     }
@@ -80,7 +80,7 @@ public class PersonalControllerTest {
     @Test
     public void getExpireTimeByCusId() {
         System.out.println("begin to test getExpireTimeByCusId()");
-        System.out.println(personalController.getExpireTimeByCusId("C001"));
+        System.out.println(personalController.getExpireTimeByCusId("Cs15"));
         System.out.println("test for getExpireTimeByCusId() end");
         System.out.println("");
     }

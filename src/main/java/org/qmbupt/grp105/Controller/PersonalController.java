@@ -4,17 +4,15 @@ import org.qmbupt.grp105.Entity.*;
 import com.google.gson.*;
 import java.io.FileReader;
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
-
+import org.qmbupt.grp105.backend.BackendServer;
 public class PersonalController {
 
     private static Map<String, Object> param = new HashMap<>();
     private static Gson gson = new Gson();
     private static Request request;
     private static Response response;
+    private static BackendServer backendServer;
     public PersonalController() {};
 
 
@@ -25,12 +23,12 @@ public class PersonalController {
      * @return a list of all customers
      */
     public ArrayList<Customer> getAllCustomer() {
-        param.put("type","Customer");
-        param.put("fields",new String[]{"cusId"});
+//        param.put("type","Customer");
+//        param.put("fields",new String[]{"cusId"});
         ArrayList<Customer> customers = new ArrayList<>();
-        request = new Request("getFieldsById",param);
-//        response = new Response(backend.getCustomerByIds(request));
-        response = new Response("{\"status\":\"success\",\"payload\":{\"cusIds\":[\"C001\",\"C002\"]}}");
+        request = new Request("getCustomerIds",param);
+        response = new Response(backendServer.execute(request.toJsonString()));
+//        response = new Response("{\"status\":\"success\",\"payload\":{\"cusIds\":[\"C001\",\"C002\"]}}");
         String status = response.getStatus();
         if(status.equalsIgnoreCase("success")) {
             JsonArray jsonArray = response.getPayload().getAsJsonArray("cusIds");
@@ -65,12 +63,13 @@ public class PersonalController {
      * @return  an customer entity
      */
     public Customer getCusInfoByCusId(String cusId) {
-        param.put("type","Customer");
-        param.put("id",cusId);
-        param.put("fields",Customer.getAllAttibutes());
-        request = new Request("getFieldsById", param);
-//        response = new Response(backend.getCustomerById(request));
-        response = new Response("{\"status\":\"success\",\"payload\":{\"cusId\":\"C001\",\"age\":45,\"name\":\"goteng\",\"password\":\"1234566\",\"phoneNo\":\"18235226823\",\"email\":\"1770927746@qq.com\",\"gender\":\"M\",\"dateOfBirth\":\"2000-04-17\",\"membershipLevel\":\"L1\",\"remainTime\":345,\"balance\":12345,\"points\":300}}");
+//        param.put("type","Customer");
+//        param.put("id",cusId);
+//        param.put("fields",Customer.getAllAttibutes());
+        param.put("cusId",cusId);
+        request = new Request("getCustomerById", param);
+        response = new Response(backendServer.execute(request.toJsonString()));
+//        response = new Response("{\"status\":\"success\",\"payload\":{\"cusId\":\"C001\",\"age\":45,\"name\":\"goteng\",\"password\":\"1234566\",\"phoneNo\":\"18235226823\",\"email\":\"1770927746@qq.com\",\"gender\":\"M\",\"dateOfBirth\":\"2000-04-17\",\"membershipLevel\":\"L1\",\"remainTime\":345,\"balance\":12345,\"points\":300}}");
         String status = response.getStatus();
         if(status.equalsIgnoreCase("success")) {
             Customer customer = gson.fromJson(response.getPayload(), Customer.class);
@@ -161,8 +160,8 @@ public class PersonalController {
     public int getMonthlyIncome(int month) {
         param.put("month", month);
         request = new Request("getMonthlyIncome", param);
-//        response = new Response(backend.getMonthlyIncome(request));
-        response = new Response("{\"status\":\"success\",\"payload\":{\"income\":\"100\"}}");
+        response = new Response(backendServer.execute(request.toJsonString()));
+//        response = new Response("{\"status\":\"success\",\"payload\":{\"income\":\"100\"}}");
         String status = response.getStatus();
         if(status.equalsIgnoreCase("success")) {
             JsonObject jsonObject = response.getPayload();
@@ -184,88 +183,5 @@ public class PersonalController {
         Customer customer = getCusInfoByCusId(cusId);
         return customer.getRemainTime();
     }
-
-
-    public static void main(String[] args) {
-        try {
-            JsonParser parser=new JsonParser();
-            JsonObject object=(JsonObject) parser.parse(new FileReader("src/main/resources/test.json"));
-            System.out.println(object.toString());
-            //Video video = new Video("V008","usr/local/bin","sldfjslfjskfjslkdfjsl",8.7,"Yoga",100,1000);
-
-        }
-        catch (JsonIOException e) {
-            e.printStackTrace();
-        } catch (JsonSyntaxException e) {
-            e.printStackTrace();
-        } catch(IOException e) {
-            e.printStackTrace();
-        }
-
-    }
+    
 }
-/*
-{
-  "status": "success",
-  "payload": {
-    "liveSessionId": "L001",
-    "url": "usr/local/bin",
-    "rating": 7.8,
-    "category": "Yoga",
-    "startTime": "2020-05-01",
-    "endTime": "2020-07-02",
-    "likes": 100,
-    "viewCounts": 3000,
-    "Customer_cusId": "C001",
-    "Coach_coachId": "Ch001"
-  }
-}
-{
-  "status": "success",
-  "payload": {
-    "cusId": "C001",
-    "age": 45,
-    "name": "goteng",
-    "password": "1234566",
-    "phoneNo": "18235226823",
-    "email": "1770927746@qq.com",
-    "gender": "M",
-    "dateOfBirth": "2000-04-17",
-    "membershipLevel": "L1",
-    "remainTime": 345,
-    "balance": 12345,
-    "points": 300
-  }
-}
-{
-  "status": "success",
-  "payload": {
-    "Expiretime": "2020-05-09"
-  }
-}
-{
-  "status": "success",
-  "payload": {
-    "videoIds": ["V001","V002"]
-  }
-}
-{
-  "status": "success",
-  "payload": {
-    "videoId": "V001",
-    "url": "usr/local/bin",
-    "name": "strength",
-    "rating": 7.8,
-    "category": "Yoga",
-    "likes": 100,
-    "viewCounts": 3000,
-    "level": "easy"
-  }
-}
-{
-  "status": "success",
-  "payload": {
-    "num": 100
-  }
-}
- */

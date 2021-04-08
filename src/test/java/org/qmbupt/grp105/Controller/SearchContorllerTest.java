@@ -57,7 +57,7 @@ public class SearchContorllerTest {
     public void getVideoByID() {
         System.out.println("begin to test getVideoByID()");
         Video video;
-        video = searchController.getVideoByID("V001");
+        video = searchController.searchVideoByID("V001");
         System.out.println(video.toString());
         System.out.println("test for getVideoByID() end");
         System.out.println();
@@ -67,7 +67,7 @@ public class SearchContorllerTest {
     public void getVideoByName() {
         System.out.println("begin to test getVideoByName()");
         Video video;
-        video = searchController.getVideoByID("goteng");
+        video = searchController.searchVideoByName("strength");
         System.out.println(video.toString());
         System.out.println("test for getVideoByName() end");
         System.out.println();
@@ -76,9 +76,10 @@ public class SearchContorllerTest {
     @Test
     public void getVideoByCategory() {
         System.out.println("begin to test getVideoByCategory()");
-        Video video;
-        video = searchController.getVideoByID("Yoga");
-        System.out.println(video.toString());
+        ArrayList<Video> videos = searchController.searchVideoByCategory("Yoga");
+        for(Video video : videos) {
+            System.out.println(video.toString());
+        }
         System.out.println("test for getVideoByCategory() end");
         System.out.println("");
     }

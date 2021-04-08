@@ -3,8 +3,7 @@ package org.qmbupt.grp105.Controller;
 import org.qmbupt.grp105.Entity.*;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-
+import org.qmbupt.grp105.backend.BackendServer;
 import java.util.*;
 
 public class VideoController {
@@ -12,15 +11,16 @@ public class VideoController {
     private static Gson gson = new Gson();
     private static Request request;
     private static Response response;
+    private static BackendServer backendServer;
     public VideoController() {};
 
     public ArrayList<Video> getAllVideos() {
-        param.put("type","Video");
-        param.put("field", new String[]{"videoId"});
+//        param.put("type","Video");
+//        param.put("field", new String[]{"videoId"});
         ArrayList<Video> videos = new ArrayList<>();
-        request = new Request("getFieldsById",param);
-//      response = new Response(backend.getAllVideos(request));
-        response = new Response("{\"status\":\"success\",\"payload\":{\"videoIds\":[\"V001\",\"V002\"]}}");
+        request = new Request("getVideoIds",param);
+        response = new Response(backendServer.execute(request.toJsonString()));
+//        response = new Response("{\"status\":\"success\",\"payload\":{\"videoIds\":[\"V001\",\"V002\"]}}");
         String status = response.getStatus();
         if(status.equalsIgnoreCase("success")) {
             JsonArray jsonArray = response.getPayload().getAsJsonArray("videoIds");
@@ -36,12 +36,13 @@ public class VideoController {
         return null;
     }
     public Video getVideoByVideoId(String videoId) {
-        param.put("type","Video");
-        param.put("id",videoId);
-        param.put("fields",Video.getAllAttributes());
-        request = new Request("getFieldsById",param);
-//        response = new Response(backend.getVideoByVideoId(request));
-        response = new Response("{\"status\":\"success\",\"payload\":{\"videoId\":\"V001\",\"url\":\"usr/local/bin\",\"name\":\"strength\",\"rating\":7.8,\"category\":\"Yoga\",\"likes\":100,\"viewCounts\":3000,\"level\":\"easy\"}}");
+//        param.put("type","Video");
+//        param.put("id",videoId);
+//        param.put("fields",Video.getAllAttributes());
+        param.put("videoId",videoId);
+        request = new Request("getVideoById",param);
+        response = new Response(backendServer.execute(request.toJsonString()));
+//        response = new Response("{\"status\":\"success\",\"payload\":{\"videoId\":\"V001\",\"url\":\"usr/local/bin\",\"name\":\"strength\",\"rating\":7.8,\"category\":\"Yoga\",\"likes\":100,\"viewCounts\":3000,\"level\":\"easy\"}}");
         String status = response.getStatus();
         if(status.equalsIgnoreCase("success")) {
             Video video = gson.fromJson(response.getPayload(), Video.class);
@@ -49,6 +50,15 @@ public class VideoController {
             return video;
         }
         param.clear();
+        return null;
+    }
+    public Video getVideoByName(String videoName) {
+        ArrayList<Video> videos = getAllVideos();
+        for(Video video : videos) {
+            if(video.getName().equalsIgnoreCase(videoName)) {
+                return video;
+            }
+        }
         return null;
     }
     /**
@@ -61,7 +71,7 @@ public class VideoController {
     public ArrayList<Video> getVideosByCusId(String cusId) {
         PersonalController personalController = new PersonalController();
         Customer customer = personalController.getCusInfoByCusId(cusId);
-        ArrayList<String> videoIds = customer.getVideoIds();
+        ArrayList<String> videoIds = customer.getVideosHistory();
         ArrayList<Video> videos = new ArrayList<>();
         for(String videoId : videoIds) {
             Video video = getVideoByVideoId(videoId);
@@ -80,8 +90,12 @@ public class VideoController {
         String json = gson.toJson(video);
         param = gson.fromJson(json, Map.class);
         request = new Request("addVideo",param);
-//        response = new Response(backend.addVideo(request));
-        response = new Response("{\"status\":\"success\"}");
+        Double likes = (Double) param.get("likes");
+        Double viewCounts = (Double)param.get("viewsCount");
+        param.replace("likes",likes.intValue());
+        param.replace("viewsCount",viewCounts.intValue());
+        response = new Response(backendServer.execute(request.toJsonString()));
+//        response = new Response("{\"status\":\"success\"}");
         String status = response.getStatus();
         if(status.equalsIgnoreCase("success")) {
             param.clear();
@@ -101,9 +115,13 @@ public class VideoController {
     public boolean modifyVideo(Video video) {
         String json = gson.toJson(video);
         param = gson.fromJson(json, Map.class);
+        Double likes = (Double) param.get("likes");
+        Double viewCounts = (Double)param.get("viewsCount");
+        param.replace("likes",likes.intValue());
+        param.replace("viewsCount",viewCounts.intValue());
         request = new Request("modifyVideo",param);
-//        response = new Response(backend.modifyVideo(request));
-        response = new Response("{\"status\":\"success\"}");
+        response = new Response(backendServer.execute(request.toJsonString()));
+//        response = new Response("{\"status\":\"success\"}");
         String status = response.getStatus();
         if(status.equalsIgnoreCase("success")) {
             param.clear();
@@ -168,14 +186,14 @@ public class VideoController {
         ArrayList<Video> videos = getAllVideos();
         ArrayList<Video> hotVideos = new ArrayList<>();
         for(Video video : videos) {
-            if(video.getViewCounts() >= threshold) {
+            if(video.getViewsCount() >= threshold) {
                 hotVideos.add(video);
             }
         }
         Collections.sort(hotVideos, new Comparator<Video>() {
             @Override
             public int compare(Video o1, Video o2) {
-                return o2.getViewCounts() - o1.getViewCounts();
+                return o2.getViewsCount() - o1.getViewsCount();
             }
         });
         return hotVideos;

@@ -14,7 +14,7 @@ public class SearchController extends Request {
     private static Gson gson = new Gson();
     private static Request request;
     private static Response response;
-
+    private static VideoController videoController = new VideoController();
     public SearchController() {
     }
 
@@ -28,13 +28,13 @@ public class SearchController extends Request {
     public ArrayList<Video> updateVideo() {
         ArrayList<Video> videos = new ArrayList<>();
 //        response = new Response(backend.updateVideo());
-        response = new Response("{\"status\":\"success\",\"payload\":{\"videoIds\":[\"V001\",\"V002\"]}}");
+        response = new Response("{\"status\":\"success\",\"payload\":{\"videoIds\":[\"V001\",\"V123\"]}}");
         String status = response.getStatus();
         if (status.equalsIgnoreCase("success")) {
             JsonArray jsonArray = response.getPayload().getAsJsonArray("videoIds");
             List<String> videoIds = gson.fromJson(jsonArray, List.class);
             for (String videoId : videoIds) {
-                Video video = getVideoByID(videoId);
+                Video video = searchVideoByID(videoId);
                 videos.add(video);
             }
             return videos;
@@ -50,27 +50,8 @@ public class SearchController extends Request {
      * @param videoID video's ID
      * @return a video entity
      */
-    public Video getVideoByID(String videoID) {
-        param.put("videoID", videoID);
-        request = new Request("getVideoByID", param);
-//        response = new Response(backend.getVideoByID(request.toJsonString()));
-        response = new Response(
-                "{\"status\":\"success\"," +
-                        "\"payload\":" +
-                        "{\"videoId\":\"V001\"," +
-                        "\"url\":\"https://www.bilibili.com/video/BV1FX4y1G7aM?spm_id_from=333.851.b_7265636f6d6d656e64.1\"," +
-                        "\"name\":\"goteng\"," +
-                        "\"rating\":\"3.5\"," +
-                        "\"category\":\"Yoga\"," +
-                        "\"likes\":\"1388\"," +
-                        "\"viewCounts\":\"13000\"}}");
-        String status = response.getStatus();
-        if (status.equalsIgnoreCase("success")) {
-            Video video = gson.fromJson(response.getPayload(), Video.class);
-            param.clear();
-            return video;
-        }
-        return null;
+    public Video searchVideoByID(String videoID) {
+        return videoController.getVideoByVideoId(videoID);
     }
 
     /**
@@ -81,27 +62,8 @@ public class SearchController extends Request {
      * @param videoName video's name
      * @return a video entity
      */
-    public Video getVideoByName(String videoName) {
-        param.put("videoName", videoName);
-        request = new Request("getVideoByName", param);
-//        response = new Response(backend.getVideoByName(request.toJsonString()));
-        response = new Response(
-                "{\"status\":\"success\"," +
-                        "\"payload\":" +
-                        "{\"videoId\":\"V001\"," +
-                        "\"url\":\"https://www.bilibili.com/video/BV1FX4y1G7aM?spm_id_from=333.851.b_7265636f6d6d656e64.1\"," +
-                        "\"name\":\"goteng\"," +
-                        "\"rating\":\"3.5\"," +
-                        "\"category\":\"Yoga\"," +
-                        "\"likes\":\"1388\"," +
-                        "\"viewCounts\":\"13000\"}}");
-        String status = response.getStatus();
-        if (status.equalsIgnoreCase("success")) {
-            Video video = gson.fromJson(response.getPayload(), Video.class);
-            param.clear();
-            return video;
-        }
-        return null;
+    public Video searchVideoByName(String videoName) {
+        return videoController.getVideoByName(videoName);
     }
 
     /**
@@ -112,23 +74,8 @@ public class SearchController extends Request {
      * @param category video's category
      * @return a list of videos with particular category
      */
-    public ArrayList<Video> getVideoByCategory(String category) {
-        ArrayList<Video> videos = new ArrayList<>();
-        param.put("category", category);
-        request = new Request("getVideoByCategory", param);
-//        response = new Response(backend.getVideoByCategory(request.toJsonString()));
-        response = new Response("{\"status\":\"success\",\"payload\":{\"videoIds\":[\"V003\",\"V005\"]}}");
-        String status = response.getStatus();
-        if (status.equalsIgnoreCase("success")) {
-            JsonArray jsonArray = response.getPayload().getAsJsonArray("videoIds");
-            List<String> videoIds = gson.fromJson(jsonArray, List.class);
-            for (String videoId : videoIds) {
-                Video video = getVideoByID(videoId);
-                videos.add(video);
-            }
-            return videos;
-        }
-        return null;
+    public ArrayList<Video> searchVideoByCategory(String category) {
+        return videoController.getVideosByCategory(category);
     }
 
     /**
@@ -140,16 +87,15 @@ public class SearchController extends Request {
      * @return a list of sorted videos
      */
     public ArrayList<Video> sortVideoByRating(ArrayList<Video> videos) {
-        for (int i = 1; i < videos.size(); i++) {
-            Video temp = videos.get(i);
-            int in = i; //记录位置
-            while (in > 0 && videos.get(in - 1).getRating().compareTo(temp.getRating()) < 0)//前面的比后面的大:
-            {
-                videos.set(in, videos.get(in - 1));//前面的元素后移
-                in--;
+        Collections.sort(videos, new Comparator<Video>() {
+            @Override
+            public int compare(Video o1, Video o2) {
+                if(o2.getRating() > o1.getRating()) {
+                    return 1;
+                }
+                return 0;
             }
-            videos.set(in, temp);
-        }
+        });
         return videos;
     }
 
