@@ -8,7 +8,7 @@ public class Video {
     private Double rating; // 评分 int score
     private String category;
     private int likes;      // 点赞数
-    private int viewCounts; // 访问量 -> hottest
+    private int viewsCount; // 访问量 -> hottest
     private String level;
 
 //    public ArrayList<LiveSession> getLiveSessions() {
@@ -17,14 +17,14 @@ public class Video {
 //    }
 //    public ArrayList<Videos> getVideoHistory();
 
-    public Video(String videoId, String url, String name, Double rating, String category, int likes, int viewCounts,String level) {
+    public Video(String videoId, String url, String name, Double rating, String category, int likes, int viewsCount, String level) {
         this.videoId = videoId;
         this.url = url;
         this.name = name;
         this.rating = rating;
         this.category = category;
         this.likes = likes;
-        this.viewCounts = viewCounts;
+        this.viewsCount = viewsCount;
         this.level = level;
     }
 
@@ -84,12 +84,12 @@ public class Video {
         this.likes = likes;
     }
 
-    public int getViewCounts() {
-        return viewCounts;
+    public int getViewsCount() {
+        return viewsCount;
     }
 
-    public void setViewCounts(int viewCounts) {
-        this.viewCounts = viewCounts;
+    public void setViewsCount(int viewsCount) {
+        this.viewsCount = viewsCount;
     }
 
     public static String[] getAllAttributes() {
@@ -104,7 +104,7 @@ public class Video {
                 ", rating=" + rating +
                 ", category='" + category + '\'' +
                 ", likes=" + likes +
-                ", viewCounts=" + viewCounts +
+                ", viewCounts=" + viewsCount +
                 '}';
     }
 }
