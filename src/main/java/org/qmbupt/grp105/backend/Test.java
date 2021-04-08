@@ -26,7 +26,7 @@ public class Test {
         // 4.1
         System.out.println("4.1\n" + BackendServer.execute("{\"request\":\"getVideoIdsByCusId\",\"payload\":{\"cusId\":\"Cs15\"}}"));
         // 4.2
-        System.out.println("4.2\n" + BackendServer.execute("{\"request\": \"addVideo\",\"payload\": {\"videoId\": \"V001\",\"url\": \"usr/local/bin\",\"name\": \"strength\",\"rating\": \"7.8\",\"category\": \"Yoga\",\"likes\": \"100\",\"viewCounts\": \"3000\",\"level\": \"easy\"}}"));
+        System.out.println("4.2\n" + BackendServer.execute("{\"request\": \"addVideo\",\"payload\": {\"videoId\": \"V123\",\"url\": \"usr/local/bin\",\"name\": \"strength\",\"rating\": \"7.8\",\"category\": \"Yoga\",\"likes\": \"100\",\"viewCounts\": \"3000\",\"level\": \"easy\"}}"));
         // 4.3
         System.out.println("4.3\n" + BackendServer.execute("{\"request\": \"modifyVideo\",\"payload\": {\"videoId\": \"V001\",\"url\": \"usr/local/bin\",\"name\": \"strength\",\"rating\": \"7.8\",\"category\": \"Yoga\",\"likes\": \"200\",\"viewCounts\": \"3000\",\"level\": \"easy\"}}"));
     }

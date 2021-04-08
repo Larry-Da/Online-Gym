@@ -1,10 +1,9 @@
 package org.qmbupt.grp105.backend.request;
 
-import java.io.IOException;
+import com.alibaba.fastjson.*;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
+import org.qmbupt.grp105.backend.dblayer.VideoManager;
+import org.qmbupt.grp105.backend.model.Video;
 
 public class RequestAddVideoHandler implements RequestHandler {
 
@@ -15,38 +14,28 @@ public class RequestAddVideoHandler implements RequestHandler {
 
         try {
 
-            JSONArray videos = JSON.parseArray(IO.read("video.json"));
-
             JSONObject newVideoFromPayload = JSON.parseObject(payload);
-            boolean isDuplicated = false;
-            for (int i = 0 ; i < videos.size(); i++) {
-                if (videos.getJSONObject(i).getString("videoId").equals(newVideoFromPayload.getString("videoId"))) {
-                    isDuplicated = true;
-                    break;
-                }
-            }
-            if (!isDuplicated) {
-                JSONObject newVideo = new JSONObject();
 
-                newVideo.put("videoId", newVideoFromPayload.getString("videoId"));
-                newVideo.put("url", newVideoFromPayload.getString("url"));
-                newVideo.put("name", newVideoFromPayload.getString("name"));
-                newVideo.put("rating", Double.parseDouble(newVideoFromPayload.getString("rating")));
-                newVideo.put("likes", Integer.parseInt(newVideoFromPayload.getString("likes")));
-                newVideo.put("category", newVideoFromPayload.getString("category"));
-                newVideo.put("viewCounts", Integer.parseInt(newVideoFromPayload.getString("viewCounts")));
-                newVideo.put("level", newVideoFromPayload.getString("level"));
+            Video video = new Video();
+            
+            video.videoId    = newVideoFromPayload.getString("videoId");
+            video.url        = newVideoFromPayload.getString("url");
+            video.name       = newVideoFromPayload.getString("name");
+            video.rating     = Double.parseDouble(newVideoFromPayload.getString("rating"));
+            video.category   = newVideoFromPayload.getString("category");
+            video.likes      = Integer.parseInt(newVideoFromPayload.getString("likes"));
+            video.viewsCount = Integer.parseInt(newVideoFromPayload.getString("viewCounts"));
+            video.level      = newVideoFromPayload.getString("level");
 
-                videos.add(newVideo);
-                IO.write("video.json", videos.toJSONString());
-            }
+            VideoManager.writeVideoInfo(video);
+
             retJson.put("status", "success");
 
         } catch (Exception ex) {
             ex.printStackTrace();
             retJson.put("status", "failed");
         }
-        // TODO Auto-generated method stub
+
         return retJson.toJSONString();
     }
     
