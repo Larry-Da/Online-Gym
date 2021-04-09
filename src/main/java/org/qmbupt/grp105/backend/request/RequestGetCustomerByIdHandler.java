@@ -30,7 +30,7 @@ public class RequestGetCustomerByIdHandler implements RequestHandler {
                     responsePayload.put("dateOfBirth", customer.getString("dateOfBirth"));
                     responsePayload.put("membershipLevel", "L" + customer.getString("membershipLevel"));
                     if (!customer.getString("expireDate").equals(""))
-                        responsePayload.put("remainTime", "" + utils.getRemainDays(customer.getString("expireDate")));
+                        responsePayload.put("remainTime", ""+123);
                     else
                         responsePayload.put("remainTime", "" + 0);
                     responsePayload.put("balance", "" + customer.getIntValue("balance"));

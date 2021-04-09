@@ -9,7 +9,7 @@ public class Personal_LivePanel
 {
     public Personal_LivePanel(PersonalController controller)
     {
-        ArrayList<LiveSession> sessions = controller.getSession("");
+        //ArrayList<LiveSession> sessions = controller.getSession("");
 
 
     }

@@ -141,7 +141,7 @@ class CustomerLeftPanel extends JPanel
         circleIcon.setBounds((int)(UIStyle.width * 0.0875), (int)(UIStyle.height * 0.12), (int)(panelWidth * 0.26), (int)(panelWidth * 0.26));
         this.add(circleIcon);
 
-        Customer cus = controller.getCusInfoById("");
+        Customer cus = controller.getCusInfoByCusId("Cs15");
         DynamicText name = new DynamicText(UIStyle.COLOR_3, UIStyle.COLOR_4, cus.getName(), (int)(panelWidth / 2), (int)(panelHeight * 0.30), (int)(panelWidth / 2), (int)(panelHeight * 0.05), UIStyle.NORMAL_ARIAL_BOLD);
         this.add(name);
 
@@ -172,7 +172,7 @@ class CustomerRightPanel extends JPanel
         setBounds((int) (UIStyle.width * 0.24), 0, panelWidth, panelHeight);
         setBackground(Color.WHITE);
         this.setLayout(innerCards);
-        CustomerMembershipPanel membership = new CustomerMembershipPanel(controller.getCusInfoById(""));
+        CustomerMembershipPanel membership = new CustomerMembershipPanel(controller.getCusInfoByCusId("Cs15"));
         this.add(membership);
     }
 }
@@ -343,8 +343,9 @@ class AdministratorMembershipPanel extends JPanel
 
         String[] column = {"CusId", "Name", "Age", "Gender", "PhoneNo", "Email", "MembershipLevel", "Balance", "Points", "DateOfBirth", "RemainTime"};
         String[][] values = new String[itemsPerPage][column.length];
+        int numOfCustomer = controller.getNumOfAllCustomers();
 
-        ArrayList<Customer> cusList = controller.getCustomer(0, 10);
+        ArrayList<Customer> cusList = new ArrayList<>(controller.getCustomerByPage(0, numOfCustomer - 1));
         int cnt = 0;
         for (Customer i : cusList)
         {
