@@ -183,5 +183,91 @@ public class PersonalController {
         Customer customer = getCusInfoByCusId(cusId);
         return customer.getRemainTime();
     }
-    
+    public static void main(String[] args) {
+        HashMap<String, Object> t = new HashMap<>();
+        System.out.println(t.size());
+    }
+
 }
+//    public static void main(String[] args) {
+//        try {
+//            JsonParser parser=new JsonParser();
+//            JsonObject object=(JsonObject) parser.parse(new FileReader("src/main/resources/test.json"));
+//            System.out.println(object.toString());
+//            //Video video = new Video("V008","usr/local/bin","sldfjslfjskfjslkdfjsl",8.7,"Yoga",100,1000);
+//
+//        }
+//        catch (JsonIOException e) {
+//            e.printStackTrace();
+//        } catch (JsonSyntaxException e) {
+//            e.printStackTrace();
+//        } catch(IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//    }
+/*
+{
+  "status": "success",
+  "payload": {
+    "liveSessionId": "L001",
+    "url": "usr/local/bin",
+    "rating": 7.8,
+    "category": "Yoga",
+    "startTime": "2020-05-01",
+    "endTime": "2020-07-02",
+    "likes": 100,
+    "viewCounts": 3000,
+    "Customer_cusId": "C001",
+    "Coach_coachId": "Ch001"
+  }
+}
+{
+  "status": "success",
+  "payload": {
+    "cusId": "C001",
+    "age": 45,
+    "name": "goteng",
+    "password": "1234566",
+    "phoneNo": "18235226823",
+    "email": "1770927746@qq.com",
+    "gender": "M",
+    "dateOfBirth": "2000-04-17",
+    "membershipLevel": "L1",
+    "remainTime": 345,
+    "balance": 12345,
+    "points": 300
+  }
+}
+{
+  "status": "success",
+  "payload": {
+    "Expiretime": "2020-05-09"
+  }
+}
+{
+  "status": "success",
+  "payload": {
+    "videoIds": ["V001","V002"]
+  }
+}
+{
+  "status": "success",
+  "payload": {
+    "videoId": "V001",
+    "url": "usr/local/bin",
+    "name": "strength",
+    "rating": 7.8,
+    "category": "Yoga",
+    "likes": 100,
+    "viewCounts": 3000,
+    "level": "easy"
+  }
+}
+{
+  "status": "success",
+  "payload": {
+    "num": 100
+  }
+}
+ */

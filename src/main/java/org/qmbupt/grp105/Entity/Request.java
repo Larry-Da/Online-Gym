@@ -40,15 +40,22 @@ public class Request {
         String str = "{\"request\":\"" + this.header + "\",\"payload\":{";
 
         StringBuilder sb = new StringBuilder();
-        for(Map.Entry<String, Object> payload : param.entrySet()) {
-            sb.append("\"");
-            sb.append(payload.getKey());
-            sb.append("\":\"");
-            sb.append(payload.getValue());
-            sb.append("\"");
-            sb.append(",");
+        if(param.size() > 0) {
+            for(Map.Entry<String, Object> payload : param.entrySet()) {
+                sb.append("\"");
+                sb.append(payload.getKey());
+                sb.append("\":\"");
+                sb.append(payload.getValue());
+                sb.append("\"");
+                sb.append(",");
+            }
+
+            sb.replace(sb.length() - 1,sb.length(), "}}");
         }
-        sb.replace(sb.length() - 1,sb.length(), "}}");
+        else {
+            str = str + "}}";
+            return str;
+        }
         str += sb.toString();
         return str;
     }

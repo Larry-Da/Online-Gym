@@ -16,7 +16,7 @@ public class Customer {
     private String remainTime;//会员剩余时间
     private int balance;//余额
     private int points; //积分
-    private ArrayList<String> videoIds;
+    private ArrayList<String> videosHistory;
     //private String exerciseLevel;
 
     public String getCusId() {
@@ -115,15 +115,15 @@ public class Customer {
         this.points = points;
     }
 
-    public ArrayList<String> getVideoIds() {
-        return videoIds;
+    public ArrayList<String> getVideosHistory() {
+        return videosHistory;
     }
 
-    public void setVideoIds(ArrayList<String> videoIds) {
-        this.videoIds = videoIds;
+    public void setVideosHistory(ArrayList<String> videosHistory) {
+        this.videosHistory = videosHistory;
     }
     public static String[] getAllAttibutes() {
-        return new String[]{"cusId","age","name","password","phoneNo","email","gender","dateOfBirth","membershipLevel","remainTime","balance","points","videoIds"};
+        return new String[]{"cusId","age","name","password","phoneNo","email","gender","dateOfBirth","membershipLevel","remainTime","balance","points"};
     }
     public Customer(String cusId, int age, String name, String password, String phoneNo, String email, char gender,
                     Date dateOfBirth, String membershipLevel, String remainTime, int balance, int points) {
@@ -139,6 +139,23 @@ public class Customer {
         this.remainTime = remainTime;
         this.balance = balance;
         this.points = points;
+    }
+
+    public Customer(String cusId, int age, String name, String password, String phoneNo, String email, char gender,
+                    Date dateOfBirth, String membershipLevel, String remainTime, int balance, int points, ArrayList<String> videosHistory) {
+        this.cusId = cusId;
+        this.age = age;
+        this.name = name;
+        this.password = password;
+        this.phoneNo = phoneNo;
+        this.email = email;
+        this.gender = gender;
+        this.dateOfBirth = dateOfBirth;
+        this.membershipLevel = membershipLevel;
+        this.remainTime = remainTime;
+        this.balance = balance;
+        this.points = points;
+        this.videosHistory = videosHistory;
     }
 
     @Override
