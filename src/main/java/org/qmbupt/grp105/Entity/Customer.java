@@ -3,13 +3,10 @@ package org.qmbupt.grp105.Entity;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Customer {
+public class Customer extends Person
+{
     private String cusId;
     private int age;
-    private String name;
-    private String password;
-    private String phoneNo;
-    private String email;
     private char gender;
     private Date dateOfBirth;
     private String membershipLevel;//不确定是String类型的
@@ -127,12 +124,9 @@ public class Customer {
     }
     public Customer(String cusId, int age, String name, String password, String phoneNo, String email, char gender,
                     Date dateOfBirth, String membershipLevel, String remainTime, int balance, int points) {
+        super(name, password, phoneNo, email);
         this.cusId = cusId;
         this.age = age;
-        this.name = name;
-        this.password = password;
-        this.phoneNo = phoneNo;
-        this.email = email;
         this.gender = gender;
         this.dateOfBirth = dateOfBirth;
         this.membershipLevel = membershipLevel;
@@ -143,12 +137,9 @@ public class Customer {
 
     public Customer(String cusId, int age, String name, String password, String phoneNo, String email, char gender,
                     Date dateOfBirth, String membershipLevel, String remainTime, int balance, int points, ArrayList<String> videosHistory) {
+        super(name, password, phoneNo, email);
         this.cusId = cusId;
         this.age = age;
-        this.name = name;
-        this.password = password;
-        this.phoneNo = phoneNo;
-        this.email = email;
         this.gender = gender;
         this.dateOfBirth = dateOfBirth;
         this.membershipLevel = membershipLevel;

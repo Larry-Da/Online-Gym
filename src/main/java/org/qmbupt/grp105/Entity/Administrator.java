@@ -1,18 +1,12 @@
 package org.qmbupt.grp105.Entity;
 
-public class Administrator {
+public class Administrator extends Person{
     private String adminId;
-    private String name;
-    private String password;
-    private String phoneNo;
-    private String email;
+
 
     public Administrator(String adminId, String name, String password, String phoneNo, String email) {
+        super(name, password, phoneNo, email);
         this.adminId = adminId;
-        this.name = name;
-        this.password = password;
-        this.phoneNo = phoneNo;
-        this.email = email;
     }
 
     public String getAdminId() {

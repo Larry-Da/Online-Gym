@@ -1,26 +1,15 @@
 package org.qmbupt.grp105.Entity;
-public class Coach {
+public class Coach extends Person
+{
     private String coachId;
     private int age;
-    private String name;
-    private String password;
-    private String phoneNo;
-    private String email;
     private char gender;
 
     public Coach(String coachId, int age, String name, String password, String phoneNo, String email, char gender) {
-        super();
+        super(name, password, phoneNo, email);
         this.coachId = coachId;
         this.age = age;
-        this.name = name;
-        this.password = password;
-        this.phoneNo = phoneNo;
-        this.email = email;
         this.gender = gender;
-    }
-    public Coach() {
-        super();
-        // TODO Auto-generated constructor stub
     }
 
     public String getCoachId() {
