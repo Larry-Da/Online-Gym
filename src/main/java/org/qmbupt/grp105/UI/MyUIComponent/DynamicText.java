@@ -5,35 +5,18 @@ import java.awt.*;
 import java.util.*;
 import javax.swing.*;
 
-public class DynamicText extends JLabel
+public class DynamicText extends MyLabelComponent
 {
-    private String text;
-    private Font font;
-    private Color colors[] = {Color.WHITE, Color.BLACK};
-    private String aligned = "mid";
 
     public DynamicText(int x, int y, String aligned, Color background, Color foreground, String text, int width, int height, Font font) {
-
+        super(width, height, x, y, text, background, foreground, aligned);
         this.font = font;
 
-        this.aligned = aligned;
-        this.text = text;
-        colors[0] = background;
-        colors[1] = foreground;
-
-        setBounds(x, y, width, height);
     }
 
     public DynamicText(Color background, Color foreground, String text, int xcenter, int ycenter, int width, int height, Font font) {
+        super(width, height, xcenter - width / 2, ycenter - height / 2, text, background, foreground, "mid");
         this.font = font;
-
-        this.text = text;
-        colors[0] = background;
-        colors[1] = foreground;
-
-        int x = xcenter - width / 2;
-        int y = ycenter - height / 2;
-        setBounds(x, y, width, height);
 
     }
     public void changeText(String text)
@@ -62,7 +45,6 @@ public class DynamicText extends JLabel
         if(aligned.equals("mid")) {
             x2 = (getWidth() - metrics.stringWidth(text)) / 2;
             y2 = ((getHeight() - metrics.getHeight()) / 2) + metrics.getAscent();
-            System.out.println(text + metrics.stringWidth(text));
         }
         else if(aligned.equals("left")){
             x2 = 0;

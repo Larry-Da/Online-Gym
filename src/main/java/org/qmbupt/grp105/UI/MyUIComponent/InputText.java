@@ -18,6 +18,7 @@ public class InputText extends JTextField
     private Color borderColor;
     private Font font = UIStyle.NORMAL_FONT;
     private boolean arc = true;
+
     public InputText(int x, int y, int width, int height, int numberOfChars, boolean autoVanish, String defaultText)
     {
         super(numberOfChars);

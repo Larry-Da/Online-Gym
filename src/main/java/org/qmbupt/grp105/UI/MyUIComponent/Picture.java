@@ -8,15 +8,15 @@ import java.util.HashMap;
 
 public class Picture extends JLabel
 {
+    int width;
+    int height;
     String path;
-    int x;
-    int y;
+
     public Picture(String path, int x, int y)
     {
         this.path = path;
-        this.x = x;
-        this.y = y;
-
+        this.width = x;
+        this.height = y;
     }
     protected void paintComponent(Graphics g)
     {
@@ -34,15 +34,15 @@ public class Picture extends JLabel
         int originalHeight = icon.getIconHeight();
         int desiredWidth;
         int desiredHeight;
-        if(((double)x / y) < ((double)originalWidth / originalHeight))
+        if(((double)width / height) < ((double)originalWidth / originalHeight))
         {
             desiredHeight = originalHeight;
-            desiredWidth = (int)(originalHeight * (double)x / y);
+            desiredWidth = (int)(originalHeight * (double)width / height);
         }
         else
         {
             desiredWidth = originalWidth;
-            desiredHeight = (int)(originalWidth * (double)y / x);
+            desiredHeight = (int)(originalWidth * (double)height / width);
         }
         CropImageFilter cropFilter = new CropImageFilter(0, 0, desiredWidth, desiredHeight);
 
