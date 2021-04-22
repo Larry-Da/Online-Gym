@@ -1,13 +1,14 @@
 package org.qmbupt.grp105.UI.MyUIComponent;
+
 import org.qmbupt.grp105.UI.UIStyle;
 
-import javax.swing.JTextField;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.util.*;
 
-public class InputText extends JTextField
+public class InputArea extends JTextArea
 {
     private Color borderColor_unselected = Color.decode("#DEE2E6");
     private Color borderColor_selected = UIStyle.BLUE_BUTTRESS;
@@ -17,30 +18,12 @@ public class InputText extends JTextField
     private Color backgroundColor_selected = Color.WHITE;
     private Color borderColor;
     private Font font = UIStyle.NORMAL_FONT;
+
     private boolean arc = true;
 
-    public InputText(int x, int y, int width, int height, int numberOfChars, boolean autoVanish, String defaultText)
+    public InputArea(int width, int height, boolean autoVanish, int centerX, int centerY, String defaultText, boolean arc)
     {
-        super(numberOfChars);
 
-        setParameters(x, y, width, height, defaultText);
-        setEvent(autoVanish, defaultText);
-
-
-    }
-    public InputText(Font font, boolean arc, int x, int y, int width, int height, int numberOfChars, boolean autoVanish, String defaultText)
-    {
-        super(numberOfChars);
-        this.font = font;
-        this.arc = arc;
-        setParameters(x, y, width, height, defaultText);
-        setEvent(autoVanish, defaultText);
-
-
-    }
-    public InputText(int width, int height, int numberOfChars, boolean autoVanish, int centerX, int centerY, String defaultText, boolean arc)
-    {
-        super(numberOfChars);
         this.arc = arc;
         int x = centerX - width / 2;
         int y = centerY - height / 2;
@@ -49,22 +32,6 @@ public class InputText extends JTextField
         setEvent(autoVanish, defaultText);
     }
 
-    public InputText(int x, int y, int width, int height, int numberOfChars, boolean autoVanish, String defaultText, Color textColor_unselected, Color textColor_selected, Color backgroundColor_unselected, Color backgroundColor_selected, Color borderColor_unselected, Color borderColor_selected)
-    {
-        super(numberOfChars);
-
-        this.borderColor_selected = borderColor_selected;
-        this.borderColor_unselected = borderColor_unselected;
-        this.textColor_selected = textColor_selected;
-        this.textColor_unselected = textColor_unselected;
-        this.backgroundColor_selected = backgroundColor_selected;
-        this.backgroundColor_unselected = backgroundColor_unselected;
-
-        setParameters(x, y, width, height, defaultText);
-        setEvent(autoVanish, defaultText);
-
-
-    }
     void setParameters(int x, int y, int width, int height, String text)
     {
         setOpaque(false);
@@ -88,26 +55,26 @@ public class InputText extends JTextField
             public void focusGained(FocusEvent e)
             {
                 if(autoVanish) {
-                    if (InputText.this.getText().equals(defaultText)) {
-                        InputText.this.setText("");
+                    if (InputArea.this.getText().equals(defaultText)) {
+                        InputArea.this.setText("");
                     }
                 }
-                InputText.this.setForeground(textColor_selected);
-                InputText.this.setBorderColor(borderColor_selected);
-                InputText.this.setBackground(backgroundColor_selected);
+                InputArea.this.setForeground(textColor_selected);
+                InputArea.this.setBorderColor(borderColor_selected);
+                InputArea.this.setBackground(backgroundColor_selected);
             }
 
             @Override
             public void focusLost(FocusEvent e) {
                 if(autoVanish) {
-                    if (InputText.this.getText().isEmpty()) {
-                        InputText.this.setText(defaultText);
+                    if (InputArea.this.getText().isEmpty()) {
+                        InputArea.this.setText(defaultText);
                     }
                 }
 
-                InputText.this.setForeground(textColor_unselected);
-                InputText.this.setBorderColor(borderColor_unselected);
-                InputText.this.setBackground(backgroundColor_unselected);
+                InputArea.this.setForeground(textColor_unselected);
+                InputArea.this.setBorderColor(borderColor_unselected);
+                InputArea.this.setBackground(backgroundColor_unselected);
             }
         });
     }

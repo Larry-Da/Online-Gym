@@ -36,7 +36,7 @@ public class UIStyle
     public static int ScreenHeight;
 
     public static final String HomePanel_BackGround = UIStyle.class.getClassLoader().getResource("Fitness-for-10-Home-Licensing-Information.jpg").getPath();
-    public static final String SignInPanel_Login = UIStyle.class.getClassLoader().getResource("LoginPic.png").getPath();
+    public static final String SignInPanel_Login = UIStyle.class.getClassLoader().getResource("LoginPic.jpg").getPath();
     public static final String CustomerPanel_PersonIcon = UIStyle.class.getClassLoader().getResource("PersonalIcon.jpg").getPath();
     public static final String CustomerMember_Money = UIStyle.class.getClassLoader().getResource("Money.png").getPath();
     public static final String CustomerMember_Level = UIStyle.class.getClassLoader().getResource("level-icon.png").getPath();
@@ -48,6 +48,11 @@ public class UIStyle
     public static final String VirtualClass_yoga = UIStyle.class.getClassLoader().getResource("yoga.jpg").getPath();
     public static final String VirtualClass_strength = UIStyle.class.getClassLoader().getResource("Strength.jpg").getPath();
     public static final String VirtualClass_loseWeight =  UIStyle.class.getClassLoader().getResource("loseWeight.jpg").getPath();
+    public static final String VirtualClass_thumbUp = UIStyle.class.getClassLoader().getResource("thumbs-up-512.png").getPath();
+    public static final String VirtualClass_play = UIStyle.class.getClassLoader().getResource("media_play.png").getPath();
+    public static final String VirtualClass_rate = UIStyle.class.getClassLoader().getResource("rating.png").getPath();
+    public static final String VirtualClass_category = UIStyle.class.getClassLoader().getResource("category.png").getPath();
+    public static final String Contact_background = UIStyle.class.getClassLoader().getResource("Contact.jpeg").getPath();
 
     public UIStyle()
     {

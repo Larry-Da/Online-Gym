@@ -54,6 +54,10 @@ public class TextButton extends MyLabelComponent implements MouseListener
         {
             this.font = UIStyle.NORMAL_FONT;
         }
+        else if(size.equals("tiny"))
+        {
+            this.font = UIStyle.TINY_FONT;
+        }
         originalColors[0] = background;
         originalColors[1] = foreground;
 

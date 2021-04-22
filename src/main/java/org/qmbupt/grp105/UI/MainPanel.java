@@ -8,6 +8,8 @@ public class MainPanel extends JPanel
     private HomePanel homePanel;
     private PersonalPanel personalPanel;
     private VirtualClassPanel virtualClassPanel;
+    private LiveClassPanel liveClassPanel;
+    private ContactPanel contactPanel;
 
 
     public MainPanel()
@@ -27,9 +29,14 @@ public class MainPanel extends JPanel
         this.add(virtualClassPanel, "virtualClassPanel");
         //classPanel.setVisible(true);
 
+        liveClassPanel = new LiveClassPanel(cards, this);
+        this.add(liveClassPanel, "liveSessionPanel");
 
+        contactPanel = new ContactPanel(cards, this);
+        this.add(contactPanel, "contactPanel");
 
 
 
     }
+
 }

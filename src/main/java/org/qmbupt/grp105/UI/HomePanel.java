@@ -1,6 +1,7 @@
 package org.qmbupt.grp105.UI;
 
 
+import org.qmbupt.grp105.Entity.Video;
 import org.qmbupt.grp105.UI.MyUIComponent.*;
 import org.qmbupt.grp105.UI.MyUIComponent.MenuBar;
 
@@ -9,7 +10,6 @@ import java.awt.*;
 
 public class HomePanel extends JPanel
 {
-
     public HomePanel(CardLayout cards, JPanel mainPanel)
     {
         MenuBar mb = new MenuBar(cards, mainPanel);

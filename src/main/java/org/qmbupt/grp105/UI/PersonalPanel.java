@@ -9,6 +9,7 @@ import java.util.Date;
 
 import org.qmbupt.grp105.Controller.PersonalController;
 import org.qmbupt.grp105.Entity.Customer;
+import org.qmbupt.grp105.Entity.Video;
 import org.qmbupt.grp105.UI.MyUIComponent.*;
 import org.qmbupt.grp105.UI.MyUIComponent.MenuBar;
 
@@ -106,6 +107,8 @@ class SignInPanel extends JPanel
                     cards.show(contentPanel, "customerPanel");
             }
         });
+
+
     }
 }
 
