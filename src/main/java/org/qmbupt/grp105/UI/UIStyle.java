@@ -21,6 +21,7 @@ public class UIStyle
     public static final Color COLOR_2 = Color.WHITE;
     public static final Color COLOR_3 = Color.decode("#F6F6F6");
     public static final Color COLOR_4 = Color.BLACK;
+    public static final Color COLOR_5 = Color.decode("#4D5054");
 
     public static final Color BLUE_BUTTRESS = Color.decode("#1253CE");
     public static final Color BLUE_SHALLOW = Color.decode("#ACC7F1");

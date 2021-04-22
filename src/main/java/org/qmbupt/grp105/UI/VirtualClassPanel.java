@@ -102,11 +102,11 @@ class SearchPanel extends JPanel
 
         int startFilter = 130;
         String[] categoryFilterString = {"Category", "Bicycle Training", "HITT", "Flexibility", "Yoga", "Strength", "Weight Loss"};
-        FilterBox categoryFilter = new FilterBox(startFilter, categoryFilterString);
+        FilterBox categoryFilter = new FilterBox(startFilter, categoryFilterString, "dark");
         this.add(categoryFilter);
 
         String[] sortString = {"Sort", "Like", "Rating", "View"};
-        FilterBox sortFilter = new FilterBox(startFilter + 40, sortString);
+        FilterBox sortFilter = new FilterBox(startFilter + 40, sortString, "dark");
         this.add(sortFilter);
 
         pageMax = 10;
@@ -136,7 +136,7 @@ class SearchResultPanel extends JPanel
         int xinterval =(int)((UIStyle.width - 100 - 100 - 200) / 3);
         for(int i = 0; i < videos.length; i++)
         {
-            VideoPanel video = new VideoPanel(videos[i], 100+ xinterval * i, 100, mainPanel, cards);
+            VideoPanel video = new VideoPanel(videos[i], 100+ xinterval * i, 100, mainPanel, cards, "small");
             this.add(video);
         }
         JSlider pages = new JSlider(1, pageMax, 1);

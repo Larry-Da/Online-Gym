@@ -51,13 +51,13 @@ class ContentPanel extends JPanel
 
         int startFilter = 130;
         String[] categoryFilterString = {"Category", "Bicycle Training", "HITT", "Flexibility", "Yoga", "Strength", "Weight Loss"};
-        FilterBox categoryFilter = new FilterBox(startFilter, categoryFilterString);
+        FilterBox categoryFilter = new FilterBox(startFilter, categoryFilterString, "dark");
         this.add(categoryFilter);
 
 
 
         String[] sortString = {"Sort", "Like", "Rating", "View"};
-        FilterBox sortFilter = new FilterBox(startFilter + 40, sortString);
+        FilterBox sortFilter = new FilterBox(startFilter + 40, sortString, "dark");
         this.add(sortFilter);
 
         pageMax = 10;

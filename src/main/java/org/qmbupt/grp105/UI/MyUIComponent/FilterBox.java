@@ -10,19 +10,27 @@ public class FilterBox extends JPanel
 {
     private Font font;
     private FontMetrics mt;
+    private String color;
 
-    public FilterBox (int y, String contents[])
+    public FilterBox (int y, String contents[], String color)
     {
         setLayout(null);
+        this.color = color;
         font = UIStyle.SMALL_FONT;
-        this.setBackground(Color.decode("#14151A"));
+        if(color.equals("dark"))
+            this.setBackground(Color.decode("#14151A"));
+        else
+            this.setBackground(Color.white);
         mt = Toolkit.getDefaultToolkit().getFontMetrics(font);
 
 
 
         JLabel head = new JLabel(contents[0]);
         head.setFont(font);
-        head.setForeground(Color.white);
+        if(color.equals("dark"))
+            head.setForeground(Color.white);
+        else
+            head.setForeground(Color.black);
         int posision = 200;
         int space = 25;
 
@@ -37,7 +45,10 @@ public class FilterBox extends JPanel
         {
             JCheckBox option = new JCheckBox(contents[i]);
             option.setFont(font);
-            option.setForeground(Color.white);
+            if(color.equals("dark"))
+                option.setForeground(Color.white);
+            else
+                option.setForeground(Color.BLACK);
             int StringWidth = mt.stringWidth(contents[i]);
             option.setBounds(posision, 0, StringWidth+space*2, 40);
             posision += StringWidth + space*2;
@@ -54,7 +65,10 @@ public class FilterBox extends JPanel
             put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             put(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
         }});
-        g2.setPaint(Color.decode("#EC9730"));
+        if(color.equals("dark"))
+            g2.setPaint(Color.decode("#EC9730"));
+        else
+            g2.setPaint(UIStyle.BLUE_SHALLOW);
         g2.drawLine(0, 39, (int)UIStyle.width, 39);
     }
 }

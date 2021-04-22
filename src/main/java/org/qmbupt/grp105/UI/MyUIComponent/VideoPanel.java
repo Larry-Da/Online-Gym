@@ -16,25 +16,89 @@ public class VideoPanel extends JPanel implements MouseListener
     private int space;
     private String title;
     private int likes;
+    private int likesX;
+    private int likesY;
+
     private int picHeight;
     private int lineHeight;
+
     private int viewCount;
+    private int viewCountX;
+    private int viewCountY;
+
     private double rate;
+    private int rateX;
+    private int rateY;
+
     private String category;
+    private int categoryX;
+    private int categoryY;
+
     private JPanel mainPanel;
     private CardLayout cards;
-    public VideoPanel(Video video, int x, int y, JPanel mainPanel, CardLayout cards)
+    private String size;
+
+    public VideoPanel(Video video, int x, int y, JPanel mainPanel, CardLayout cards, String size)
     {
-        int width = 200;
-        int height = 300;
-        space = width / 10;
         this.setLayout(null);
-        picHeight = height / 3 * 2;
-        lineHeight  = height / 3 / 3;
+        this.size = size;
+
+        int width;
+        int height;
         String picPath = UIStyle.class.getClassLoader().getResource(video.getUrl()).getPath();
-        JLabel picturePreview = new Picture(picPath, width, picHeight);
-        this.add(picturePreview);
-        picturePreview.setBounds(0, 0, width, picHeight);
+
+        if(size.equals("small"))
+        {
+            width = 200;
+            height = 300;
+            space = width / 10;
+            picHeight = height / 3 * 2;
+            lineHeight  = height / 3 / 3;
+            JLabel picturePreview = new Picture(picPath, width, picHeight);
+            this.add(picturePreview);
+            picturePreview.setBounds(0, 0, width, picHeight);
+            this.addMouseListener(this);
+            this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+            likesX = 46;
+            likesY = 247;
+
+            viewCountX = 146;
+            viewCountY = 247;
+
+            rateX = 46;
+            rateY = 280;
+
+            categoryX = 146;
+            categoryY = 280;
+        }
+        else
+        {
+            space = 20;
+            width = (int)UIStyle.width - (int)(UIStyle.width * 0.24);
+            height = 120;
+            picHeight = height - 10;
+            JLabel picturePreview = new Picture(picPath, picHeight, picHeight);
+            this.add(picturePreview);
+            picturePreview.setBounds(space, space, picHeight, picHeight);
+            picturePreview.addMouseListener(this);
+            picturePreview.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+            likesX = 400;
+            likesY = 110;
+
+            viewCountX = 500;
+            viewCountY = 110;
+
+            rateX = 600;
+            rateY = 110;
+
+            categoryX = 700;
+            categoryY = 110;
+
+        }
+
+
 
 
         title = video.getName();
@@ -45,10 +109,8 @@ public class VideoPanel extends JPanel implements MouseListener
 
 
         setBackground(Color.WHITE);
-        this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         this.cards = cards;
         this.mainPanel = mainPanel;
-        this.addMouseListener(this);
 
         this.setVisible(true);
         this.setBounds(x, y, width, height);
@@ -66,34 +128,45 @@ public class VideoPanel extends JPanel implements MouseListener
         }});
         super.paintComponent(g2);
 
-        g2.setPaint(Color.BLACK);
-        g2.setFont(UIStyle.TINY_FONT);
-        g2.drawString(title, space, picHeight + space);
+
+        if(size.equals("small")) {
+            g2.setPaint(Color.BLACK);
+            g2.setFont(UIStyle.TINY_FONT);
+            g2.drawString(title, space, picHeight + space);
+        }
+        else
+        {
+            g2.setPaint(Color.BLACK);
+            g2.setFont(UIStyle.NORMAL_FONT);
+            g2.drawString(title, 150, 40);
+        }
 
         g2.setPaint(Color.gray);
-        g2.drawString(likes + "", (int)(2.3 * space), (int)(picHeight + space / 1.40 + lineHeight));
+        g2.setFont(UIStyle.TINY_FONT);
 
-
-        g2.drawString(viewCount + "", getWidth() /2 + (int)(2.3 * space), (int)(picHeight + space / 1.40 + lineHeight));
-
-        g2.drawString(rate + "", (int)(2.3 * space), (int)(picHeight + space / 1.40 + 2* lineHeight));
-
-        g2.drawString(category,getWidth() /2 +  (int)(2.3 * space), (int)(picHeight + space / 1.40 + 2* lineHeight) );
+        g2.drawString(likes + "", likesX, likesY);
+        g2.drawString(viewCount + "", viewCountX, viewCountY);
+        g2.drawString(rate + "", rateX, rateY);
+        g2.drawString(category, categoryX, categoryY);
 
 
         Image img1 = new ImageIcon(UIStyle.VirtualClass_thumbUp).getImage();
-        g2.drawImage(img1, space, picHeight +  lineHeight, space, space,null);// must set width andd height, otherwise it will not display it
+        g2.drawImage(img1, likesX - 26, likesY - 17, 20, 20,null);// must set width andd height, otherwise it will not display it
 
         Image img2 = new ImageIcon(UIStyle.VirtualClass_play).getImage();
-        g2.drawImage(img2, getWidth() / 2 + space, picHeight +   lineHeight, space, space,null);// must set width andd height, otherwise it will not display it
+        g2.drawImage(img2, viewCountX - 26, viewCountY - 17, 20, 20,null);// must set width andd height, otherwise it will not display it
 
         Image img3 = new ImageIcon(UIStyle.VirtualClass_rate).getImage();
-        g2.drawImage(img3, space, picHeight +  2 * lineHeight, space, space,null);// must set width andd height, otherwise it will not display it
+        g2.drawImage(img3,rateX - 26, rateY - 17, 20, 20,null);// must set width andd height, otherwise it will not display it
 
         Image img4 = new ImageIcon(UIStyle.VirtualClass_category).getImage();
-        g2.drawImage(img4, getWidth() / 2 +  space, picHeight +  2 * lineHeight, space, space,null);// must set width andd height, otherwise it will not display it
+        g2.drawImage(img4, categoryX - 26, categoryY - 17, 20, 20, null);
 
-
+        if(!size.equals("small"))
+        {
+            g2.setPaint(UIStyle.COLOR_5);
+            g2.drawLine(150, 120, (int)UIStyle.width - (int)(UIStyle.width * 0.24), 120);
+        }
     }
     public void mousePressed(MouseEvent e) {
         //

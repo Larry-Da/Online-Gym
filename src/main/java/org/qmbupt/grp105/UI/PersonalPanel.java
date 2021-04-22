@@ -1,6 +1,8 @@
 package org.qmbupt.grp105.UI;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -14,6 +16,7 @@ import org.qmbupt.grp105.Entity.LiveSession;
 import org.qmbupt.grp105.Entity.Video;
 import org.qmbupt.grp105.UI.MyUIComponent.*;
 import org.qmbupt.grp105.UI.MyUIComponent.MenuBar;
+import org.w3c.dom.Text;
 
 public class PersonalPanel extends JPanel
 {
@@ -35,7 +38,7 @@ public class PersonalPanel extends JPanel
         contentPanel.setLayout(loginCards);
         SignInPanel signInPanel = new SignInPanel(loginCards, contentPanel);
         contentPanel.add(signInPanel, "signInPanel");
-        CustomerPanel customerPanel = new CustomerPanel(loginCards, contentPanel);
+        CustomerPanel customerPanel = new CustomerPanel(loginCards, contentPanel, cards, mainPanel);
         contentPanel.add(customerPanel, "customerPanel");
         AdministratorPanel administratorPanel = new AdministratorPanel(loginCards, contentPanel);
         contentPanel.add(administratorPanel, "administratorPanel");
@@ -46,13 +49,13 @@ public class PersonalPanel extends JPanel
 class CustomerPanel extends JPanel
 {
     private PersonalController controller = new PersonalController();
-    public CustomerPanel(CardLayout loginCards, JPanel contentPanel)
+    public CustomerPanel(CardLayout loginCards, JPanel contentPanel, CardLayout mainCards, JPanel mainPanel)
     {
         this.setLayout(null);
         int barHeight = (int)(UIStyle.height) / 10;
         this.setBounds(0, 0, (int)(UIStyle.width), (int)(UIStyle.height - barHeight));
         CardLayout innerCards = new CardLayout();
-        CustomerRightPanel personalRightPanel = new CustomerRightPanel(innerCards, controller);
+        CustomerRightPanel personalRightPanel = new CustomerRightPanel(innerCards, controller, mainCards, mainPanel);
         this.add(personalRightPanel);
 
         CustomerLeftPanel customerLeftPanel = new CustomerLeftPanel(controller, loginCards, contentPanel, innerCards, personalRightPanel);
@@ -134,8 +137,8 @@ class CustomerLeftPanel extends JPanel
 
         TextButton myMembership = new TextButton(UIStyle.COLOR_3, UIStyle.COLOR_4, "My Membership", (int)(0.15 * panelWidth), buttonStart, buttonWidth, buttonHeight, UIStyle.NORMAL_FONT, false, "left");
         TextButton myBookedLive = new TextButton(UIStyle.COLOR_3, UIStyle.COLOR_4, "My Booked LiveSession", (int)(0.15 * panelWidth), buttonStart + buttonHeight, buttonWidth, buttonHeight, UIStyle.NORMAL_FONT, false, "left");
-        TextButton myExerciseRecord = new TextButton(UIStyle.COLOR_3, UIStyle.COLOR_4, "My Exercise Records", (int)(0.15 * panelWidth), buttonStart + 2 * buttonHeight, buttonWidth, buttonHeight, UIStyle.NORMAL_FONT, false, "left");
-        TextButton exerciseJournals = new TextButton(UIStyle.COLOR_3, UIStyle.COLOR_4, "My Classes", (int)(0.15 * panelWidth), buttonStart + 3 * buttonHeight, buttonWidth, buttonHeight, UIStyle.NORMAL_FONT, false, "left");
+        TextButton myVideoHistory = new TextButton(UIStyle.COLOR_3, UIStyle.COLOR_4, "My Video History", (int)(0.15 * panelWidth), buttonStart + 2 * buttonHeight, buttonWidth, buttonHeight, UIStyle.NORMAL_FONT, false, "left");
+        TextButton myFavorite = new TextButton(UIStyle.COLOR_3, UIStyle.COLOR_4, "My Favorite Video", (int)(0.15 * panelWidth), buttonStart + 3 * buttonHeight, buttonWidth, buttonHeight, UIStyle.NORMAL_FONT, false, "left");
 
         myMembership.addMouseListener(new MouseAdapter() {
             @Override
@@ -151,11 +154,26 @@ class CustomerLeftPanel extends JPanel
                 contentCards.show(rightPanel, "BookedLive");
             }
         });
+        myVideoHistory.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                contentCards.show(rightPanel, "VideoHistory");
+            }
+        });
+        myFavorite.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            super.mouseClicked(e);
+            contentCards.show(rightPanel, "Favorite");
+        }
+    });
+
 
         this.add(myMembership);
         this.add(myBookedLive);
-        this.add(myExerciseRecord);
-        this.add(exerciseJournals);
+        this.add(myVideoHistory);
+        this.add(myFavorite);
 
 
 
@@ -188,7 +206,7 @@ class CustomerLeftPanel extends JPanel
 
 class CustomerRightPanel extends JPanel
 {
-    public CustomerRightPanel(CardLayout innerCards, PersonalController controller) {
+    public CustomerRightPanel(CardLayout innerCards, PersonalController controller, CardLayout mainCards, JPanel mainPanel) {
         int panelWidth = (int) (UIStyle.width * 0.76);
         int panelHeight = (int) (UIStyle.height - UIStyle.barHeight);
         setBounds((int) (UIStyle.width * 0.24), 0, panelWidth, panelHeight);
@@ -196,9 +214,15 @@ class CustomerRightPanel extends JPanel
         this.setLayout(innerCards);
         CustomerMembershipPanel membership = new CustomerMembershipPanel(controller.getCusInfoByCusId("Cs15"));
         this.add(membership, "Membership");
-        LiveSession liveSessions[] = {LiveSession.getSample(), LiveSession.getSample()};
+        LiveSession liveSessions[] = {LiveSession.getSample(), LiveSession.getSample(), LiveSession.getSample(), LiveSession.getSample(), LiveSession.getSample()};
         BookedLivePanel bookedLivePanel = new BookedLivePanel(liveSessions);
         this.add(bookedLivePanel, "BookedLive");
+        Video videos[] = {Video.getSampleVideo(),Video.getSampleVideo(),Video.getSampleVideo(),Video.getSampleVideo(),Video.getSampleVideo()};
+        VideoHistoryPanel videoHistoryPanel = new VideoHistoryPanel(videos, mainCards, mainPanel);
+        this.add(videoHistoryPanel, "VideoHistory");
+        FavoritePanel favoritePanel = new FavoritePanel(videos, mainCards, mainPanel);
+        this.add(favoritePanel, "Favorite");
+
     }
 }
 
@@ -261,17 +285,161 @@ class CustomerMembershipPanel extends JPanel
 }
 class BookedLivePanel extends JPanel
 {
+    private int pageMax;
     public BookedLivePanel(LiveSession[] liveSessions)
     {
+        pageMax = 10;
+        String expiredContent[] = {"Expired", "Yes", "No"};
+        FilterBox expired = new FilterBox(50, expiredContent, "light");
+        this.add(expired);
+        String[] categoryFilterString = {"Category", "Bicycle Training", "HITT", "Flexibility", "Yoga", "Strength", "Weight Loss"};
+        FilterBox categoryFilter = new FilterBox(10, categoryFilterString, "light");
+        this.add(categoryFilter);
+
+
+
         int panelWidth = (int) (UIStyle.width * 0.76);
         int panelHeight = (int) (UIStyle.height - UIStyle.barHeight);
+        TextButton applyChange = new TextButton(panelWidth / 2, 110, UIStyle.BLUE_BUTTRESS, Color.white, "Apply Change", 150, 25, "tiny", true);
+        this.add(applyChange);
         setBounds((int) (UIStyle.width * 0.24), UIStyle.barHeight, panelWidth, panelHeight);
         setBackground(Color.WHITE);
-
         this.setLayout(null);
+        for(int i = 0; i < 3; i++) {
+            LivePanel test = new LivePanel(liveSessions[i], 0, 150 * i + 130, "large");
+            this.add(test);
+        }
+
+        JSlider pages = new JSlider(1, pageMax, 1);
+
+        int pagesWidth = 100;
+        int pagesHeight = 50;
+        pages.setBounds((int)(panelWidth / 2 - pagesWidth / 2), (int)(panelHeight - pagesHeight+7), pagesWidth,pagesHeight);
+
+        this.add(pages);
+        // 设置主刻度间隔
+        pages.setMajorTickSpacing(3);
+
+        // 设置次刻度间隔
+        pages.setMinorTickSpacing(1);
+        pages.setForeground(Color.white);
+        pages.setBackground(Color.white);
+//        pages.setPaintTicks(true);
+//        pages.setPaintLabels(true);
+        pages.setSnapToTicks(true);
+        JTextField pageShow = new JTextField();
+        pageShow.setBounds((int)(panelWidth / 2 + pagesWidth / 1.5), (int)(panelHeight - pagesHeight + 17), 30, 30);
+        this.add(pageShow);
+        pageShow.setText("1");
+        pages.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                pageShow.setText(pages.getValue() + "");
+            }
+        });
+
     }
 
 }
+class VideoHistoryPanel extends JPanel
+{
+    private int pageMax;
+    public VideoHistoryPanel(Video[] videos, CardLayout cards, JPanel mainPanel)
+    {
+        pageMax = 10;
+
+        int panelWidth = (int) (UIStyle.width * 0.76);
+        int panelHeight = (int) (UIStyle.height - UIStyle.barHeight);
+
+        setBounds((int) (UIStyle.width * 0.24), UIStyle.barHeight, panelWidth, panelHeight);
+        setBackground(Color.WHITE);
+        this.setLayout(null);
+        for(int i = 0; i < 3; i++) {
+            VideoPanel test = new VideoPanel(videos[i], 0, 150 * i, mainPanel, cards, "large");
+            this.add(test);
+        }
+
+        JSlider pages = new JSlider(1, pageMax, 1);
+
+        int pagesWidth = 100;
+        int pagesHeight = 50;
+        pages.setBounds((int)(panelWidth / 2 - pagesWidth / 2), (int)(panelHeight - pagesHeight+7), pagesWidth,pagesHeight);
+
+        this.add(pages);
+        // 设置主刻度间隔
+        pages.setMajorTickSpacing(3);
+
+        // 设置次刻度间隔
+        pages.setMinorTickSpacing(1);
+        pages.setForeground(Color.white);
+        pages.setBackground(Color.white);
+//        pages.setPaintTicks(true);
+//        pages.setPaintLabels(true);
+        pages.setSnapToTicks(true);
+        JTextField pageShow = new JTextField();
+        pageShow.setBounds((int)(panelWidth / 2 + pagesWidth / 1.5), (int)(panelHeight - pagesHeight + 17), 30, 30);
+        this.add(pageShow);
+        pageShow.setText("1");
+        pages.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                pageShow.setText(pages.getValue() + "");
+            }
+        });
+
+    }
+
+}
+class FavoritePanel extends JPanel
+{
+    private int pageMax;
+    public FavoritePanel(Video[] videos, CardLayout cards, JPanel mainPanel)
+    {
+        pageMax = 10;
+
+        int panelWidth = (int) (UIStyle.width * 0.76);
+        int panelHeight = (int) (UIStyle.height - UIStyle.barHeight);
+
+        setBounds((int) (UIStyle.width * 0.24), UIStyle.barHeight, panelWidth, panelHeight);
+        setBackground(Color.WHITE);
+        this.setLayout(null);
+        for(int i = 0; i < 3; i++) {
+            VideoPanel test = new VideoPanel(videos[i], 0, 150 * i, mainPanel, cards, "large");
+            this.add(test);
+        }
+
+        JSlider pages = new JSlider(1, pageMax, 1);
+
+        int pagesWidth = 100;
+        int pagesHeight = 50;
+        pages.setBounds((int)(panelWidth / 2 - pagesWidth / 2), (int)(panelHeight - pagesHeight+7), pagesWidth,pagesHeight);
+
+        this.add(pages);
+        // 设置主刻度间隔
+        pages.setMajorTickSpacing(3);
+
+        // 设置次刻度间隔
+        pages.setMinorTickSpacing(1);
+        pages.setForeground(Color.white);
+        pages.setBackground(Color.white);
+//        pages.setPaintTicks(true);
+//        pages.setPaintLabels(true);
+        pages.setSnapToTicks(true);
+        JTextField pageShow = new JTextField();
+        pageShow.setBounds((int)(panelWidth / 2 + pagesWidth / 1.5), (int)(panelHeight - pagesHeight + 17), 30, 30);
+        this.add(pageShow);
+        pageShow.setText("1");
+        pages.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                pageShow.setText(pages.getValue() + "");
+            }
+        });
+
+    }
+
+}
+
 class AdministratorPanel extends JPanel
 {
     PersonalController controller = new PersonalController();

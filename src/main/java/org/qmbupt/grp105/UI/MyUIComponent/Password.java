@@ -21,8 +21,7 @@ public class Password extends JPasswordField
     public Password(int xcenter, int ycenter, int width, int height)
     {
         super(10);
-        setOpaque(false);
-        setOpaque(false);
+
         setForeground(this.textColor_unselected); //Text color
         setBorderColor(this.borderColor_unselected);
         setBackground(this.backgroundColor_unselected);// background color
@@ -32,7 +31,7 @@ public class Password extends JPasswordField
         setBounds(x, y, width, height);
 
         setFont(UIStyle.NORMAL_FONT);
-        setBackground(Color.WHITE);
+
         setText("Password");
         setEchoChar((char)0);
         this.addFocusListener(new FocusListener()
@@ -78,7 +77,7 @@ public class Password extends JPasswordField
             put(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
         }});
         g2.setColor(getBackground());
-        g2.fillRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 20, 20);
+        g2.fillRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 0, 0);
 
         super.paintComponent(g2);
     }
@@ -88,7 +87,7 @@ public class Password extends JPasswordField
         Graphics2D g2 = (Graphics2D) g;
         g2.setColor(borderColor);
 
-        g2.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 20, 20);
+        g2.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 0, 0);
     }
     public void setBorderColor(Color color) {
         borderColor = color;
