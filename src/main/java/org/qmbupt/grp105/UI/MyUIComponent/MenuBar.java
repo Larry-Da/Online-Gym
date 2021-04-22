@@ -1,6 +1,7 @@
 package org.qmbupt.grp105.UI.MyUIComponent;
 
 import org.qmbupt.grp105.UI.ContactPanel;
+import org.qmbupt.grp105.UI.MainPanel;
 import org.qmbupt.grp105.UI.UIStyle;
 
 import javax.swing.*;
@@ -41,30 +42,36 @@ public class MenuBar extends JPanel
             public void mouseClicked(MouseEvent e) {
                 //cards.next(mainPanel);
                 cards.show(mainPanel, "personalPanel");
+                MainPanel.currentPanel = "personalPanel";
             }
         });
         HomePageButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 cards.show(mainPanel, "homePanel");
+                MainPanel.currentPanel = "homePanel";
             }
         });
         ClassButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 cards.show(mainPanel, "virtualClassPanel");
+                MainPanel.currentPanel = "virtualClassPanel";
             }
         });
         LiveButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 cards.show(mainPanel, "liveSessionPanel");
+                MainPanel.currentPanel = "liveSessionPanel";
             }
         });
         ContactButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 cards.show(mainPanel, "contactPanel");
+                MainPanel.currentPanel = "contactPanel";
+
             }
         });
         this.setLayout(null);

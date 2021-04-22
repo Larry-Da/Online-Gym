@@ -53,6 +53,9 @@ public class UIStyle
     public static final String VirtualClass_rate = UIStyle.class.getClassLoader().getResource("rating.png").getPath();
     public static final String VirtualClass_category = UIStyle.class.getClassLoader().getResource("category.png").getPath();
     public static final String Contact_background = UIStyle.class.getClassLoader().getResource("Contact.jpeg").getPath();
+    public static final String VirtualClass_pause = UIStyle.class.getClassLoader().getResource("pause.png").getPath();
+    public static final String VirtualClass_favorite = UIStyle.class.getClassLoader().getResource("favorite.png").getPath();
+
 
     public UIStyle()
     {

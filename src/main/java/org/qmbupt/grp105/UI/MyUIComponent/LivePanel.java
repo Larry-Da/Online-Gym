@@ -15,10 +15,20 @@ public class LivePanel extends JPanel
     private String category;
     String coachId;
 
-    public LivePanel(LiveSession live, int x, int y)
+
+    public LivePanel(LiveSession live, int x, int y, String size)
     {
-        int width = 200;
-        int height = 100;
+        int width;
+        int height;
+        if(size.equals("small")) {
+            width = 200;
+            height = 100;
+        }
+        else
+        {
+            width = (int)UIStyle.width - (int)(UIStyle.width * 0.24);
+            height = 150;
+        }
         space = width / 10;
         this.setLayout(null);
         picHeight = height / 3 ;

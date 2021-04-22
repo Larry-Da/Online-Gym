@@ -4,11 +4,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.print.Book;
 import java.util.ArrayList;
 import java.util.Date;
 
 import org.qmbupt.grp105.Controller.PersonalController;
 import org.qmbupt.grp105.Entity.Customer;
+import org.qmbupt.grp105.Entity.LiveSession;
 import org.qmbupt.grp105.Entity.Video;
 import org.qmbupt.grp105.UI.MyUIComponent.*;
 import org.qmbupt.grp105.UI.MyUIComponent.MenuBar;
@@ -43,19 +45,21 @@ public class PersonalPanel extends JPanel
 
 class CustomerPanel extends JPanel
 {
-    PersonalController controller = new PersonalController();
+    private PersonalController controller = new PersonalController();
     public CustomerPanel(CardLayout loginCards, JPanel contentPanel)
     {
         this.setLayout(null);
         int barHeight = (int)(UIStyle.height) / 10;
         this.setBounds(0, 0, (int)(UIStyle.width), (int)(UIStyle.height - barHeight));
-        CustomerLeftPanel customerLeftPanel = new CustomerLeftPanel(controller, loginCards, contentPanel);
-        this.add(customerLeftPanel);
-        customerLeftPanel.setVisible(true);
-
         CardLayout innerCards = new CardLayout();
         CustomerRightPanel personalRightPanel = new CustomerRightPanel(innerCards, controller);
         this.add(personalRightPanel);
+
+        CustomerLeftPanel customerLeftPanel = new CustomerLeftPanel(controller, loginCards, contentPanel, innerCards, personalRightPanel);
+        this.add(customerLeftPanel);
+        customerLeftPanel.setVisible(true);
+
+
     }
 }
 
@@ -116,7 +120,7 @@ class CustomerLeftPanel extends JPanel
 {
     int panelWidth;
     int panelHeight;
-    public CustomerLeftPanel(PersonalController controller, final CardLayout loginCards, final JPanel contentPanel)
+    public CustomerLeftPanel(PersonalController controller, final CardLayout loginCards, final JPanel contentPanel, CardLayout contentCards, JPanel rightPanel)
     {
         panelWidth = (int)(UIStyle.width * 0.24);
         panelHeight = (int)(UIStyle.height - UIStyle.barHeight);
@@ -129,12 +133,27 @@ class CustomerLeftPanel extends JPanel
         int buttonWidth = panelWidth;
 
         TextButton myMembership = new TextButton(UIStyle.COLOR_3, UIStyle.COLOR_4, "My Membership", (int)(0.15 * panelWidth), buttonStart, buttonWidth, buttonHeight, UIStyle.NORMAL_FONT, false, "left");
-        TextButton myClasses = new TextButton(UIStyle.COLOR_3, UIStyle.COLOR_4, "My Classes", (int)(0.15 * panelWidth), buttonStart + buttonHeight, buttonWidth, buttonHeight, UIStyle.NORMAL_FONT, false, "left");
+        TextButton myBookedLive = new TextButton(UIStyle.COLOR_3, UIStyle.COLOR_4, "My Booked LiveSession", (int)(0.15 * panelWidth), buttonStart + buttonHeight, buttonWidth, buttonHeight, UIStyle.NORMAL_FONT, false, "left");
         TextButton myExerciseRecord = new TextButton(UIStyle.COLOR_3, UIStyle.COLOR_4, "My Exercise Records", (int)(0.15 * panelWidth), buttonStart + 2 * buttonHeight, buttonWidth, buttonHeight, UIStyle.NORMAL_FONT, false, "left");
         TextButton exerciseJournals = new TextButton(UIStyle.COLOR_3, UIStyle.COLOR_4, "My Classes", (int)(0.15 * panelWidth), buttonStart + 3 * buttonHeight, buttonWidth, buttonHeight, UIStyle.NORMAL_FONT, false, "left");
 
+        myMembership.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                contentCards.show(rightPanel, "Membership");
+            }
+        });
+        myBookedLive.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                contentCards.show(rightPanel, "BookedLive");
+            }
+        });
+
         this.add(myMembership);
-        this.add(myClasses);
+        this.add(myBookedLive);
         this.add(myExerciseRecord);
         this.add(exerciseJournals);
 
@@ -176,7 +195,10 @@ class CustomerRightPanel extends JPanel
         setBackground(Color.WHITE);
         this.setLayout(innerCards);
         CustomerMembershipPanel membership = new CustomerMembershipPanel(controller.getCusInfoByCusId("Cs15"));
-        this.add(membership);
+        this.add(membership, "Membership");
+        LiveSession liveSessions[] = {LiveSession.getSample(), LiveSession.getSample()};
+        BookedLivePanel bookedLivePanel = new BookedLivePanel(liveSessions);
+        this.add(bookedLivePanel, "BookedLive");
     }
 }
 
@@ -237,7 +259,19 @@ class CustomerMembershipPanel extends JPanel
 
     }
 }
+class BookedLivePanel extends JPanel
+{
+    public BookedLivePanel(LiveSession[] liveSessions)
+    {
+        int panelWidth = (int) (UIStyle.width * 0.76);
+        int panelHeight = (int) (UIStyle.height - UIStyle.barHeight);
+        setBounds((int) (UIStyle.width * 0.24), UIStyle.barHeight, panelWidth, panelHeight);
+        setBackground(Color.WHITE);
 
+        this.setLayout(null);
+    }
+
+}
 class AdministratorPanel extends JPanel
 {
     PersonalController controller = new PersonalController();
@@ -379,11 +413,10 @@ class AdministratorMembershipPanel extends JPanel
         PageSelector pages = new PageSelector(10, Color.WHITE, Color.black, (int)(panelWidth - 100), (int)(50));
         this.add(pages);
 
-
-
     }
 
 }
+
 
 
 

@@ -10,6 +10,8 @@ public class MainPanel extends JPanel
     private VirtualClassPanel virtualClassPanel;
     private LiveClassPanel liveClassPanel;
     private ContactPanel contactPanel;
+    private TempContentPanel tempContentPanel;
+    public static String currentPanel = "homePanel";
 
 
     public MainPanel()
@@ -34,6 +36,10 @@ public class MainPanel extends JPanel
 
         contactPanel = new ContactPanel(cards, this);
         this.add(contactPanel, "contactPanel");
+
+        tempContentPanel = new TempContentPanel(cards, this);
+        this.add(tempContentPanel, "tempContentPanel");
+
 
 
 

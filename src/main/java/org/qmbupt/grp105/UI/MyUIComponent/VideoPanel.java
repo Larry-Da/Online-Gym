@@ -1,13 +1,17 @@
 package org.qmbupt.grp105.UI.MyUIComponent;
 
 import org.qmbupt.grp105.Entity.Video;
+import org.qmbupt.grp105.UI.MainPanel;
 import org.qmbupt.grp105.UI.UIStyle;
+import org.qmbupt.grp105.UI.VideoDetailPanel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.HashMap;
 
-public class VideoPanel extends JPanel
+public class VideoPanel extends JPanel implements MouseListener
 {
     private int space;
     private String title;
@@ -17,7 +21,9 @@ public class VideoPanel extends JPanel
     private int viewCount;
     private double rate;
     private String category;
-    public VideoPanel(Video video, int x, int y)
+    private JPanel mainPanel;
+    private CardLayout cards;
+    public VideoPanel(Video video, int x, int y, JPanel mainPanel, CardLayout cards)
     {
         int width = 200;
         int height = 300;
@@ -39,6 +45,11 @@ public class VideoPanel extends JPanel
 
 
         setBackground(Color.WHITE);
+        this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        this.cards = cards;
+        this.mainPanel = mainPanel;
+        this.addMouseListener(this);
+
         this.setVisible(true);
         this.setBounds(x, y, width, height);
 
@@ -82,6 +93,30 @@ public class VideoPanel extends JPanel
         Image img4 = new ImageIcon(UIStyle.VirtualClass_category).getImage();
         g2.drawImage(img4, getWidth() / 2 +  space, picHeight +  2 * lineHeight, space, space,null);// must set width andd height, otherwise it will not display it
 
+
+    }
+    public void mousePressed(MouseEvent e) {
+        //
+    }
+
+    public void mouseClicked(MouseEvent e)
+    {
+        cards.show(mainPanel, "tempContentPanel");
+        //MainPanel.tempContentPanel.setContent(new VideoDetailPanel());
+        //
+    }
+    public void mouseReleased(MouseEvent e)
+    {
+        //
+    }
+    public void mouseEntered(MouseEvent e)
+    {
+
+    }
+
+
+    public void mouseExited(MouseEvent e)
+    {
 
     }
 }

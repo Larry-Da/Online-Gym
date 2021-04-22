@@ -85,14 +85,14 @@ class ResultPanel extends JPanel {
         int xinterval =(int)((UIStyle.width - 100 - 100 - 200) / 3);
         for(int i = 0; i < liveSessions.length; i++)
         {
-            LivePanel live = new LivePanel(liveSessions[i], 100+ xinterval * i, 100);
+            LivePanel live = new LivePanel(liveSessions[i], 100+ xinterval * i, 100, "small");
             this.add(live);
             if(i == 3)
                 break;
         }
         for(int i = 4; i < liveSessions.length; i++)
         {
-            LivePanel live = new LivePanel(liveSessions[i], 100+ xinterval * (i-4), 250);
+            LivePanel live = new LivePanel(liveSessions[i], 100+ xinterval * (i-4), 250, "small");
             this.add(live);
         }
         JSlider pages = new JSlider(1, pageMax, 1);

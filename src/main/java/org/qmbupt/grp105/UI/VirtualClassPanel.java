@@ -33,7 +33,7 @@ public class VirtualClassPanel extends JPanel
         CategoryPanel categoryPanel = new CategoryPanel(searchCards, contentPanel);
         contentPanel.add(categoryPanel, "categoryPanel");
 
-        SearchPanel searchPanel = new SearchPanel(searchCards, contentPanel);
+        SearchPanel searchPanel = new SearchPanel(searchCards, contentPanel, cards, mainPanel);
         contentPanel.add(searchPanel, "searchPanel");
 
 
@@ -93,7 +93,7 @@ class SearchPanel extends JPanel
 {
     private int pageMax;
     public static int SearchResultPanelHeight;
-    public SearchPanel(CardLayout cards, JPanel contentPanel)
+    public SearchPanel(CardLayout cards, JPanel contentPanel, CardLayout mainCards, JPanel mainPanel)
     {
         this.setLayout(null);
         this.setBackground(Color.decode("#14151A"));
@@ -122,13 +122,13 @@ class SearchPanel extends JPanel
 
         SearchResultPanel searchResultPanels[] = new SearchResultPanel[pageMax];
         Video[] videos = {Video.getSampleVideo(), Video.getSampleVideo(), Video.getSampleVideo(), Video.getSampleVideo()};
-        searchResultPanels[0] = new SearchResultPanel(videos, pageMax, resultCards, resultContentPanel);
+        searchResultPanels[0] = new SearchResultPanel(videos, pageMax, resultCards, resultContentPanel, mainCards, mainPanel);
         resultContentPanel.add(searchResultPanels[0], "0");
     }
 }
 class SearchResultPanel extends JPanel
 {
-    public SearchResultPanel(Video[] videos, int pageMax, CardLayout resultCards, JPanel resultContentPanel)
+    public SearchResultPanel(Video[] videos, int pageMax, CardLayout resultCards, JPanel resultContentPanel, CardLayout cards, JPanel mainPanel)
     {
         this.setLayout(null);
         this.setBackground(Color.decode("#14151A"));
@@ -136,7 +136,7 @@ class SearchResultPanel extends JPanel
         int xinterval =(int)((UIStyle.width - 100 - 100 - 200) / 3);
         for(int i = 0; i < videos.length; i++)
         {
-            VideoPanel video = new VideoPanel(videos[i], 100+ xinterval * i, 100);
+            VideoPanel video = new VideoPanel(videos[i], 100+ xinterval * i, 100, mainPanel, cards);
             this.add(video);
         }
         JSlider pages = new JSlider(1, pageMax, 1);
