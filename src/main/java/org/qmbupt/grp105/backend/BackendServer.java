@@ -1,6 +1,7 @@
 package org.qmbupt.grp105.backend;
 
 import java.io.*;
+import java.util.logging.Logger;
 
 import com.alibaba.fastjson.*;
 
@@ -9,6 +10,7 @@ import org.qmbupt.grp105.backend.request.*;
 //yyyy-MM-dd
 public class BackendServer {
     public static String execute(String clientRequestStr) {
+        Logger.getLogger("").info("Received String: " + clientRequestStr);
         try {
             JSONObject object = JSON.parseObject(clientRequestStr);
 

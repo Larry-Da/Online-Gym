@@ -1,3 +1,7 @@
+/**
+ * This file should be removed in the future.
+ */
+
 package org.qmbupt.grp105.backend.request;
 
 import com.alibaba.fastjson.*;

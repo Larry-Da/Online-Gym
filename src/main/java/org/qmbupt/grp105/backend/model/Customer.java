@@ -1,6 +1,7 @@
 package org.qmbupt.grp105.backend.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
@@ -24,14 +25,14 @@ public class Customer {
     @JSONField(name = "gender")
     public String gender;
 
-    @JSONField(name = "dateOfBirth", format = "yyyy-MM-dd", ordinal = 3)
-    public String dateOfBirth;
+    @JSONField(name = "dateOfBirth", format = "yyyy-MM-dd")
+    public Date dateOfBirth;
 
     @JSONField(name = "level")
     public int level;
 
-    @JSONField(name = "expireDate")
-    public String expireDate;
+    @JSONField(name = "expireDate", format = "yyyy-MM-dd")
+    public Date expireDate;
 
     @JSONField(name = "balance")
     public int balance;

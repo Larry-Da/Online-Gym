@@ -1,6 +1,7 @@
 package org.qmbupt.grp105.backend.request;
 
 import com.alibaba.fastjson.*;
+import org.qmbupt.grp105.backend.dblayer.TransactionManager;
 
 public class RequestGetMonthlyIncomeHandler implements RequestHandler {
 
@@ -10,18 +11,10 @@ public class RequestGetMonthlyIncomeHandler implements RequestHandler {
         JSONObject retJson = new JSONObject();
         
         try {
-
             int month = Integer.parseInt(JSON.parseObject(payload).getString("month"));
-            JSONArray transactions = JSON.parseObject(IO.read("gym.json")).getJSONArray("transactions");
             int monthlyTotalIncome = 0;
 
-            for (int i = 0; i < transactions.size(); i++) {
-                JSONObject transaction = transactions.getJSONObject(i);
-                if (Integer.parseInt(transaction.getString("date").substring(5, 7)) == month) {
-                    monthlyTotalIncome += transaction.getInteger("mount");
-                }
-            }
-
+            monthlyTotalIncome = TransactionManager.getMonthlyIncome(month);
 
             JSONObject responsePayload = new JSONObject();
             responsePayload.put("income", "" + monthlyTotalIncome);
