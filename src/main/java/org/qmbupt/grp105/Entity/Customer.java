@@ -16,6 +16,7 @@ public class Customer extends Person
     private ArrayList<String> videosHistory;
     //private String exerciseLevel;
 
+
     public String getCusId() {
         return cusId;
     }
@@ -134,6 +135,10 @@ public class Customer extends Person
         this.balance = balance;
         this.points = points;
     }
+    public static Customer getSample()
+    {
+        return new Customer("1", 21, "Vae", "12345", "18055661111", "2018213144@bupt.edu.cn", 'M', new Date(100000000), "Lv1", "12h", 123, 12);
+    }
 
     public Customer(String cusId, int age, String name, String password, String phoneNo, String email, char gender,
                     Date dateOfBirth, String membershipLevel, String remainTime, int balance, int points, ArrayList<String> videosHistory) {
@@ -166,4 +171,5 @@ public class Customer extends Person
                 ", points=" + points +
                 '}';
     }
+
 }

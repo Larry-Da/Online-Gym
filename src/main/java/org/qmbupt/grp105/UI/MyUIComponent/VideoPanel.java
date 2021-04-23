@@ -34,14 +34,16 @@ public class VideoPanel extends JPanel implements MouseListener
     private int categoryX;
     private int categoryY;
 
-    private JPanel mainPanel;
+    private MainPanel mainPanel;
     private CardLayout cards;
     private String size;
 
-    public VideoPanel(Video video, int x, int y, JPanel mainPanel, CardLayout cards, String size)
+
+    public VideoPanel(Video video, int x, int y, MainPanel mainPanel, CardLayout cards, String size)
     {
         this.setLayout(null);
         this.size = size;
+        this.mainPanel = mainPanel;
 
         int width;
         int height;
@@ -174,7 +176,15 @@ public class VideoPanel extends JPanel implements MouseListener
 
     public void mouseClicked(MouseEvent e)
     {
-        cards.show(mainPanel, "tempContentPanel");
+        if(size.equals("manage")) {
+            cards.show(mainPanel, "tempContentPanel");
+            mainPanel.setTempContent("videoModify", title);
+        }
+        else
+        {
+            cards.show(mainPanel, "tempContentPanel");
+            mainPanel.setTempContent("video", title);
+        }
         //MainPanel.tempContentPanel.setContent(new VideoDetailPanel());
         //
     }

@@ -40,9 +40,10 @@ public class MainPanel extends JPanel
         tempContentPanel = new TempContentPanel(cards, this);
         this.add(tempContentPanel, "tempContentPanel");
 
-
-
-
+    }
+    public void setTempContent(String content, String name)
+    {
+        tempContentPanel.setContent(content, name);
     }
 
 }

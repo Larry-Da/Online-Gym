@@ -2,15 +2,22 @@ package org.qmbupt.grp105.UI;
 
 import org.qmbupt.grp105.Entity.Video;
 import org.qmbupt.grp105.UI.MyUIComponent.TextButton;
+import org.qmbupt.grp105.UI.MyUIComponent.VideoModifyPanel;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.HashSet;
+import java.util.Set;
 
 public class TempContentPanel extends JPanel
 {
-    private JPanel content;
+    private JPanel contentContainer;
+    private CardLayout innerCards = new CardLayout();
+    private String currentContent;
+    private VideoDetailPanel videoPanel;
+    private VideoModifyPanel videoModifyPanel;
     public TempContentPanel(CardLayout cards, JPanel mainPanel)
     {
         this.setLayout(null);
@@ -31,16 +38,46 @@ public class TempContentPanel extends JPanel
         });
         backBar.add(back);
         this.setVisible(true);
-        content = new VideoDetailPanel();
-        content.setBounds(0, UIStyle.barHeight, (int)UIStyle.width, (int)(UIStyle.height - UIStyle.barHeight ));
-        this.add(content);
+        contentContainer = new JPanel();
+        contentContainer.setBounds(0, UIStyle.barHeight, (int)UIStyle.width, (int)(UIStyle.height - UIStyle.barHeight ));
+        this.add(contentContainer);
+        contentContainer.setLayout(innerCards);
+        videoPanel = new VideoDetailPanel();
+        contentContainer.add(videoPanel, "video");
+        currentContent = "video";
+        videoModifyPanel = new VideoModifyPanel();
+        contentContainer.add(videoModifyPanel, "videoModify");
+
 
     }
-    public void setContent(JPanel content)
+    public void setContent(String type, String name)
     {
-        //this.content = content;
-        content.setBounds(0, UIStyle.barHeight, (int)UIStyle.width, (int)(UIStyle.height - UIStyle.barHeight));
-        //VideoDetailPanel.mediaPlayerComponent.mediaPlayer().media().startPaused("/Users/daliangrun/Downloads/IMG_0620.MOV");
+        updateUI();
+        if(type.equals("video"))
+        {
+            if(currentContent.equals("video"))
+            {
+                videoPanel.setCurrentVideo(Video.getSampleVideo());
+            }
+            else {
+                currentContent = "video";
+                videoPanel.setCurrentVideo(Video.getSampleVideo());
+                innerCards.show(contentContainer, "video");
+            }
+        }
+        else if(type.equals("videoModify"))
+        {
+            if(currentContent.equals("videoModify"))
+            {
+
+            }
+            else
+            {
+                currentContent = "videoModify";
+                innerCards.show(contentContainer, "videoModify");
+            }
+        }
+
 
     }
 

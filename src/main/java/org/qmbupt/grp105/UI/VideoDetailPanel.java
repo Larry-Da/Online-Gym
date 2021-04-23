@@ -1,5 +1,6 @@
 package org.qmbupt.grp105.UI;
 
+import org.qmbupt.grp105.Entity.Video;
 import org.qmbupt.grp105.UI.MyUIComponent.InputText;
 import org.qmbupt.grp105.UI.MyUIComponent.PicButton;
 import org.qmbupt.grp105.UI.MyUIComponent.TextButton;
@@ -18,6 +19,7 @@ public class VideoDetailPanel extends JPanel
     private CallbackMediaPlayerComponent mediaPlayerComponent;
     private TextButton pauseButton;
     private String path = "/Users/daliangrun/Downloads/vue-vr/demos/assets/ClashofClans.mp4";
+    private Video currentVideo;
    // private String path = "/Users/daliangrun/Downloads/corejava/v1ch13fx/fancy/moonlanding.mp4";
     public VideoDetailPanel()
     {
@@ -90,4 +92,7 @@ public class VideoDetailPanel extends JPanel
 
     }
 
+    public void setCurrentVideo(Video currentVideo) {
+        this.currentVideo = currentVideo;
+    }
 }

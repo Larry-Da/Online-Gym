@@ -14,7 +14,7 @@ import javax.swing.plaf.basic.BasicSliderUI;
 
 public class VirtualClassPanel extends JPanel
 {
-    public VirtualClassPanel(CardLayout cards, JPanel mainPanel)
+    public VirtualClassPanel(CardLayout cards, MainPanel mainPanel)
     {
         MenuBar menuBar = new MenuBar(cards, mainPanel);
         menuBar.setVisible(true);
@@ -53,7 +53,7 @@ class CategoryPanel extends JPanel
         this.setLayout(null);
         this.setBackground(Color.black);
         int buttonWidth = (int) (UIStyle.width / 3);
-        int buttonHeight = (int) (UIStyle.height * 0.39);
+        int buttonHeight = (int) ((UIStyle.height  - UIStyle.barHeight) / 2);
 
         CategoryButton bicycle = new CategoryButton(UIStyle.VirtualClass_bicycle, buttonWidth, buttonHeight, "Bicycle Training");
         bicycle.setBounds(0, 0, buttonWidth, buttonHeight);
@@ -82,10 +82,11 @@ class CategoryPanel extends JPanel
         strength.setBounds(buttonWidth, buttonHeight, buttonWidth, buttonHeight);
         this.add(strength);
 
-
         CategoryButton weightLoss = new CategoryButton(UIStyle.VirtualClass_loseWeight, buttonWidth, buttonHeight, "Weight Loss");
         weightLoss.setBounds(2 * buttonWidth, buttonHeight, buttonWidth, buttonHeight);
         this.add(weightLoss);
+
+
 
     }
 }
@@ -93,7 +94,7 @@ class SearchPanel extends JPanel
 {
     private int pageMax;
     public static int SearchResultPanelHeight;
-    public SearchPanel(CardLayout cards, JPanel contentPanel, CardLayout mainCards, JPanel mainPanel)
+    public SearchPanel(CardLayout cards, JPanel contentPanel, CardLayout mainCards, MainPanel mainPanel)
     {
         this.setLayout(null);
         this.setBackground(Color.decode("#14151A"));
@@ -128,7 +129,7 @@ class SearchPanel extends JPanel
 }
 class SearchResultPanel extends JPanel
 {
-    public SearchResultPanel(Video[] videos, int pageMax, CardLayout resultCards, JPanel resultContentPanel, CardLayout cards, JPanel mainPanel)
+    public SearchResultPanel(Video[] videos, int pageMax, CardLayout resultCards, JPanel resultContentPanel, CardLayout cards, MainPanel mainPanel)
     {
         this.setLayout(null);
         this.setBackground(Color.decode("#14151A"));
