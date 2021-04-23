@@ -11,6 +11,10 @@ public class Coach extends Person
         this.age = age;
         this.gender = gender;
     }
+    public static Coach getSample()
+    {
+        return new Coach("01", 29, "John Walker", "abc", "18055615556", "2018213144@bupt.edu.cn", 'M');
+    }
 
     public String getCoachId() {
         return coachId;

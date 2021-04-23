@@ -165,7 +165,6 @@ class SearchResultPanel extends JPanel
             @Override
             public void stateChanged(ChangeEvent e) {
                 pageShow.setText(pages.getValue() + "");
-
             }
         });
         this.setVisible(true);
