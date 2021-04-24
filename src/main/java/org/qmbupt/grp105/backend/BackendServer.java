@@ -21,15 +21,4 @@ public class BackendServer {
             return "{\"status\": \"failed\"}";
         }
     }
-    
-
-    private static void init() {
-        // if both info.json.tmp and info.json occur
-        //   delete info.json
-        //   return
-        // if only info.json.tmp
-        //   mv info.json.tmp to info.json
-        //   return
-
-    }
 }

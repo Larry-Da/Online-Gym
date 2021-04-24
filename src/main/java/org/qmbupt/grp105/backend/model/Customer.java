@@ -42,4 +42,7 @@ public class Customer {
     
     @JSONField(name = "videosHistory")
     public ArrayList<String> videosHistory;
+
+    @JSONField(name = "bookedSessions")
+    public  ArrayList<String> bookedSessions;
 }
