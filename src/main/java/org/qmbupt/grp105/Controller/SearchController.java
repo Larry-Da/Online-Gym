@@ -25,22 +25,22 @@ public class SearchController extends Request {
      *
      * @return a list of all videos
      */
-    public ArrayList<Video> updateVideo() {
-        ArrayList<Video> videos = new ArrayList<>();
-//        response = new Response(backend.updateVideo());
-        response = new Response("{\"status\":\"success\",\"payload\":{\"videoIds\":[\"V001\",\"V123\"]}}");
-        String status = response.getStatus();
-        if (status.equalsIgnoreCase("success")) {
-            JsonArray jsonArray = response.getPayload().getAsJsonArray("videoIds");
-            List<String> videoIds = gson.fromJson(jsonArray, List.class);
-            for (String videoId : videoIds) {
-                Video video = searchVideoByID(videoId);
-                videos.add(video);
-            }
-            return videos;
-        }
-        return null;
-    }
+//    public ArrayList<Video> updateVideo() {
+//        ArrayList<Video> videos = new ArrayList<>();
+////        response = new Response(backend.updateVideo());
+//        response = new Response("{\"status\":\"success\",\"payload\":{\"videoIds\":[\"V001\",\"V123\"]}}");
+//        String status = response.getStatus();
+//        if (status.equalsIgnoreCase("success")) {
+//            JsonArray jsonArray = response.getPayload().getAsJsonArray("videoIds");
+//            List<String> videoIds = gson.fromJson(jsonArray, List.class);
+//            for (String videoId : videoIds) {
+//                Video video = searchVideoByID(videoId);
+//                videos.add(video);
+//            }
+//            return videos;
+//        }
+//        return null;
+//    }
 
     /**
      * <p>
@@ -50,9 +50,9 @@ public class SearchController extends Request {
      * @param videoID video's ID
      * @return a video entity
      */
-    public Video searchVideoByID(String videoID) {
-        return videoController.getVideoByVideoId(videoID);
-    }
+//    public Video searchVideoByID(String videoID) {
+//        return videoController.getVideoByVideoId(videoID);
+//    }
 
     /**
      * <p>
@@ -62,9 +62,9 @@ public class SearchController extends Request {
      * @param videoName video's name
      * @return a video entity
      */
-    public Video searchVideoByName(String videoName) {
-        return videoController.getVideoByName(videoName);
-    }
+//    public Video searchVideoByName(String videoName) {
+//        return videoController.getVideoByName(videoName);
+//    }
 
     /**
      * <p>
@@ -74,9 +74,9 @@ public class SearchController extends Request {
      * @param category video's category
      * @return a list of videos with particular category
      */
-    public ArrayList<Video> searchVideoByCategory(String category) {
-        return videoController.getVideosByCategory(category);
-    }
+//    public ArrayList<Video> searchVideoByCategory(String category) {
+//        return videoController.getVideosByCategory(category);
+//    }
 
     /**
      * <p>

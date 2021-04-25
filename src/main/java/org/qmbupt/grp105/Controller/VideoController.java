@@ -73,17 +73,17 @@ public class VideoController {
      * @param cusId customer ID
      * @return a list of videos
      */
-    public ArrayList<Video> getVideosByCusId(String cusId) {
-        PersonalController personalController = new PersonalController();
-        Customer customer = personalController.getCusInfoByCusId(cusId);
-        ArrayList<String> videoIds = customer.getVideosHistory();
-        ArrayList<Video> videos = new ArrayList<>();
-        for(String videoId : videoIds) {
-            Video video = getVideoByVideoId(videoId);
-            videos.add(video);
-        }
-        return videos;
-    }
+//    public ArrayList<Video> getVideosByCusId(String cusId) {
+//        PersonalController personalController = new PersonalController();
+//        Customer customer = personalController.getCusInfoByCusId(cusId);
+//        ArrayList<String> videoIds = customer.getVideosHistory();
+//        ArrayList<Video> videos = new ArrayList<>();
+//        for(String videoId : videoIds) {
+//            Video video = getVideoByVideoId(videoId);
+//            videos.add(video);
+//        }
+//        return videos;
+//    }
     /**
      * <p>
      *     This function adds a new video

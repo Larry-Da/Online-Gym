@@ -1,4 +1,5 @@
 package org.qmbupt.grp105.Entity;
+import javax.websocket.Session;
 import java.util.Date;
 public class LiveSession {
     private String liveSessionId;
@@ -28,6 +29,10 @@ public class LiveSession {
         Customer_cusId = customer_cusId;
         Coach_coachId = coach_coachId;
         this.availableNum = availableNum;
+    }
+    public static LiveSession getSample()
+    {
+        return new LiveSession("1", "PersonalIcon.jpg", 8.1, "Yoga", new Date(100000000), new Date(1000000000), 20, 100, "", "2", 10);
     }
 
 

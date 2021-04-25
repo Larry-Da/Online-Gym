@@ -40,48 +40,48 @@ public class SearchContorllerTest {
         }
     }
 
-    @Test
-    public void updateVideo() {
-        System.out.println("begin to test updateVideo()");
-        ArrayList<Video> videos;
-        videos = searchController.updateVideo();
-        System.out.println("All sessions booked by Customer C001 are as follows");
-        for (Video video : videos) {
-            System.out.println(videos.toString());
-        }
-        System.out.println("test for updateVideo() end");
-        System.out.println();
-    }
+//    @Test
+//    public void updateVideo() {
+//        System.out.println("begin to test updateVideo()");
+//        ArrayList<Video> videos;
+//        videos = searchController.updateVideo();
+//        System.out.println("All sessions booked by Customer C001 are as follows");
+//        for (Video video : videos) {
+//            System.out.println(videos.toString());
+//        }
+//        System.out.println("test for updateVideo() end");
+//        System.out.println();
+//    }
 
-    @Test
-    public void getVideoByID() {
-        System.out.println("begin to test getVideoByID()");
-        Video video;
-        video = searchController.searchVideoByID("V001");
-        System.out.println(video.toString());
-        System.out.println("test for getVideoByID() end");
-        System.out.println();
-    }
+//    @Test
+//    public void getVideoByID() {
+//        System.out.println("begin to test getVideoByID()");
+//        Video video;
+//        video = searchController.searchVideoByID("V001");
+//        System.out.println(video.toString());
+//        System.out.println("test for getVideoByID() end");
+//        System.out.println();
+//    }
 
-    @Test
-    public void getVideoByName() {
-        System.out.println("begin to test getVideoByName()");
-        Video video;
-        video = searchController.searchVideoByName("strength");
-        System.out.println(video.toString());
-        System.out.println("test for getVideoByName() end");
-        System.out.println();
-    }
+//    @Test
+//    public void getVideoByName() {
+//        System.out.println("begin to test getVideoByName()");
+//        Video video;
+//        video = searchController.searchVideoByName("strength");
+//        System.out.println(video.toString());
+//        System.out.println("test for getVideoByName() end");
+//        System.out.println();
+//    }
 
-    @Test
-    public void getVideoByCategory() {
-        System.out.println("begin to test getVideoByCategory()");
-        ArrayList<Video> videos = searchController.searchVideoByCategory("Yoga");
-        for(Video video : videos) {
-            System.out.println(video.toString());
-        }
-        System.out.println("test for getVideoByCategory() end");
-        System.out.println("");
-    }
+//    @Test
+//    public void getVideoByCategory() {
+//        System.out.println("begin to test getVideoByCategory()");
+//        ArrayList<Video> videos = searchController.searchVideoByCategory("Yoga");
+//        for(Video video : videos) {
+//            System.out.println(video.toString());
+//        }
+//        System.out.println("test for getVideoByCategory() end");
+//        System.out.println("");
+//    }
 
 }

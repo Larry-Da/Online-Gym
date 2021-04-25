@@ -30,11 +30,11 @@ public class VideoControllerTest {
         System.out.println(status);
     }
 
-    @Test
-    public void getVideosByCusId() {
-        ArrayList<Video> videos = videoController.getVideosByCusId("Cs15");
-        for(Video video : videos) {
-            System.out.println(video.toString());
-        }
-    }
+//    @Test
+//    public void getVideosByCusId() {
+//        ArrayList<Video> videos = videoController.getVideosByCusId("Cs15");
+//        for(Video video : videos) {
+//            System.out.println(video.toString());
+//        }
+//    }
 }

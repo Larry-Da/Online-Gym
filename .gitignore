@@ -1,7 +1,15 @@
+<<<<<<< HEAD
 target
 .DS_Store
 *.iml
 .classpath
 .settings
+=======
+.DS_Store
+.classpath
+.project
+.settings
+*.iml
+>>>>>>> dlr
 .idea/
 target/

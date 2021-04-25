@@ -95,6 +95,10 @@ public class Video {
     public static String[] getAllAttributes() {
         return new String[]{"videoId","url","name","rating","category","likes","viewCounts","level"};
     }
+    public static Video getSampleVideo()
+    {
+        return new Video("1", "yoga.jpg", "TestName", 9.1, "HITT", 12, 300, "lv1");
+    }
     @Override
     public String toString() {
         return "Video{" +

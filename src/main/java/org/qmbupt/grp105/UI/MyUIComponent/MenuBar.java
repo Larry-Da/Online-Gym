@@ -1,0 +1,88 @@
+package org.qmbupt.grp105.UI.MyUIComponent;
+
+import org.qmbupt.grp105.UI.ContactPanel;
+import org.qmbupt.grp105.UI.MainPanel;
+import org.qmbupt.grp105.UI.UIStyle;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.sql.Connection;
+
+public class MenuBar extends JPanel
+{
+
+    TextButton HomePageButton;
+    TextButton PersonalButton;
+    TextButton ClassButton;
+    TextButton LiveButton;
+    TextButton ContactButton;
+
+    public MenuBar(CardLayout cards, JPanel mainPanel)
+    {
+        int buttonWidth = (int)(UIStyle.width / 2 / 6);
+        int mid = (int)(UIStyle.width / 2);
+        int barHeight = (int)(UIStyle.height) / 10;
+        UIStyle.barHeight = barHeight;
+        int buttonHeight = barHeight / 2;
+
+
+        this.setBounds(0, 0, (int) UIStyle.width, barHeight);
+        this.setBackground(UIStyle.COLOR_1);
+
+        HomePageButton = new TextButton(buttonWidth + mid, buttonHeight, UIStyle.COLOR_1, UIStyle.COLOR_2, "HOMEPAGE",  buttonWidth, buttonHeight, "small", false);
+        PersonalButton = new TextButton(2 * buttonWidth + mid, buttonHeight, UIStyle.COLOR_1, UIStyle.COLOR_2, "PERSONAL",  buttonWidth, buttonHeight, "small", false);
+        ClassButton = new TextButton(3 * buttonWidth + mid, buttonHeight, UIStyle.COLOR_1, UIStyle.COLOR_2, "CLASSES",  buttonWidth, buttonHeight, "small", false);
+        LiveButton = new TextButton(4 * buttonWidth + mid, buttonHeight,UIStyle.COLOR_1, UIStyle.COLOR_2, "LIVE",  buttonWidth, buttonHeight, "small", false);
+        ContactButton = new TextButton(5 * buttonWidth + mid, buttonHeight, UIStyle.COLOR_1, UIStyle.COLOR_2, "CONTACTS",  buttonWidth, buttonHeight, "small", false);
+
+        PersonalButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                //cards.next(mainPanel);
+                cards.show(mainPanel, "personalPanel");
+                MainPanel.currentPanel = "personalPanel";
+            }
+        });
+        HomePageButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                cards.show(mainPanel, "homePanel");
+                MainPanel.currentPanel = "homePanel";
+            }
+        });
+        ClassButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                cards.show(mainPanel, "virtualClassPanel");
+                MainPanel.currentPanel = "virtualClassPanel";
+            }
+        });
+        LiveButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                cards.show(mainPanel, "liveSessionPanel");
+                MainPanel.currentPanel = "liveSessionPanel";
+            }
+        });
+        ContactButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                cards.show(mainPanel, "contactPanel");
+                MainPanel.currentPanel = "contactPanel";
+
+            }
+        });
+        this.setLayout(null);
+        this.add(HomePageButton);
+        this.add(PersonalButton);
+        this.add(ClassButton);
+        this.add(LiveButton);
+        this.add(ContactButton);
+
+
+
+    }
+
+}
