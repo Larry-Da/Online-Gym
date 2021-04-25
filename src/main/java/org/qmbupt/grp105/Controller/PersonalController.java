@@ -6,6 +6,11 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 import org.qmbupt.grp105.backend.BackendServer;
+import org.qmbupt.grp105.backend.dblayer.CustomerManager;
+/**
+ * @version 1.2
+ * @author Wenrui Zhao
+ */
 public class PersonalController {
 
     private static Map<String, Object> param = new HashMap<>();
@@ -134,19 +139,42 @@ public class PersonalController {
         }
         return num;
     }
-    public boolean updateCustomer(Customer customer) {
-        String json = gson.toJson(customer);
-        param = gson.fromJson(json,Map.class);
-        request = new Request("updateCustomer",param);
-//        response = new Response(backend.updateCustomer(request));
-        response = new Response("{\"status\":\"success\"}");
-        String status = response.getStatus();
-        if(status.equalsIgnoreCase("success")) {
-            param.clear();
-            return true;
+    public void updateCustomer(Customer customer) {
+        try {
+            CustomerManager.writeCustomerInfo(customer);
+        } catch(IOException e) {
+            e.printStackTrace();
         }
-        param.clear();
-        return false;
+    }
+    public void increaseBalance(String cusId, int num) {
+        try {
+            CustomerManager.increaseBalance(cusId, num);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+    public void decreaseBalance(String cusId, int num) {
+        try {
+            CustomerManager.decreaseBalance(cusId, num);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+    public void bookLiveSession(String cusId, String sessionId) {
+        try {
+            CustomerManager.bookSession(cusId, sessionId);
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public void watchVideo(String cusId, String videoId) {
+        try {
+            CustomerManager.watchVideo(cusId, videoId);
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -183,9 +211,13 @@ public class PersonalController {
         Customer customer = getCusInfoByCusId(cusId);
         return customer.getRemainTime();
     }
-    public static void main(String[] args) {
-        HashMap<String, Object> t = new HashMap<>();
-        System.out.println(t.size());
+
+    public void extendMembership(String cusId) {
+        try {
+            CustomerManager.extendMembership(cusId);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }
