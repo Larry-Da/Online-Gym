@@ -1,5 +1,7 @@
 package org.qmbupt.grp105.backend.request;
 
+import java.util.logging.Logger;
+
 public class RequestHandlerFactory {
     public static RequestHandler createHandler(String type) {
         if (type.equals("getSessionIdsByCusId")) {

@@ -21,7 +21,7 @@ public class Test {
         System.out.println("2.1\n" + BackendServer.execute("{\"request\":\"getCusNumByLevel\",\"payload\":{\"membershipLevel\":\"L0\"}}"));
 
         // 3.1
-        System.out.println("3.1\n" + BackendServer.execute("{\"request\":\"getMonthlyIncome\",\"payload\":{\"month\":\"02\"}}"));
+        System.out.println("3.1\n" + BackendServer.execute("{\"request\":\"getMonthlyIncome\",\"payload\":{\"month\":\"04\"}}"));
 
         // 4.1
         System.out.println("4.1\n" + BackendServer.execute("{\"request\":\"getVideoIdsByCusId\",\"payload\":{\"cusId\":\"Cs15\"}}"));

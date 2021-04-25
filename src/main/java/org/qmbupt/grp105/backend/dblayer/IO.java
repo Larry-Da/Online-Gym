@@ -23,10 +23,4 @@ public class IO {
         ps.println(str);
         ps.close();
     }
-
-    protected static void commit() {
-        // writeToFile("./db/info.json.tmp");
-        // deleteFile("./db/info.json");
-        // moveFile(from: "./db/info.json.tmp", to: "./db/info.json");
-    }
 }

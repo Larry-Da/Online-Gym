@@ -1,25 +1,24 @@
-/**
- * This file should be removed in the future.
- */
-
 package org.qmbupt.grp105.backend.request;
 
-import com.alibaba.fastjson.*;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import org.qmbupt.grp105.backend.dblayer.CustomerManager;
+import org.qmbupt.grp105.backend.dblayer.TransactionManager;
 
-public class RequestGetVideoIdsByCusIdHandler implements RequestHandler {
+public class NewRequestHandlerExtendMembership implements RequestHandler {
 
-    
     @Override
     public String execute(String payload) {
         JSONObject retJson = new JSONObject();
-        
+
         try {
             String cusId = JSON.parseObject(payload).getString("cusId");
-            JSONObject responsePayload = new JSONObject();
-            responsePayload.put("VideoIds", CustomerManager.getCustomerById(cusId).videosHistory);
-            retJson.put("payload", responsePayload);
+            if (!CustomerManager.extendMembership(cusId))
+                throw new Exception();
+
+            retJson.put("payload", new JSONObject());
             retJson.put("status", "success");
+
         } catch (Exception ex) {
             retJson.put("status", "failed");
             ex.printStackTrace();
@@ -27,6 +26,4 @@ public class RequestGetVideoIdsByCusIdHandler implements RequestHandler {
 
         return retJson.toJSONString();
     }
-
-    
 }

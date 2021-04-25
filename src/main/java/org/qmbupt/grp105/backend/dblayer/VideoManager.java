@@ -7,10 +7,6 @@ import com.alibaba.fastjson.*;
 import org.qmbupt.grp105.backend.model.*;
 
 public class VideoManager {
-    
-    private static final String JSON_FILE_NAME = "video.json";
-
-
 
     public static void writeVideoInfo(Video video) throws IOException {
         writeOrDeleteVideo(video, null);
@@ -20,47 +16,46 @@ public class VideoManager {
         writeOrDeleteVideo(null, videoId);
     }
 
-    public static ArrayList<Video> getVideos() throws IOException {
-
-        ArrayList<Video> ret = new ArrayList<>();
-
-        JSONArray videos = JSON.parseArray(IO.read(JSON_FILE_NAME));
-
-        for (int i = 0; i < videos.size(); i++) {
-            Video video = videos.getObject(i, Video.class);
-            ret.add(video);
+    public static Video getVideoById(String videoId) throws IOException {
+        ArrayList<Video> videos = DataManager.getInstance().videos;
+        for (Video video : videos) {
+            if (video.videoId.equals(videoId)) {
+                return video;
+            }
         }
+        return null;
+    }
 
-        return ret;
+    public static ArrayList<Video> getVideos() throws IOException {
+        return DataManager.getInstance().videos;
     }
 
     public static ArrayList<String> getVideoIds() throws IOException {
-        ArrayList<Video> videos = getVideos();
+        ArrayList<Video> videos = DataManager.getInstance().videos;
+
         ArrayList<String> ret = new ArrayList<>();
 
-        for (int i = 0; i < videos.size(); i++) {
-            ret.add(videos.get(i).videoId);
+        for (Video video : videos) {
+            ret.add(video.videoId);
         }
 
         return ret;
     }
 
     private static void writeOrDeleteVideo(Video video, String videoId) throws IOException {
-
         if (video != null) videoId = video.videoId;
 
-        JSONArray videos = JSON.parseArray(IO.read(JSON_FILE_NAME));
-
+        ArrayList<Video> videos = DataManager.getInstance().videos;
         for (int i = 0; i < videos.size(); i++) {
-            if (videoId.equals(videos.getJSONObject(i).getString("videoId"))) {
+            if (videos.get(i).videoId.equals(videoId)) {
                 videos.remove(i);
                 break;
             }
         }
 
         if (video != null) videos.add(video);
-        
-        IO.write(JSON_FILE_NAME, videos.toJSONString());
+
+        DataManager.getInstance().commit();
     }
     
 }
