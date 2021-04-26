@@ -12,7 +12,7 @@ public class PersonalControllerTest {
     PersonalController personalController;
     @Before
     public void setUp() throws Exception {
-        personalController = new PersonalController();
+        personalController = PersonalController.getController();
     }
 
     @Test

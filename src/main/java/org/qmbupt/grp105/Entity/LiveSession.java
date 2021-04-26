@@ -1,9 +1,9 @@
 package org.qmbupt.grp105.Entity;
-import javax.websocket.Session;
+import org.qmbupt.grp105.backend.model.Session;
+
 import java.util.Date;
 public class LiveSession {
     private String liveSessionId;
-    private String url;
     private Double rating; // 评分 int score
     private String category;
     private Date startTime; // 开始结束
@@ -13,13 +13,14 @@ public class LiveSession {
     private String Customer_cusId;
     private String Coach_coachId;
     private int availableNum;
+
+
     public static String[] getAllAttributes() {
         return new String[]{"liveSessionId","url","rating","category","startTime","endTime","likes","viewCounts","Customer_cusId","Coach_coachId","availableNum"};
     }
-    public LiveSession(String liveSessionId, String url, Double rating, String category, Date startTime, Date endTime,
+    public LiveSession(String liveSessionId, Double rating, String category, Date startTime, Date endTime,
                        int likes, int viewCounts, String customer_cusId, String coach_coachId, int availableNum) {
         this.liveSessionId = liveSessionId;
-        this.url = url;
         this.rating = rating;
         this.category = category;
         this.startTime = startTime;
@@ -32,7 +33,7 @@ public class LiveSession {
     }
     public static LiveSession getSample()
     {
-        return new LiveSession("1", "PersonalIcon.jpg", 8.1, "Yoga", new Date(100000000), new Date(1000000000), 20, 100, "", "2", 10);
+        return new LiveSession("1", 8.1, "Yoga", new Date(100000000), new Date(1000000000), 20, 100, "", "2", 10);
     }
 
 
@@ -41,9 +42,6 @@ public class LiveSession {
         return liveSessionId;
     }
 
-    public String getUrl() {
-        return url;
-    }
 
     public Double getRating() {
         return rating;
@@ -81,9 +79,6 @@ public class LiveSession {
         this.liveSessionId = liveSessionId;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
-    }
 
     public void setRating(Double rating) {
         this.rating = rating;
@@ -129,7 +124,6 @@ public class LiveSession {
     public String toString() {
         return "LiveSession{" +
                 "liveSessionId='" + liveSessionId + '\'' +
-                ", url='" + url + '\'' +
                 ", rating=" + rating +
                 ", category='" + category + '\'' +
                 ", startTime=" + startTime +
@@ -140,5 +134,18 @@ public class LiveSession {
                 ", Coach_coachId='" + Coach_coachId + '\'' +
                 ", availableNum=" + availableNum +
                 '}';
+    }
+    public org.qmbupt.grp105.backend.model.Session converter() {
+        org.qmbupt.grp105.backend.model.Session session = new org.qmbupt.grp105.backend.model.Session();
+        session.availableNum = this.availableNum;
+        session.category = this.category;
+        session.coachId = this.Coach_coachId;
+        session.endTime = this.endTime;
+        session.likes = this.likes;
+        session.rating = this.rating;
+        session.sessionId = this.liveSessionId;
+        session.viewsCount = this.viewCounts;
+        session.startTime = this.startTime;
+        return session;
     }
 }

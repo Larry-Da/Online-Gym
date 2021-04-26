@@ -1,12 +1,19 @@
 package org.qmbupt.grp105.Entity;
-public class Coach extends Person
+public class Coach
 {
     private String coachId;
     private int age;
     private char gender;
+    protected String name;
+    protected String password;
+    protected String phoneNo;
+    protected String email;
 
     public Coach(String coachId, int age, String name, String password, String phoneNo, String email, char gender) {
-        super(name, password, phoneNo, email);
+        this.name = name;
+        this.password = password;
+        this.phoneNo = phoneNo;
+        this.email = email;
         this.coachId = coachId;
         this.age = age;
         this.gender = gender;
@@ -64,4 +71,17 @@ public class Coach extends Person
         return "Coach [coachId=" + coachId + ", age=" + age + ", name=" + name + ", password=" + password + ", phoneNo="
                 + phoneNo + ", email=" + email + ", gender=" + gender + "]";
     }
+    public org.qmbupt.grp105.backend.model.Coach convert()
+    {
+        org.qmbupt.grp105.backend.model.Coach coach = new org.qmbupt.grp105.backend.model.Coach();
+        coach.age = this.age;
+        coach.coachId = this.coachId;
+        coach.email = this.email;
+        coach.gender = this.gender;
+        coach.password = this.password;
+        coach.phoneNo = this.phoneNo;
+        coach.name = this.name;
+        return coach;
+    }
+
 }

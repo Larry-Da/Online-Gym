@@ -41,7 +41,8 @@ public class Sticker extends JLabel
 
         g2.setPaint(Color.BLACK);
         g2.setFont(UIStyle.NORMAL_FONT);
-        g2.drawString(contents, (int)(0.067 * width), (int)(0.6 * height));
+        if(contents!= null)
+            g2.drawString(contents, (int)(0.067 * width), (int)(0.6 * height));
 
         Image img = new ImageIcon(imagePath).getImage();
         g.drawImage(img, width / 2, (int) (0.1 * width), (int)(getHeight() / 1.5), (int)(getHeight() / 1.5),null);// must set width andd height, otherwise it will not display it

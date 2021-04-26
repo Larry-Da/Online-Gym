@@ -3,18 +3,22 @@ package org.qmbupt.grp105.Entity;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Customer extends Person
+public class Customer
 {
     private String cusId;
     private int age;
     private char gender;
     private Date dateOfBirth;
     private String membershipLevel;//不确定是String类型的
-    private String remainTime;//会员剩余时间
+    private String expiredTime;//会员剩余时间
     private int balance;//余额
     private int points; //积分
     private ArrayList<String> videosHistory;
     //private String exerciseLevel;
+    protected String name;
+    protected String password;
+    protected String phoneNo;
+    protected String email;
 
 
     public String getCusId() {
@@ -53,8 +57,8 @@ public class Customer extends Person
         return membershipLevel;
     }
 
-    public String getRemainTime() {
-        return remainTime;
+    public String getExpiredTime() {
+        return expiredTime;
     }
 
     public int getBalance() {
@@ -102,7 +106,7 @@ public class Customer extends Person
     }
 
     public void setRemainTime(String remainTime) {
-        this.remainTime = remainTime;
+        this.expiredTime = remainTime;
     }
 
     public void setBalance(int balance) {
@@ -124,31 +128,49 @@ public class Customer extends Person
         return new String[]{"cusId","age","name","password","phoneNo","email","gender","dateOfBirth","membershipLevel","remainTime","balance","points"};
     }
     public Customer(String cusId, int age, String name, String password, String phoneNo, String email, char gender,
-                    Date dateOfBirth, String membershipLevel, String remainTime, int balance, int points) {
-        super(name, password, phoneNo, email);
+                    Date dateOfBirth, String membershipLevel, String expiredTime, int balance, int points) {
+        this.name = name;
+        this.password = password;
+        this.phoneNo = phoneNo;
+        this.email = email;
         this.cusId = cusId;
         this.age = age;
         this.gender = gender;
         this.dateOfBirth = dateOfBirth;
         this.membershipLevel = membershipLevel;
-        this.remainTime = remainTime;
+        this.expiredTime = expiredTime;
         this.balance = balance;
         this.points = points;
     }
+    private ArrayList<String> bookedSessions;
+
+    public ArrayList<String> getBookedSessions() {
+        return bookedSessions;
+    }
+
+    public void setBookedSessions(ArrayList<String> bookedSessions) {
+        this.bookedSessions = bookedSessions;
+    }
+
     public static Customer getSample()
     {
         return new Customer("1", 21, "Vae", "12345", "18055661111", "2018213144@bupt.edu.cn", 'M', new Date(100000000), "Lv1", "12h", 123, 12);
     }
 
     public Customer(String cusId, int age, String name, String password, String phoneNo, String email, char gender,
-                    Date dateOfBirth, String membershipLevel, String remainTime, int balance, int points, ArrayList<String> videosHistory) {
-        super(name, password, phoneNo, email);
+                    Date dateOfBirth, String membershipLevel, String expiredTime, int balance, int points, ArrayList<String> videosHistory, ArrayList<String> bookedSessions) {
+
+        this.bookedSessions = bookedSessions;
+        this.name = name;
+        this.password = password;
+        this.phoneNo = phoneNo;
+        this.email = email;
         this.cusId = cusId;
         this.age = age;
         this.gender = gender;
         this.dateOfBirth = dateOfBirth;
         this.membershipLevel = membershipLevel;
-        this.remainTime = remainTime;
+        this.expiredTime = expiredTime;
         this.balance = balance;
         this.points = points;
         this.videosHistory = videosHistory;
@@ -166,10 +188,28 @@ public class Customer extends Person
                 ", gender=" + gender +
                 ", dateOfBirth=" + dateOfBirth +
                 ", membershipLevel='" + membershipLevel + '\'' +
-                ", remainTime=" + remainTime +
+                ", expiredTime=" + expiredTime +
                 ", balance=" + balance +
                 ", points=" + points +
                 '}';
+    }
+    public org.qmbupt.grp105.backend.model.Customer convert()
+    {
+        org.qmbupt.grp105.backend.model.Customer customer = new org.qmbupt.grp105.backend.model.Customer();
+        customer.balance = this.balance;
+        customer.cusId = this.cusId;
+        customer.expireDate = new Date();
+        customer.videosHistory = (ArrayList<String>)this.videosHistory.clone();
+        customer.bookedSessions = new ArrayList<>();
+        customer.dateOfBirth = this.dateOfBirth;
+        customer.email = this.email;
+        customer.gender = this.gender + "";
+        customer.level = Integer.parseInt(this.membershipLevel);
+        customer.name = this.name;
+        customer.password = this.password;
+        customer.phoneNo = this.phoneNo;
+        customer.xp = 0;
+        return customer;
     }
 
 }

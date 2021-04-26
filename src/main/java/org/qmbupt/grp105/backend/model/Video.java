@@ -30,4 +30,10 @@ public class Video {
     @JSONField(name = "level")
     public String level;
 
+    public org.qmbupt.grp105.Entity.Video converter() {
+        return new org.qmbupt.grp105.Entity.Video(this.videoId, this.url, this.name, this.rating, this.category,
+                this.likes, this.viewsCount, this.level);
+    }
+
+
 }

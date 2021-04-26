@@ -4,6 +4,7 @@ import org.qmbupt.grp105.UI.UIStyle;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class FilterBox extends JPanel
@@ -11,6 +12,23 @@ public class FilterBox extends JPanel
     private Font font;
     private FontMetrics mt;
     private String color;
+    private ArrayList<JCheckBox> options = new ArrayList<>();
+
+    public void setState(boolean state, int index)
+    {
+        options.get(index).setSelected(state);
+    }
+    public boolean[] getStates()
+    {
+        boolean states[] = new boolean[options.size()];
+        int cnt = 0;
+        for(JCheckBox o : options)
+        {
+            states[cnt] = o.isSelected();
+            cnt++;
+        }
+        return states;
+    }
 
     public FilterBox (int y, String contents[], String color)
     {
@@ -22,8 +40,6 @@ public class FilterBox extends JPanel
         else
             this.setBackground(Color.white);
         mt = Toolkit.getDefaultToolkit().getFontMetrics(font);
-
-
 
         JLabel head = new JLabel(contents[0]);
         head.setFont(font);
@@ -39,11 +55,10 @@ public class FilterBox extends JPanel
         this.setVisible(true);
         this.setBounds(0, y, (int)UIStyle.width, 40);
 
-
-
         for(int i = 1; i < contents.length; i++)
         {
             JCheckBox option = new JCheckBox(contents[i]);
+            options.add(option);
             option.setFont(font);
             if(color.equals("dark"))
                 option.setForeground(Color.white);

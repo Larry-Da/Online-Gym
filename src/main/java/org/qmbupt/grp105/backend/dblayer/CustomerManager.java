@@ -194,10 +194,12 @@ public class CustomerManager {
             if (customers.get(i).cusId.equals(customer.cusId)) {
                 customers.remove(i);
                 customers.add(customer);
+                DataManager.getInstance().commit();
                 return;
             }
         }
         customers.add(customer);
+        DataManager.getInstance().commit();
     }
 
 

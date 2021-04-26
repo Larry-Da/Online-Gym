@@ -7,7 +7,7 @@ import org.qmbupt.grp105.Entity.Customer;
 import org.qmbupt.grp105.Entity.Video;
 import org.qmbupt.grp105.backend.BackendServer;
 import org.qmbupt.grp105.backend.dblayer.*;
-
+import org.qmbupt.grp105.backend.dblayer.VideoManager;
 import java.io.IOException;
 import java.util.*;
 
@@ -17,45 +17,40 @@ public class VideoController {
     private static Request request;
     private static Response response;
     private static BackendServer backendServer;
-    public VideoController() {};
+    private static VideoController videoController = new VideoController();
+    private VideoController() {};
+    public static VideoController getController()
+    {
+        return videoController;
+    }
+
+
 
     public ArrayList<Video> getAllVideos() {
-//        param.put("type","Video");
-//        param.put("field", new String[]{"videoId"});
         ArrayList<Video> videos = new ArrayList<>();
-        request = new Request("getVideoIds",param);
-        response = new Response(backendServer.execute(request.toJsonString()));
-//        response = new Response("{\"status\":\"success\",\"payload\":{\"videoIds\":[\"V001\",\"V002\"]}}");
-        String status = response.getStatus();
-        if(status.equalsIgnoreCase("success")) {
-            JsonArray jsonArray = response.getPayload().getAsJsonArray("videoIds");
-            List<String> videoIds = gson.fromJson(jsonArray, List.class);
-            for(String videoId : videoIds) {
-                Video video = getVideoByVideoId(videoId);
-                videos.add(video);
+
+        try {
+            ArrayList<org.qmbupt.grp105.backend.model.Video> temp = VideoManager.getVideos();
+            for(org.qmbupt.grp105.backend.model.Video i : temp)
+            {
+                videos.add(i.converter());
             }
-            param.clear();
-            return videos;
         }
-        param.clear();
-        return null;
+        catch(Exception e)
+        {
+
+        }
+        return videos;
     }
     public Video getVideoByVideoId(String videoId) {
-//        param.put("type","Video");
-//        param.put("id",videoId);
-//        param.put("fields",Video.getAllAttributes());
-        param.put("videoId",videoId);
-        request = new Request("getVideoById",param);
-        response = new Response(backendServer.execute(request.toJsonString()));
-//        response = new Response("{\"status\":\"success\",\"payload\":{\"videoId\":\"V001\",\"url\":\"usr/local/bin\",\"name\":\"strength\",\"rating\":7.8,\"category\":\"Yoga\",\"likes\":100,\"viewCounts\":3000,\"level\":\"easy\"}}");
-        String status = response.getStatus();
-        if(status.equalsIgnoreCase("success")) {
-            Video video = gson.fromJson(response.getPayload(), Video.class);
-            param.clear();
-            return video;
+        Video video = null;
+        try {
+            video = VideoManager.getVideoById(videoId).converter();
+        } catch(IOException e) {
+            e.printStackTrace();
         }
-        param.clear();
-        return null;
+        return video;
+
     }
     public Video getVideoByName(String videoName) {
         ArrayList<Video> videos = getAllVideos();
@@ -65,6 +60,38 @@ public class VideoController {
             }
         }
         return null;
+    }
+
+    public ArrayList<Video> getVideosByName(String keyword) {
+        ArrayList<Video> videos = getAllVideos();
+        if(keyword == null)
+            return videos;
+        ArrayList<Video> res = new ArrayList<>();
+        for(Video v: videos) {
+            if(v.getName().contains(keyword)) {
+                res.add(v);
+            }
+        }
+        return res;
+    }
+
+    public ArrayList<Video> filterByCategory(ArrayList<Video> videos, List<String> category) {
+        ArrayList<Video> videos1 = null;
+        if(videos == null) {
+            videos1 = getAllVideos();
+        }
+        else {
+            videos1 = videos;
+        }
+        if(category.size() == 0) // if no category chosen
+            return videos1;
+        ArrayList<Video> res = new ArrayList<>();
+        for(Video v: videos1) {
+            if(category.contains(v.getCategory())) {
+                res.add(v);
+            }
+        }
+        return res;
     }
     /**
      *<p>
@@ -108,7 +135,7 @@ public class VideoController {
 //        }
 //        param.clear();
         try {
-            VideoManager.writeVideoInfo(video);
+            VideoManager.writeVideoInfo(video.convert());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -136,7 +163,7 @@ public class VideoController {
      */
     public void modifyVideo(Video video) {
         try {
-            VideoManager.writeVideoInfo(video);
+            VideoManager.writeVideoInfo(video.convert());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -156,6 +183,24 @@ public class VideoController {
             }
         }
         return videoList;
+    }
+    public ArrayList<Video> getVideosByCusId(String cusId) {
+        ArrayList<Video> videos = new ArrayList<>();
+        param.put("cusId",cusId);
+        request = new Request("getVideoIdsByCusId", param);
+        response = new Response(backendServer.execute(request.toJsonString()));
+        String status = response.getStatus();
+        if(status.equals("success")) {
+            JsonArray jsonArray = response.getPayload().getAsJsonArray("VideoIds");
+            List<String> videoIds = gson.fromJson(jsonArray, List.class);
+            for(String videoId : videoIds) {
+                Video video = getVideoByVideoId(videoId);
+
+                videos.add(video);
+            }
+            return videos;
+        }
+        return null;
     }
     public boolean likeVideo(String videoId) {
         param.put("videoId",videoId);

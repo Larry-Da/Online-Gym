@@ -1,6 +1,7 @@
 package org.qmbupt.grp105.Entity;
 
-public class Video {
+public class Video
+{
     private String videoId;
     private String url;
     private String name; // for keyword search
@@ -110,5 +111,18 @@ public class Video {
                 ", likes=" + likes +
                 ", viewCounts=" + viewsCount +
                 '}';
+    }
+    public org.qmbupt.grp105.backend.model.Video convert()
+    {
+        org.qmbupt.grp105.backend.model.Video video = new org.qmbupt.grp105.backend.model.Video();
+        video.videoId = this.videoId;
+        video.viewsCount = this.viewsCount;
+        video.category = this.category;
+        video.level = this.level;
+        video.likes = this.likes;
+        video.name = this.name;
+        video.rating = this.rating;
+        video.url=  this.url;
+        return video;
     }
 }

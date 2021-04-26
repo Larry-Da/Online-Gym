@@ -18,7 +18,13 @@ public class PersonalController {
     private static Request request;
     private static Response response;
     private static BackendServer backendServer;
-    public PersonalController() {};
+    private static PersonalController personalController = new PersonalController();
+    private PersonalController() {};
+    public  static PersonalController getController()
+    {
+        return personalController;
+    }
+
 
 
     /**
@@ -68,20 +74,13 @@ public class PersonalController {
      * @return  an customer entity
      */
     public Customer getCusInfoByCusId(String cusId) {
-//        param.put("type","Customer");
-//        param.put("id",cusId);
-//        param.put("fields",Customer.getAllAttibutes());
-        param.put("cusId",cusId);
-        request = new Request("getCustomerById", param);
-        response = new Response(backendServer.execute(request.toJsonString()));
-//        response = new Response("{\"status\":\"success\",\"payload\":{\"cusId\":\"C001\",\"age\":45,\"name\":\"goteng\",\"password\":\"1234566\",\"phoneNo\":\"18235226823\",\"email\":\"1770927746@qq.com\",\"gender\":\"M\",\"dateOfBirth\":\"2000-04-17\",\"membershipLevel\":\"L1\",\"remainTime\":345,\"balance\":12345,\"points\":300}}");
-        String status = response.getStatus();
-        if(status.equalsIgnoreCase("success")) {
-            Customer customer = gson.fromJson(response.getPayload(), Customer.class);
-            param.clear();
-            return customer;
+        try {
+            return CustomerManager.getCustomerById(cusId).converter();
         }
-        param.clear();
+
+        catch (Exception e){
+
+        }
         return null;
     }
 
@@ -139,9 +138,19 @@ public class PersonalController {
         }
         return num;
     }
+    public String getIdByEmail(String email)
+    {
+        ArrayList<Customer> customers = getAllCustomer();
+        for(Customer c: customers) {
+            if(c.getEmail().equals(email)) {
+                return c.getCusId();
+            }
+        }
+        return null;
+    }
     public void updateCustomer(Customer customer) {
         try {
-            CustomerManager.writeCustomerInfo(customer);
+            CustomerManager.writeCustomerInfo(customer.convert());
         } catch(IOException e) {
             e.printStackTrace();
         }
@@ -209,7 +218,7 @@ public class PersonalController {
      */
     public String getExpireTimeByCusId(String cusId) {
         Customer customer = getCusInfoByCusId(cusId);
-        return customer.getRemainTime();
+        return customer.getExpiredTime();
     }
 
     public void extendMembership(String cusId) {

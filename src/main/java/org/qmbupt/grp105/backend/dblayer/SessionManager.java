@@ -51,6 +51,33 @@ public class SessionManager {
         return ret;
     }
 
+    /**
+     * get CusIds who booked thhe specified session
+     * @param sessionId
+     * @return array of CusId
+     * @throws IOException
+     */
+    public static ArrayList<String> getCusIdsBySessionId(String sessionId) throws IOException {
+        ArrayList<Customer> customers = DataManager.getInstance().customers;
+        ArrayList<String> ret = new ArrayList<>();
+        for (Customer customer : customers) {
+            if (customer.bookedSessions.contains(sessionId)) {
+                ret.add(customer.cusId);
+            }
+        }
+        return ret;
+    }
+
+
+    /**
+     * get all sessions
+     * @return
+     * @throws IOException
+     */
+    public static ArrayList<Session> getAllSessions() throws IOException {
+        return DataManager.getInstance().sessions;
+    }
+
 
 
 
@@ -68,6 +95,6 @@ public class SessionManager {
     }
 
     public static void main(String[] args) throws IOException {
-        System.out.println(getNextId());
+        System.out.println(getAllSessions());
     }
 }

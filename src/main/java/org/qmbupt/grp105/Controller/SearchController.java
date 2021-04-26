@@ -14,9 +14,16 @@ public class SearchController extends Request {
     private static Gson gson = new Gson();
     private static Request request;
     private static Response response;
-    private static VideoController videoController = new VideoController();
-    public SearchController() {
+    private static SearchController searchController = new SearchController();
+    private static VideoController videoController = VideoController.getController();
+    private SearchController() {
     }
+    public static SearchController getController()
+    {
+        return searchController;
+    }
+
+
 
     /**
      * <p>

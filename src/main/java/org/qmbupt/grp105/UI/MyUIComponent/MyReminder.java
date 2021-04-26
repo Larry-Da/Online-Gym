@@ -21,7 +21,8 @@ public class MyReminder
     }
     public void WRONG(String message)
     {
-        popup(message, Color.decode("#DFDFDF"));
+        popup(message, Color.decode("#E04147"));
+
     }
     public void popup(String message, Color background)
     {

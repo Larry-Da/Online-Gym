@@ -1,11 +1,18 @@
 package org.qmbupt.grp105.Entity;
 
-public class Administrator extends Person{
+public class Administrator {
     private String adminId;
+    protected String name;
+    protected String password;
+    protected String phoneNo;
+    protected String email;
 
 
     public Administrator(String adminId, String name, String password, String phoneNo, String email) {
-        super(name, password, phoneNo, email);
+        this.name = name;
+        this.password = password;
+        this.phoneNo = phoneNo;
+        this.email = email;
         this.adminId = adminId;
     }
 

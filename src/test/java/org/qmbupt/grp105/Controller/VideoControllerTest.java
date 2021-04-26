@@ -13,21 +13,19 @@ public class VideoControllerTest {
 
     @Before
     public void setUp() throws Exception {
-        videoController = new VideoController();
+        videoController = VideoController.getController();
     }
 
     @Test
     public void addVideo() {
         Video video = new Video("V098","usr/local","Sdwerrtyry",8.7,"Yoga",500,1000,"easy");
-        boolean status = videoController.AddVideo(video);
-        System.out.println(status);
+        videoController.AddVideo(video);
     }
 
     @Test
     public void modifyVideo() {
         Video video = new Video("V014","usr/local","456sl",8.7,"Yoga",700,1000,"easy");
-        boolean status = videoController.modifyVideo(video);
-        System.out.println(status);
+        videoController.modifyVideo(video);
     }
 
 //    @Test

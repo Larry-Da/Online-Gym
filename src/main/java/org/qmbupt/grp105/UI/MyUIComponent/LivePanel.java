@@ -83,7 +83,8 @@ public class LivePanel extends JPanel
             button = new TextButton((int)(width - buttonWidth / 1.5), (int)(height-1.5*buttonHeight), Color.decode("#192D33"), Color.WHITE, buttonText, buttonWidth, buttonHeight, "small", true);
 
         this.add(button);
-        String picPath = UIStyle.class.getClassLoader().getResource(live.getUrl()).getPath();
+        //String picPath = UIStyle.class.getClassLoader().getResource(live.getUrl()).getPath();
+        String picPath = UIStyle.VirtualClass_favorite;
         JLabel picturePreview = new Picture(picPath, picHeight, picHeight);
         this.add(picturePreview);
         picturePreview.setBounds(space, space, picHeight, picHeight);

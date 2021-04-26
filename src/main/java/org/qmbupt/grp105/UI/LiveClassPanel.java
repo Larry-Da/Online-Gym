@@ -1,5 +1,7 @@
 package org.qmbupt.grp105.UI;
 
+import org.qmbupt.grp105.Controller.LiveController;
+import org.qmbupt.grp105.Controller.VideoController;
 import org.qmbupt.grp105.Entity.LiveSession;
 import org.qmbupt.grp105.Entity.Video;
 import org.qmbupt.grp105.UI.MyUIComponent.*;
@@ -9,6 +11,10 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 public class LiveClassPanel extends JPanel
 {
@@ -42,60 +48,107 @@ class ContentPanel extends JPanel
 {
     private int pageMax;
     public static int SearchResultPanelHeight;
+
+    private InputText searchBar;
+    private String[] categoryFilterString = {"Category", "Bicycle Training", "HITT", "Flexibility", "Yoga", "Strength", "Weight Loss"};
+    private String[] sortString = {"Sort", "Like", "Rating", "View"};
+
+    private CardLayout resultCards;
+    private ArrayList<ResultPanel> searchResultPanels = new ArrayList<>();
+    private FilterBox categoryFilter;
+    private JPanel resultContentPanel;
+    private CardLayout mainCards;
+    private MainPanel mainPanel;
+    private FilterBox sortFilter;
+
     public ContentPanel(CardLayout cards, JPanel contentPanel)
     {
+
         this.setLayout(null);
         this.setBackground(Color.decode("#14151A"));
-        InputText searchBar = new InputText(500, 50, 40, true, (int)(UIStyle.width / 2), 80, "Search", true);
+
+
+        searchBar = new InputText(500, 50, 40, true, (int)(UIStyle.width / 2), 55, "Search", true);
         this.add(searchBar);
+        searchBar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                updateRes();
+            }
+        });
 
         int startFilter = 130;
-        String[] categoryFilterString = {"Category", "Bicycle Training", "HITT", "Flexibility", "Yoga", "Strength", "Weight Loss"};
-        FilterBox categoryFilter = new FilterBox(startFilter, categoryFilterString, "dark");
+        categoryFilter = new FilterBox(startFilter, categoryFilterString, "dark");
         this.add(categoryFilter);
 
-
-
-        String[] sortString = {"Sort", "Like", "Rating", "View"};
-        FilterBox sortFilter = new FilterBox(startFilter + 40, sortString, "dark");
+        sortFilter = new FilterBox(startFilter + 40, sortString, "dark");
         this.add(sortFilter);
 
-        pageMax = 10;
         SearchResultPanelHeight = (int)(UIStyle.height - UIStyle.barHeight - UIStyle.height / 4);
 
-        CardLayout resultCards = new CardLayout();
-        JPanel resultContentPanel = new JPanel();
+        resultCards = new CardLayout();
+        resultContentPanel = new JPanel();
         resultContentPanel.setBounds(0, (int)(UIStyle.height / 4), (int)(UIStyle.width),(int)(UIStyle.height));
         this.add(resultContentPanel);
         resultContentPanel.setLayout(resultCards);
 
+        updateRes();
         resultContentPanel.setVisible(true);
 
-        ResultPanel searchResultPanels[] = new ResultPanel[pageMax];
-        LiveSession[] liveSessions = {LiveSession.getSample(), LiveSession.getSample(), LiveSession.getSample(), LiveSession.getSample(), LiveSession.getSample(), LiveSession.getSample(), LiveSession.getSample()};
-        searchResultPanels[0] = new ResultPanel(liveSessions, pageMax, resultCards, resultContentPanel);
-        resultContentPanel.add(searchResultPanels[0], "0");
+    }
+    public void updateRes()
+    {
+        String key = searchBar.getText();
+        if(key.equals("Search") || key.equals(""))
+        {
+            key = null;
+        }
+        ArrayList<LiveSession> sessions = LiveController.getController().getSessionsByCoach(key);
+        ArrayList<String> keyCategory = new ArrayList<>();
+        boolean[] states = categoryFilter.getStates();
+        int cnt = 1;
+        for(boolean i : states)
+        {
+            if(i)
+            {
+                keyCategory.add(categoryFilterString[cnt]);
+            }
+            cnt++;
+        }
+        ArrayList<LiveSession> sessions1 = LiveController.getController().filterSessionByCategory(sessions, keyCategory);
+
+        pageMax = sessions1.size() / 8;
+        for(ResultPanel i : searchResultPanels)
+        {
+            resultContentPanel.remove(i);
+        }
+        searchResultPanels.clear();
+
+        for(int i = 0; i <= pageMax; i++)
+        {
+            searchResultPanels.add(new ResultPanel(sessions1, pageMax, resultCards, resultContentPanel, i + 1));
+            resultContentPanel.add(searchResultPanels.get(i), i + 1 + "");
+        }
+
     }
 }
 class ResultPanel extends JPanel {
-    public ResultPanel(LiveSession[] liveSessions, int pageMax, CardLayout resultCards, JPanel resultContentPanel) {
+    public ResultPanel(ArrayList<LiveSession> liveSessions, int pageMax, CardLayout resultCards, JPanel resultContentPanel, int page) {
         this.setLayout(null);
         this.setBackground(Color.decode("#14151A"));
 
         int xinterval =(int)((UIStyle.width - 100 - 100 - 200) / 3);
-        for(int i = 0; i < liveSessions.length; i++)
+        for(int i = 8 * page; i < liveSessions.size() && i < 8 * page + 4; i++)
         {
-            LivePanel live = new LivePanel(liveSessions[i], 100+ xinterval * i, 100, "small");
-            this.add(live);
-            if(i == 3)
-                break;
-        }
-        for(int i = 4; i < liveSessions.length; i++)
-        {
-            LivePanel live = new LivePanel(liveSessions[i], 100+ xinterval * (i-4), 250, "small");
+            LivePanel live = new LivePanel(liveSessions.get(i), 100+ xinterval * i%4, 100, "small");
             this.add(live);
         }
-        JSlider pages = new JSlider(1, pageMax, 1);
+        for(int i = 8 *page + 4; i < liveSessions.size() && i < 8*page + 8; i++)
+        {
+            LivePanel live = new LivePanel(liveSessions.get(i), 100+ xinterval * (i-4)%4, 250, "small");
+            this.add(live);
+        }
+        JSlider pages = new JSlider(1, pageMax + 1, 1);
 
         int pagesWidth = 100;
         int pagesHeight = 50;

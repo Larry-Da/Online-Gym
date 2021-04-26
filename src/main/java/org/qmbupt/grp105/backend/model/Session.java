@@ -1,7 +1,5 @@
 package org.qmbupt.grp105.backend.model;
-
 import com.alibaba.fastjson.annotation.JSONField;
-
 import java.util.Date;
 
 public class Session {
@@ -32,4 +30,10 @@ public class Session {
 
     @JSONField(name = "availableNum")
     public int availableNum;
+
+    public org.qmbupt.grp105.Entity.LiveSession converter() {
+        return new org.qmbupt.grp105.Entity.LiveSession(this.sessionId, this.rating, this.category, this.startTime,
+                this.endTime, this.likes, this.viewsCount, null, this.coachId, this.availableNum);
+    }
+
 }

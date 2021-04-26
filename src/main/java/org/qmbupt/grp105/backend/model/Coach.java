@@ -23,4 +23,7 @@ public class Coach {
 
     @JSONField(name = "gender")
     public char gender;
+    public org.qmbupt.grp105.Entity.Coach converter() {
+        return new org.qmbupt.grp105.Entity.Coach(this.coachId, this.age, this.name, this.password, this.phoneNo, this.email, this.gender);
+    }
 }

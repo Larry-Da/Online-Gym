@@ -3,9 +3,11 @@ package org.qmbupt.grp105.Entity;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Request {
+public class Request{
     private String header;
     private Map<String, Object> param;
+
+
     public Request() {
         this.header = "";
         this.param = new HashMap<String, Object>();

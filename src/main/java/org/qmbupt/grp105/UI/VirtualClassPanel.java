@@ -1,13 +1,17 @@
 package org.qmbupt.grp105.UI;
 
+import org.qmbupt.grp105.Controller.VideoController;
 import org.qmbupt.grp105.Entity.Video;
 import org.qmbupt.grp105.UI.MyUIComponent.*;
 import org.qmbupt.grp105.UI.MyUIComponent.MenuBar;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.plaf.basic.BasicSliderUI;
@@ -30,26 +34,22 @@ public class VirtualClassPanel extends JPanel
         CardLayout searchCards = new CardLayout();
         contentPanel.setLayout(searchCards);
 
-        CategoryPanel categoryPanel = new CategoryPanel(searchCards, contentPanel);
-        contentPanel.add(categoryPanel, "categoryPanel");
-
         SearchPanel searchPanel = new SearchPanel(searchCards, contentPanel, cards, mainPanel);
         contentPanel.add(searchPanel, "searchPanel");
 
+        CategoryPanel categoryPanel = new CategoryPanel(searchCards, contentPanel, searchPanel);
+        contentPanel.add(categoryPanel, "categoryPanel");
 
-//        SignInPanel signInPanel = new SignInPanel(loginCards, contentPanel);
-//        contentPanel.add(signInPanel, "signInPanel");
-//        CustomerPanel customerPanel = new CustomerPanel(loginCards, contentPanel);
-//        contentPanel.add(customerPanel, "customerPanel");
-//        AdministratorPanel administratorPanel = new AdministratorPanel(loginCards, contentPanel);
-//        contentPanel.add(administratorPanel, "administratorPanel");
+        searchCards.show(contentPanel, "categoryPanel");
+
+
 
     }
 }
 
 class CategoryPanel extends JPanel
 {
-    public CategoryPanel(CardLayout cards, JPanel contentPanel) {
+    public CategoryPanel(CardLayout cards, JPanel contentPanel, SearchPanel searchPanel) {
         this.setLayout(null);
         this.setBackground(Color.black);
         int buttonWidth = (int) (UIStyle.width / 3);
@@ -63,6 +63,9 @@ class CategoryPanel extends JPanel
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 cards.show(contentPanel, "searchPanel");
+                searchPanel.setCate("Bicycle Training");
+                searchPanel.updateRes();
+
             }
         });
 
@@ -94,53 +97,119 @@ class SearchPanel extends JPanel
 {
     private int pageMax;
     public static int SearchResultPanelHeight;
+    private InputText searchBar;
+    private String[] categoryFilterString = {"Category", "Bicycle Training", "HITT", "Flexibility", "Yoga", "Strength", "Weight Loss"};
+    private CardLayout resultCards;
+    private ArrayList<SearchResultPanel> searchResultPanels =new ArrayList<>();
+    FilterBox categoryFilter;
+    private JPanel resultContentPanel;
+    private CardLayout mainCards;
+    private MainPanel mainPanel;
+    private FilterBox sortFilter;
+
     public SearchPanel(CardLayout cards, JPanel contentPanel, CardLayout mainCards, MainPanel mainPanel)
     {
         this.setLayout(null);
-        this.setBackground(Color.decode("#14151A"));
-        InputText searchBar = new InputText(500, 50, 40, true, (int)(UIStyle.width / 2), 80, "Search", true);
-        this.add(searchBar);
+        this.mainCards = mainCards;
+        this.mainPanel = mainPanel;
 
-        int startFilter = 130;
-        String[] categoryFilterString = {"Category", "Bicycle Training", "HITT", "Flexibility", "Yoga", "Strength", "Weight Loss"};
-        FilterBox categoryFilter = new FilterBox(startFilter, categoryFilterString, "dark");
+        this.setBackground(Color.decode("#14151A"));
+        searchBar = new InputText(500, 50, 40, true, (int)(UIStyle.width / 2), 55, "Search", true);
+        this.add(searchBar);
+        searchBar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                updateRes();
+            }
+        });
+
+
+        int startFilter = 90;
+        categoryFilter = new FilterBox(startFilter, categoryFilterString, "dark");
         this.add(categoryFilter);
 
         String[] sortString = {"Sort", "Like", "Rating", "View"};
-        FilterBox sortFilter = new FilterBox(startFilter + 40, sortString, "dark");
+        sortFilter = new FilterBox(startFilter + 40, sortString, "dark");
         this.add(sortFilter);
 
-        pageMax = 10;
         SearchResultPanelHeight = (int)(UIStyle.height - UIStyle.barHeight - UIStyle.height / 4);
 
-        CardLayout resultCards = new CardLayout();
-        JPanel resultContentPanel = new JPanel();
+        resultCards = new CardLayout();
+        resultContentPanel = new JPanel();
         resultContentPanel.setBounds(0, (int)(UIStyle.height / 4), (int)(UIStyle.width),(int)(UIStyle.height));
         this.add(resultContentPanel);
         resultContentPanel.setLayout(resultCards);
 
+        updateRes();
         resultContentPanel.setVisible(true);
 
-        SearchResultPanel searchResultPanels[] = new SearchResultPanel[pageMax];
-        Video[] videos = {Video.getSampleVideo(), Video.getSampleVideo(), Video.getSampleVideo(), Video.getSampleVideo()};
-        searchResultPanels[0] = new SearchResultPanel(videos, pageMax, resultCards, resultContentPanel, mainCards, mainPanel);
-        resultContentPanel.add(searchResultPanels[0], "0");
+
+    }
+    public void setCate(String cate)
+    {
+        int cnt = 0;
+        for(String i : categoryFilterString)
+        {
+            if(i.equals(cate))
+            {
+                categoryFilter.setState(true, cnt - 1);
+            }
+            cnt++;
+        }
+    }
+    public void updateRes()
+    {
+        String key = searchBar.getText();
+        if(key.equals("Search") || key.equals(""))
+        {
+            key = null;
+        }
+        ArrayList<Video> videos = VideoController.getController().getVideosByName(key);
+        ArrayList<String> keyCategory = new ArrayList<>();
+        boolean[] states = categoryFilter.getStates();
+        int cnt = 1;
+        for(boolean i : states)
+        {
+            if(i)
+            {
+                keyCategory.add(categoryFilterString[cnt]);
+            }
+            cnt++;
+        }
+        ArrayList<Video> videos1 = VideoController.getController().filterByCategory(videos, keyCategory);
+
+        pageMax = videos1.size() / 4;
+        for(SearchResultPanel i : searchResultPanels)
+        {
+            resultContentPanel.remove(i);
+        }
+        searchResultPanels.clear();
+
+        for(int i = 0; i <= pageMax; i++)
+        {
+            searchResultPanels.add(new SearchResultPanel(videos1, pageMax, resultCards, resultContentPanel, mainCards, mainPanel, i + 1));
+            resultContentPanel.add(searchResultPanels.get(i), i + 1 + "");
+        }
+
     }
 }
 class SearchResultPanel extends JPanel
 {
-    public SearchResultPanel(Video[] videos, int pageMax, CardLayout resultCards, JPanel resultContentPanel, CardLayout cards, MainPanel mainPanel)
+    public SearchResultPanel(ArrayList<Video> videos, int pageMax, CardLayout resultCards, JPanel resultContentPanel, CardLayout cards, MainPanel mainPanel, int page)
     {
         this.setLayout(null);
         this.setBackground(Color.decode("#14151A"));
 
         int xinterval =(int)((UIStyle.width - 100 - 100 - 200) / 3);
-        for(int i = 0; i < videos.length; i++)
+
+        for(int i = (page - 1) * 4; i < videos.size() && i < (page) * 4; i++)
         {
-            VideoPanel video = new VideoPanel(videos[i], 100+ xinterval * i, 100, mainPanel, cards, "small");
+            VideoPanel video = new VideoPanel(videos.get(i), 100+ xinterval * (i % 4), 70, mainPanel, cards, "small");
             this.add(video);
         }
-        JSlider pages = new JSlider(1, pageMax, 1);
+        JSlider pages = new JSlider(1, pageMax + 1, page);
+        pages.setValue(page);
+
 
         int pagesWidth = 100;
         int pagesHeight = 50;
@@ -160,11 +229,20 @@ class SearchResultPanel extends JPanel
         JTextField pageShow = new JTextField();
         pageShow.setBounds((int)(UIStyle.width / 2 + pagesWidth / 1.5), (int)(SearchPanel.SearchResultPanelHeight - pagesHeight + 10), 30, 30);
         this.add(pageShow);
-        pageShow.setText("1");
+        pageShow.setText(page + "");
         pages.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
                 pageShow.setText(pages.getValue() + "");
+
+            }
+        });
+        pageShow.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                resultCards.show(resultContentPanel, pageShow.getText() + "");
+                pageShow.setText(page + "");
+                pages.setValue(page);
             }
         });
         this.setVisible(true);

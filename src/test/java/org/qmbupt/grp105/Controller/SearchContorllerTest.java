@@ -14,7 +14,7 @@ public class SearchContorllerTest {
 
     @Before
     public void setUp() {
-        searchController = new SearchController();
+        searchController = SearchController.getController();
         videos = new ArrayList<>();
         videos.add(new Video("1", "12345", "video1", 3.5, "yoga", 1300, 3500,"easy"));
         videos.add(new Video("2", "12345", "video2", 3.2, "yoga", 800, 1900,"difficult"));

@@ -4,11 +4,17 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Date;
 
+import org.qmbupt.grp105.Controller.LiveController;
 import org.qmbupt.grp105.Controller.PersonalController;
+import org.qmbupt.grp105.Controller.VideoController;
 import org.qmbupt.grp105.Entity.Coach;
 import org.qmbupt.grp105.Entity.Customer;
 import org.qmbupt.grp105.Entity.LiveSession;
@@ -19,6 +25,7 @@ import org.qmbupt.grp105.UI.MyUIComponent.MenuBar;
 public class PersonalPanel extends JPanel
 {
     public static MyReminder reminder;
+    private CustomerPanel customerPanel;
     public PersonalPanel(CardLayout cards, MainPanel mainPanel)
     {
         MenuBar menuBar = new MenuBar(cards, mainPanel);
@@ -35,9 +42,9 @@ public class PersonalPanel extends JPanel
         contentPanel.setVisible(true);
         CardLayout loginCards = new CardLayout();
         contentPanel.setLayout(loginCards);
-        SignInPanel signInPanel = new SignInPanel(loginCards, contentPanel);
+        SignInPanel signInPanel = new SignInPanel(loginCards, contentPanel, this);
         contentPanel.add(signInPanel, "signInPanel");
-        CustomerPanel customerPanel = new CustomerPanel(loginCards, contentPanel, cards, mainPanel);
+        customerPanel = new CustomerPanel(loginCards, contentPanel, cards, mainPanel);
         contentPanel.add(customerPanel, "customerPanel");
         AdministratorPanel administratorPanel = new AdministratorPanel(loginCards, contentPanel, cards, mainPanel);
         contentPanel.add(administratorPanel, "administratorPanel");
@@ -45,31 +52,43 @@ public class PersonalPanel extends JPanel
         contentPanel.add(coachPanel, "coachPanel");
 
     }
+    public void updateCus(String id)
+    {
+        customerPanel.updateCus(id);
+    }
 }
 
 class CustomerPanel extends JPanel
 {
-    private PersonalController controller = new PersonalController();
+
+    CustomerLeftPanel customerLeftPanel;
+    private CustomerRightPanel personalRightPanel;
     public CustomerPanel(CardLayout loginCards, JPanel contentPanel, CardLayout mainCards, MainPanel mainPanel)
     {
         this.setLayout(null);
         int barHeight = (int)(UIStyle.height) / 10;
         this.setBounds(0, 0, (int)(UIStyle.width), (int)(UIStyle.height - barHeight));
         CardLayout innerCards = new CardLayout();
-        CustomerRightPanel personalRightPanel = new CustomerRightPanel(innerCards, controller, mainCards, mainPanel);
+        personalRightPanel = new CustomerRightPanel(innerCards, mainCards, mainPanel);
         this.add(personalRightPanel);
 
-        CustomerLeftPanel customerLeftPanel = new CustomerLeftPanel(controller, loginCards, contentPanel, innerCards, personalRightPanel);
+        customerLeftPanel = new CustomerLeftPanel(loginCards, contentPanel, innerCards, personalRightPanel);
         this.add(customerLeftPanel);
         customerLeftPanel.setVisible(true);
 
+
+    }
+    public void updateCus(String id)
+    {
+        personalRightPanel.update(id);
+        customerLeftPanel.updateInfo();
 
     }
 }
 
 class SignInPanel extends JPanel
 {
-    public SignInPanel(final CardLayout cards, final JPanel contentPanel) {
+    public SignInPanel(final CardLayout cards, final JPanel contentPanel, PersonalPanel personalPanel) {
         this.setLayout(null);
 
         JPanel loginPanel = new JPanel();
@@ -105,23 +124,50 @@ class SignInPanel extends JPanel
         this.setBackground(Color.WHITE);
         this.add(loginPanel);
 
-        Login.addMouseListener(new MouseAdapter() {
+        password.addActionListener(new ActionListener() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                //cards.next(mainPanel);
-                if(account.getText().equals("1"))
-                    cards.show(contentPanel, "administratorPanel");
-                else if(account.getText().equals("2"))
-                    cards.show(contentPanel, "coachPanel");
-                else {
-                    cards.show(contentPanel, "customerPanel");
-                    PersonalPanel.reminder.OK("Hello, Grey!");
-                }
-
+            public void actionPerformed(ActionEvent e) {
+                loginVerify(account, password, cards, contentPanel, personalPanel);
             }
         });
 
+        Login.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                loginVerify(account, password, cards, contentPanel, personalPanel);
+            }
+        });
+    }
+    public void loginVerify(InputText account, Password password, CardLayout cards, JPanel contentPanel, PersonalPanel personalPanel)
+    {
+        //cards.next(mainPanel);
+        String acc = account.getText();
+        String pass = password.getText();
+        PersonalController controller = PersonalController.getController();
+        String id = controller.getIdByEmail(acc);
 
+        if (acc.equals("1")) {
+            cards.show(contentPanel, "administratorPanel");
+        } else if (acc.equals("2") ) {
+            cards.show(contentPanel, "coachPanel");
+        } else if(id == null)
+        {
+            PersonalPanel.reminder.WRONG("Email doesn't exist");
+        }
+        else {
+            Customer cus = controller.getCusInfoByCusId(id);
+            String passwordReal = cus.getPassword();
+            if(passwordReal.equals(pass)) {
+                LoginToken.setId(id);
+                personalPanel.updateCus(id);
+                cards.show(contentPanel, "customerPanel");
+                PersonalPanel.reminder.OK("Hello," + cus.getName()+ "!");
+            }
+            else
+            {
+                PersonalPanel.reminder.WRONG("Wrong Password");
+            }
+        }
     }
 }
 
@@ -129,7 +175,9 @@ class CustomerLeftPanel extends JPanel
 {
     int panelWidth;
     int panelHeight;
-    public CustomerLeftPanel(PersonalController controller, final CardLayout loginCards, final JPanel contentPanel, CardLayout contentCards, JPanel rightPanel)
+    Picture circleIcon;
+    DynamicText name;
+    public CustomerLeftPanel(final CardLayout loginCards, final JPanel contentPanel, CardLayout contentCards, JPanel rightPanel)
     {
         panelWidth = (int)(UIStyle.width * 0.24);
         panelHeight = (int)(UIStyle.height - UIStyle.barHeight);
@@ -180,15 +228,16 @@ class CustomerLeftPanel extends JPanel
         this.add(myBookedLive);
         this.add(myVideoHistory);
         this.add(myFavorite);
+        PersonalController controller = PersonalController.getController();
 
 
 
-        Picture circleIcon = new Picture(UIStyle.CustomerPanel_PersonIcon, (int)(panelWidth * 0.26), (int)(panelWidth * 0.26));
+        circleIcon = new Picture(UIStyle.CustomerPanel_PersonIcon, (int)(panelWidth * 0.26), (int)(panelWidth * 0.26));
         circleIcon.setBounds((int)(UIStyle.width * 0.0875), (int)(UIStyle.height * 0.12), (int)(panelWidth * 0.26), (int)(panelWidth * 0.26));
         this.add(circleIcon);
 
-        Customer cus = controller.getCusInfoByCusId("Cs15");
-        DynamicText name = new DynamicText(UIStyle.COLOR_3, UIStyle.COLOR_4, cus.getName(), (int)(panelWidth / 2), (int)(panelHeight * 0.30), (int)(panelWidth / 2), (int)(panelHeight * 0.05), UIStyle.NORMAL_ARIAL_BOLD);
+        Customer cus = controller.getCusInfoByCusId("cs1");
+        name = new DynamicText(UIStyle.COLOR_3, UIStyle.COLOR_4, cus.getName(), (int)(panelWidth / 2), (int)(panelHeight * 0.30), (int)(panelWidth / 2), (int)(panelHeight * 0.05), UIStyle.NORMAL_ARIAL_BOLD);
         this.add(name);
 
 
@@ -204,7 +253,20 @@ class CustomerLeftPanel extends JPanel
                 loginCards.show(contentPanel, "signInPanel");
             }
         });
+    }
+    public void updateInfo()
+    {
+        Customer cus = PersonalController.getController().getCusInfoByCusId(LoginToken.getId());
+        this.remove(name);
+        name = new DynamicText(UIStyle.COLOR_3, UIStyle.COLOR_4, cus.getName(), (int)(panelWidth / 2), (int)(panelHeight * 0.30), (int)(panelWidth / 2), (int)(panelHeight * 0.05), UIStyle.NORMAL_ARIAL_BOLD);
+        this.add(name);
 
+        this.remove(circleIcon);
+
+        String picPath = UIStyle.class.getClassLoader().getResource(cus.getCusId() + ".png").getPath();
+        circleIcon = new Picture(picPath, (int)(panelWidth * 0.26), (int)(panelWidth * 0.26));
+        circleIcon.setBounds((int)(UIStyle.width * 0.0875), (int)(UIStyle.height * 0.12), (int)(panelWidth * 0.26), (int)(panelWidth * 0.26));
+        this.add(circleIcon);
 
     }
 
@@ -212,22 +274,49 @@ class CustomerLeftPanel extends JPanel
 
 class CustomerRightPanel extends JPanel
 {
-    public CustomerRightPanel(CardLayout innerCards, PersonalController controller, CardLayout mainCards, MainPanel mainPanel) {
+    private CardLayout innerCards;
+    private CardLayout mainCards;
+    private MainPanel mainPanel;
+    CustomerMembershipPanel membership;
+    CustomerBookedLivePanel bookedLivePanel;
+    VideoHistoryPanel videoHistoryPanel;
+    PersonalController controller;
+    FavoritePanel favoritePanel;
+    public CustomerRightPanel(CardLayout innerCards, CardLayout mainCards, MainPanel mainPanel) {
+        this.innerCards = innerCards;
+        this.mainCards = mainCards;
+        this.mainPanel = mainPanel;
+        controller = PersonalController.getController();
         int panelWidth = (int) (UIStyle.width * 0.76);
         int panelHeight = (int) (UIStyle.height - UIStyle.barHeight);
         setBounds((int) (UIStyle.width * 0.24), 0, panelWidth, panelHeight);
         setBackground(Color.WHITE);
         this.setLayout(innerCards);
-        CustomerMembershipPanel membership = new CustomerMembershipPanel(controller.getCusInfoByCusId("Cs15"));
+
+    }
+    public void update(String id)
+    {
+        if(membership != null)
+            this.remove(membership);
+        membership = new CustomerMembershipPanel(controller.getCusInfoByCusId(id));
         this.add(membership, "Membership");
-        LiveSession liveSessions[] = {LiveSession.getSample(), LiveSession.getSample(), LiveSession.getSample(), LiveSession.getSample(), LiveSession.getSample()};
-        CustomerBookedLivePanel bookedLivePanel = new CustomerBookedLivePanel(liveSessions);
+
+        if(bookedLivePanel != null)
+            this.remove(bookedLivePanel);
+        ArrayList<LiveSession> liveSessions = LiveController.getController().getLiveSessionByCusId(id);
+        bookedLivePanel = new CustomerBookedLivePanel(liveSessions);
         this.add(bookedLivePanel, "BookedLive");
-        Video videos[] = {Video.getSampleVideo(),Video.getSampleVideo(),Video.getSampleVideo(),Video.getSampleVideo(),Video.getSampleVideo()};
-        VideoHistoryPanel videoHistoryPanel = new VideoHistoryPanel(videos, mainCards, mainPanel);
+
+        if(videoHistoryPanel != null)
+            this.remove(videoHistoryPanel);
+        ArrayList<Video> videos = VideoController.getController().getVideosByCusId(id);
+        videoHistoryPanel = new VideoHistoryPanel(videos, mainCards, mainPanel);
         this.add(videoHistoryPanel, "VideoHistory");
-        FavoritePanel favoritePanel = new FavoritePanel(videos, mainCards, mainPanel);
-        this.add(favoritePanel, "Favorite");
+
+//        this.remove(favoritePanel);
+//        ArrayList<Video> favorites = VideoController.getController();
+
+
 
     }
 }
@@ -280,19 +369,31 @@ class CustomerMembershipPanel extends JPanel
                 , "User Level", cus.getMembershipLevel(), (int)(buttonStartX + stikerWidth * 1.3), buttonStartY - 3*buttonHeight, UIStyle.CustomerMember_Level);
         this.add(level);
 
-        Sticker remainTime = new Sticker(stikerWidth, stikerHeight
-                , "VIP remaining time", cus.getRemainTime(), (int)(buttonStartX + stikerWidth * 2.6), buttonStartY - 3*buttonHeight, UIStyle.CustomerMember_Time);
-        this.add(remainTime);
+        Sticker expireTime = new Sticker(stikerWidth, stikerHeight
+                , "VIP Expire time", cus.getExpiredTime(), (int)(buttonStartX + stikerWidth * 2.6), buttonStartY - 3*buttonHeight, UIStyle.CustomerMember_Time);
+        this.add(expireTime);
 
         TextButton save = new TextButton(UIStyle.GREEN_OK, Color.WHITE, "Save", (int)(buttonStartX + 1.5 * buttonWidth), buttonStartY + 7 * buttonHeight, buttonWidth / 2, buttonHeight, UIStyle.NORMAL_FONT, true, "mid");
         this.add(save);
+        save.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                cus.setName(name_lower.getText());
+                cus.setGender(gender_lower.getText().charAt(0));
+                cus.setEmail(email_lower.getText());
+                cus.setPhoneNo(phone_lower.getText());
+                PersonalController.getController().updateCustomer(cus);
+                PersonalPanel.reminder.OK("Save Success!");
+            }
+        });
 
     }
 }
 class CustomerBookedLivePanel extends JPanel
 {
     private int pageMax;
-    public CustomerBookedLivePanel(LiveSession[] liveSessions)
+    public CustomerBookedLivePanel(ArrayList<LiveSession> liveSessions)
     {
         pageMax = 10;
         String expiredContent[] = {"Expired", "Yes", "No"};
@@ -311,8 +412,9 @@ class CustomerBookedLivePanel extends JPanel
         setBounds((int) (UIStyle.width * 0.24), UIStyle.barHeight, panelWidth, panelHeight);
         setBackground(Color.WHITE);
         this.setLayout(null);
-        for(int i = 0; i < 3; i++) {
-            LivePanel test = new LivePanel(liveSessions[i], 0, 150 * i + 130, "large");
+
+        for(int i = 0; i < liveSessions.size() && i < 3; i++) {
+            LivePanel test = new LivePanel(liveSessions.get(i), 0, 150 * i + 130, "large");
             this.add(test);
         }
 
@@ -350,7 +452,7 @@ class CustomerBookedLivePanel extends JPanel
 class VideoHistoryPanel extends JPanel
 {
     private int pageMax;
-    public VideoHistoryPanel(Video[] videos, CardLayout cards, MainPanel mainPanel)
+    public VideoHistoryPanel(ArrayList<Video> videos, CardLayout cards, MainPanel mainPanel)
     {
         pageMax = 10;
 
@@ -360,8 +462,8 @@ class VideoHistoryPanel extends JPanel
         setBounds((int) (UIStyle.width * 0.24), UIStyle.barHeight, panelWidth, panelHeight);
         setBackground(Color.WHITE);
         this.setLayout(null);
-        for(int i = 0; i < 3; i++) {
-            VideoPanel test = new VideoPanel(videos[i], 0, 150 * i, mainPanel, cards, "large");
+        for(int i = 0; i < videos.size() && i < 3; i++) {
+            VideoPanel test = new VideoPanel(videos.get(i), 0, 150 * i, mainPanel, cards, "large");
             this.add(test);
         }
 
@@ -399,7 +501,7 @@ class VideoHistoryPanel extends JPanel
 class FavoritePanel extends JPanel
 {
     private int pageMax;
-    public FavoritePanel(Video[] videos, CardLayout cards, MainPanel mainPanel)
+    public FavoritePanel(ArrayList<Video> videos, CardLayout cards, MainPanel mainPanel)
     {
         pageMax = 10;
 
@@ -409,8 +511,8 @@ class FavoritePanel extends JPanel
         setBounds((int) (UIStyle.width * 0.24), UIStyle.barHeight, panelWidth, panelHeight);
         setBackground(Color.WHITE);
         this.setLayout(null);
-        for(int i = 0; i < 3; i++) {
-            VideoPanel test = new VideoPanel(videos[i], 0, 150 * i, mainPanel, cards, "large");
+        for(int i = 0; i < 3 && i < videos.size(); i++) {
+            VideoPanel test = new VideoPanel(videos.get(i), 0, 150 * i, mainPanel, cards, "large");
             this.add(test);
         }
 
@@ -448,17 +550,17 @@ class FavoritePanel extends JPanel
 
 class AdministratorPanel extends JPanel
 {
-    PersonalController controller = new PersonalController();
+
     public AdministratorPanel(CardLayout loginCards, JPanel contentPanel, CardLayout mainCards, MainPanel mainPanel)
     {
         this.setLayout(null);
         int barHeight = (int)(UIStyle.height) / 10;
         this.setBounds(0, 0, (int)(UIStyle.width), (int)(UIStyle.height - barHeight));
         CardLayout innerCards = new CardLayout();
-        AdministratorRightPanel administratorRightPanel = new AdministratorRightPanel(innerCards, controller, contentPanel, mainCards, mainPanel);
+        AdministratorRightPanel administratorRightPanel = new AdministratorRightPanel(innerCards, contentPanel, mainCards, mainPanel);
         this.add(administratorRightPanel);
         administratorRightPanel.setVisible(true);
-        AdministratorLeftPanel administratorLeftPanel = new AdministratorLeftPanel(controller, loginCards, contentPanel, innerCards, administratorRightPanel);
+        AdministratorLeftPanel administratorLeftPanel = new AdministratorLeftPanel(loginCards, contentPanel, innerCards, administratorRightPanel);
         this.add(administratorLeftPanel);
         administratorLeftPanel.setVisible(true);
 
@@ -473,7 +575,7 @@ class AdministratorLeftPanel extends JPanel
 {
     int panelWidth;
     int panelHeight;
-    public AdministratorLeftPanel(PersonalController controller, final CardLayout loginCards, final JPanel contentPanel, CardLayout contentCards, JPanel rightPanel)
+    public AdministratorLeftPanel(final CardLayout loginCards, final JPanel contentPanel, CardLayout contentCards, JPanel rightPanel)
     {
         panelWidth = (int)(UIStyle.width * 0.24);
         panelHeight = (int)(UIStyle.height - UIStyle.barHeight);
@@ -539,7 +641,8 @@ class AdministratorLeftPanel extends JPanel
 
 class AdministratorRightPanel extends JPanel
 {
-    public AdministratorRightPanel(CardLayout innerCards, PersonalController controller, JPanel contentPanel, CardLayout mainCards, MainPanel mainPanel) {
+    public AdministratorRightPanel(CardLayout innerCards, JPanel contentPanel, CardLayout mainCards, MainPanel mainPanel) {
+        PersonalController controller = PersonalController.getController();
         int panelWidth = (int) (UIStyle.width * 0.76);
         int panelHeight = (int) (UIStyle.height - UIStyle.barHeight);
         setBounds((int) (UIStyle.width * 0.24), 0, panelWidth, panelHeight);
@@ -571,7 +674,7 @@ class AdministratorMembershipPanel extends JPanel
 
         int itemsPerPage = 12;
 
-        String[] column = {"CusId", "Name", "Age", "Gender", "PhoneNo", "Email", "MembershipLevel", "Balance", "Points", "DateOfBirth", "RemainTime"};
+        String[] column = {"CusId", "Name", "Age", "Gender", "PhoneNo", "Email", "MembershipLevel", "Balance", "Points", "DateOfBirth", "ExpiredTime"};
         String[][] values = new String[itemsPerPage][column.length];
         int numOfCustomer = controller.getNumOfAllCustomers();
 
@@ -718,7 +821,6 @@ class AdministratorVideoManagement extends JPanel
 }
 class CoachPanel extends JPanel
 {
-    private PersonalController controller = new PersonalController();
     public CoachPanel(CardLayout loginCards, JPanel contentPanel, CardLayout mainCards, MainPanel mainPanel)
     {
         this.setLayout(null);
