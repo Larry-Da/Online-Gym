@@ -34,6 +34,19 @@ public class LiveController {
         }
         return res;
     }
+    public ArrayList<LiveSession> getLiveSessionByCoachId(String coId)
+    {
+        ArrayList<LiveSession> sessions = getAllLiveSessions();
+        ArrayList<LiveSession> res = new ArrayList<>();
+        for(LiveSession i : sessions)
+        {
+            if(i.getCoach_coachId().equals(coId))
+            {
+                res.add(i);
+            }
+        }
+        return res;
+    }
     public ArrayList<LiveSession> getAllLiveSessions() {
         ArrayList<Session> sessions = null;
         ArrayList<LiveSession> res = new ArrayList<>();

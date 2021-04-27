@@ -156,6 +156,8 @@ class SearchPanel extends JPanel
     private CardLayout mainCards;
     private MainPanel mainPanel;
     private FilterBox sortFilter;
+    private String[] sortString = {"Sort", "Like", "Rating", "View"};
+
 
     public SearchPanel(CardLayout cards, JPanel contentPanel, CardLayout mainCards, MainPanel mainPanel)
     {
@@ -178,8 +180,7 @@ class SearchPanel extends JPanel
         categoryFilter = new FilterBox(startFilter, categoryFilterString, "dark");
         this.add(categoryFilter);
 
-        String[] sortString = {"Sort", "Like", "Rating", "View"};
-        sortFilter = new FilterBox(startFilter + 40, sortString, "dark");
+        sortFilter = new FilterBox(startFilter + 40, sortString, "dark", true);
         this.add(sortFilter);
 
         SearchResultPanelHeight = (int)(UIStyle.height - UIStyle.barHeight - UIStyle.height / 4);
@@ -227,7 +228,19 @@ class SearchPanel extends JPanel
             cnt++;
         }
         ArrayList<Video> videos1 = VideoController.getController().filterByCategory(videos, keyCategory);
+        states = sortFilter.getStates();
+        cnt = 1;
+        String sortKey = null;
+        for(boolean i : states)
+        {
+            if(i)
+            {
+                sortKey = sortString[cnt];
+            }
+            cnt++;
+        }
 
+        videos1 = VideoController.getController().sort(videos1, sortKey);
         pageMax = videos1.size() / 4;
         for(SearchResultPanel i : searchResultPanels)
         {

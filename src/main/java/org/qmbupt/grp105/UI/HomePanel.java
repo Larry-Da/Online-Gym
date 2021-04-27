@@ -10,7 +10,7 @@ import java.awt.*;
 
 public class HomePanel extends JPanel
 {
-    public HomePanel(CardLayout cards, JPanel mainPanel)
+    public HomePanel(CardLayout cards, MainPanel mainPanel)
     {
         MenuBar mb = new MenuBar(cards, mainPanel);
         mb.setVisible(true);

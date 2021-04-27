@@ -19,7 +19,7 @@ public class MenuBar extends JPanel
     TextButton LiveButton;
     TextButton ContactButton;
 
-    public MenuBar(CardLayout cards, JPanel mainPanel)
+    public MenuBar(CardLayout cards, MainPanel mainPanel)
     {
         int buttonWidth = (int)(UIStyle.width / 2 / 6);
         int mid = (int)(UIStyle.width / 2);
@@ -43,6 +43,7 @@ public class MenuBar extends JPanel
                 //cards.next(mainPanel);
                 cards.show(mainPanel, "personalPanel");
                 MainPanel.currentPanel = "personalPanel";
+                mainPanel.updatePersonalInfo();
             }
         });
         HomePageButton.addMouseListener(new MouseAdapter() {

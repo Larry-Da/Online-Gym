@@ -182,13 +182,14 @@ public class VideoPanel extends JPanel implements MouseListener
     {
         if(size.equals("manage")) {
             cards.show(mainPanel, "tempContentPanel");
-            mainPanel.setTempContent("videoModify", title);
+            mainPanel.setTempContent("videoModify", videoId);
         }
         else
         {
             cards.show(mainPanel, "tempContentPanel");
-            mainPanel.setTempContent("video", title);
-            PersonalController.getController().watchVideo(LoginToken.getId(), videoId);
+            mainPanel.setTempContent("video", videoId);
+            if(LoginToken.getId() != null && LoginToken.getType().equals("Customer"))
+                PersonalController.getController().watchVideo(LoginToken.getId(), videoId);
         }
         //MainPanel.tempContentPanel.setContent(new VideoDetailPanel());
         //

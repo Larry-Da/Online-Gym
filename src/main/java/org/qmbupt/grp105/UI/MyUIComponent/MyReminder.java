@@ -10,8 +10,8 @@ import java.awt.event.MouseEvent;
 
 public class MyReminder
 {
-    private MenuBar bar;
-    public MyReminder(MenuBar bar)
+    private JPanel bar;
+    public MyReminder(JPanel bar)
     {
         this.bar = bar;
     }

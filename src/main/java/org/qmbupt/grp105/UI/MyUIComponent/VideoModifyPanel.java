@@ -8,8 +8,6 @@ import java.awt.*;
 
 public class VideoModifyPanel extends JPanel
 {
-
-
     private Video currentVideo = Video.getSampleVideo();
 
     public VideoModifyPanel() {

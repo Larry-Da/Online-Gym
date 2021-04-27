@@ -18,9 +18,12 @@ import java.util.ArrayList;
 
 public class LiveClassPanel extends JPanel
 {
-    public LiveClassPanel(CardLayout cards, JPanel mainPanel)
+    public static MyReminder reminder;
+    public LiveClassPanel(CardLayout cards, MainPanel mainPanel)
     {
         MenuBar menuBar = new MenuBar(cards, mainPanel);
+        reminder = new MyReminder(menuBar);
+
         menuBar.setVisible(true);
         this.setLayout(null);
         this.add(menuBar);
@@ -81,7 +84,7 @@ class ContentPanel extends JPanel
         categoryFilter = new FilterBox(startFilter, categoryFilterString, "dark");
         this.add(categoryFilter);
 
-        sortFilter = new FilterBox(startFilter + 40, sortString, "dark");
+        sortFilter = new FilterBox(startFilter + 40, sortString, "dark", true);
         this.add(sortFilter);
 
         SearchResultPanelHeight = (int)(UIStyle.height - UIStyle.barHeight - startFilter - 90);
@@ -116,6 +119,7 @@ class ContentPanel extends JPanel
             cnt++;
         }
         ArrayList<LiveSession> sessions1 = LiveController.getController().filterSessionByCategory(sessions, keyCategory);
+
 
         pageMax = sessions1.size() / 8;
         for(ResultPanel i : searchResultPanels)

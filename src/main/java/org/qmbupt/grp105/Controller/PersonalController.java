@@ -6,7 +6,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 import org.qmbupt.grp105.backend.BackendServer;
+import org.qmbupt.grp105.backend.dblayer.CoachManager;
 import org.qmbupt.grp105.backend.dblayer.CustomerManager;
+import org.qmbupt.grp105.backend.dblayer.VideoManager;
+
 /**
  * @version 1.2
  * @author Wenrui Zhao
@@ -24,7 +27,44 @@ public class PersonalController {
     {
         return personalController;
     }
-
+    public ArrayList<Customer> filterByKeyword(ArrayList<Customer> customers, String key)
+    {
+        ArrayList<Customer> res = new ArrayList<>();
+        if(key == null)
+            return customers;
+        for(Customer i : customers)
+        {
+            if(i.getName().contains(key) || i.getCusId().contains(key))
+            {
+                res.add(i);
+            }
+        }
+        return res;
+    }
+    public ArrayList<Customer> filterByGender(ArrayList<Customer> customers, char gender)
+    {
+        ArrayList<Customer> res = new ArrayList<>();
+        if(gender == 'n')
+            return customers;
+        for(Customer i: customers)
+        {
+            if(gender == i.getGender())
+                res.add(i);
+        }
+        return res;
+    }
+    public ArrayList<Customer> filterByCusLevel(ArrayList<Customer> customers,ArrayList<String> levelKeys)
+    {
+        ArrayList<Customer> res = new ArrayList<>();
+        if(levelKeys.size() == 0)
+            return customers;
+        for(Customer i: customers)
+        {
+            if(levelKeys.contains(i.getMembershipLevel()))
+                res.add(i);
+        }
+        return res;
+    }
 
 
     /**
@@ -83,6 +123,17 @@ public class PersonalController {
         }
         return null;
     }
+    public Coach getCoachInfoById(String coId)
+    {
+        ArrayList<Coach> coaches = this.getAllCoaches();
+        for(Coach i : coaches)
+        {
+            if(i.getCoachId().equals(coId))
+                return i;
+        }
+        return null;
+
+    }
 
 
 
@@ -138,15 +189,45 @@ public class PersonalController {
         }
         return num;
     }
-    public String getIdByEmail(String email)
-    {
-        ArrayList<Customer> customers = getAllCustomer();
-        for(Customer c: customers) {
-            if(c.getEmail().equals(email)) {
-                return c.getCusId();
+
+    /**
+     * check the username and the password
+     * @param username
+     * @param pass
+     * @return
+     */
+    public int check(String username, String pass) {
+        try {
+            if(CustomerManager.getCustomerById(getIdByEmail(username)) == null) {
+                if (CoachManager.getCoachById(getIdByEmail(username)) == null) {
+                    return 3;
+                }
+                else {
+                    Coach coach = CoachManager.getCoachById(getIdByEmail(username)).converter();
+                    if(!coach.getPassword().equals(pass)) {
+                        return 4;
+                    }
+                    else {
+                        return 2;
+                    }
+                }
             }
+            else {
+                Customer customer = CustomerManager.getCustomerById(getIdByEmail(username)).converter();
+                if(!customer.getPassword().equals(pass)) {
+                    return 4;
+                }
+                else {
+                    return 1;
+                }
+
+            }
+
+        } catch(IOException e) {
+            e.printStackTrace();
         }
-        return null;
+
+        return -1;
     }
     public void updateCustomer(Customer customer) {
         try {
@@ -180,7 +261,45 @@ public class PersonalController {
     }
     public void watchVideo(String cusId, String videoId) {
         try {
-            CustomerManager.watchVideo(cusId, videoId);
+            Customer customer = CustomerManager.getCustomerById(cusId).converter();
+            if(!customer.getVideosHistory().contains(videoId)) {
+                CustomerManager.watchVideo(cusId,videoId);
+            }
+            else {
+                int i = 0;
+                int index = customer.getVideosHistory().indexOf(videoId);
+                for(i = index; i < customer.getVideosHistory().size() - 1; i++) {
+                    customer.getVideosHistory().set(i, customer.getVideosHistory().get(i + 1));
+                }
+                customer.getVideosHistory().set(i, videoId);
+                updateCustomer(customer);
+            }
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * add the video to personal favourite list
+     * @param cusId
+     * @param videoId
+     */
+    public void addToFavourite(String cusId, String videoId) {
+        try {
+            CustomerManager.addFavoriteVideo(cusId, videoId);
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * remove the video from personal favourite list
+     * @param cusId
+     * @param videoId
+     */
+    public void removeFromFavourite(String cusId, String videoId) {
+        try {
+            CustomerManager.removeFavoriteVideo(cusId, videoId);
         } catch(IOException e) {
             e.printStackTrace();
         }
@@ -220,13 +339,68 @@ public class PersonalController {
         Customer customer = getCusInfoByCusId(cusId);
         return customer.getExpiredTime();
     }
+    public ArrayList<Video> getFavouriteVideoByCusId(String cusId) {
+        Customer customer = getCusInfoByCusId(cusId);
+        ArrayList<Video> res = new ArrayList<>();
+        try {
+            for(String s: customer.getFavouriteVideos()) {
+                res.add(VideoManager.getVideoById(s).converter());
+            }
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+        return res;
 
+    }
+    public ArrayList<Coach> getAllCoaches() {
+        ArrayList<org.qmbupt.grp105.backend.model.Coach> coaches = new ArrayList<>();
+        ArrayList<Coach> res = new ArrayList<>();
+        try {
+            coaches = CoachManager.getAllCoaches();
+            for(org.qmbupt.grp105.backend.model.Coach c: coaches) {
+                res.add(c.converter());
+            }
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+        return res;
+    }
+    /**
+     * get customer's id by his email
+     * @param email
+     * @return
+     */
+    public String getIdByEmail(String email)
+    {
+        ArrayList<Customer> customers = getAllCustomer();
+        for(Customer c: customers) {
+            if(c.getEmail().equals(email)) {
+                return c.getCusId();
+            }
+        }
+        ArrayList<Coach> coaches = getAllCoaches();
+        for(Coach c: coaches) {
+            if(c.getEmail().equals(email)) {
+                return c.getCoachId();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * extend the membership
+     * @param cusId
+     */
     public void extendMembership(String cusId) {
         try {
             CustomerManager.extendMembership(cusId);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    public static void main(String[] args) {
+        PersonalController personalController = PersonalController.getController();
+        personalController.watchVideo("cs5","v001");
     }
 
 }

@@ -1,5 +1,6 @@
 package org.qmbupt.grp105.UI;
 
+import org.qmbupt.grp105.Controller.PersonalController;
 import org.qmbupt.grp105.Entity.Video;
 import org.qmbupt.grp105.UI.MyUIComponent.InputText;
 import org.qmbupt.grp105.UI.MyUIComponent.PicButton;
@@ -78,8 +79,19 @@ public class VideoDetailPanel extends JPanel
         addToFavorite.setBounds(labelX - 5 * buttonWidth, labelY, 100, 20);
         controlsPane.add(addToFavorite);
 
+
         PicButton favorite = new PicButton(UIStyle.VirtualClass_favorite, videoPanelWidth - 8 *buttonWidth, (int)(videoPanelHeight / 10.0 /2), buttonWidth, buttonHeight);
         controlsPane.add(favorite);
+        favorite.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                if(LoginToken.getId() != null && LoginToken.getType().equals("Customer")) {
+                    PersonalController.getController().addToFavourite(LoginToken.getId(), currentVideo.getVideoId());
+                    TempContentPanel.reminder.OK("Add to favorite successfully!");
+                }
+            }
+        });
 
         videoPanel.add(controlsPane);
         mediaPlayerComponent.mediaPlayer().media().startPaused(path);
