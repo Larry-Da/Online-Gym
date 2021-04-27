@@ -96,6 +96,35 @@ public class CustomerManager {
         DataManager.getInstance().commit();
     }
 
+    /**
+     * add a video to favorites
+     * @param cusId
+     * @param videoId
+     * @throws IOException
+     */
+    public static void addFavoriteVideo(String cusId, String videoId) throws IOException {
+        Customer customer = getCustomerById(cusId);
+        for (int i = 0; i < customer.favoriteVideos.size(); i++) {
+            if (customer.favoriteVideos.get(i).equals(videoId)) {
+                customer.favoriteVideos.remove(i);
+                break;
+            }
+        }
+        customer.favoriteVideos.add(videoId);
+        DataManager.getInstance().commit();
+    }
+
+    public static void removeFavoriteVideo(String cusId, String videoId) throws IOException {
+        Customer customer = getCustomerById(cusId);
+        for (int i = 0; i < customer.favoriteVideos.size(); i++) {
+            if (customer.favoriteVideos.get(i).equals(videoId)) {
+                customer.favoriteVideos.remove(i);
+                break;
+            }
+        }
+        DataManager.getInstance().commit();
+    }
+
 
 
     /**
@@ -204,9 +233,6 @@ public class CustomerManager {
 
 
     public static void main(String[] args) throws Exception {
-
-        extendMembership("Cs13");
-        watchVideo("Cs13", "asdf");
-        bookSession("Cs13", "lvs1");
+        addFavoriteVideo("cs2", "v001");
     }
 }

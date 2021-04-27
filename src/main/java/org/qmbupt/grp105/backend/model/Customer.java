@@ -46,6 +46,9 @@ public class Customer {
     @JSONField(name = "bookedSessions")
     public  ArrayList<String> bookedSessions;
 
+    @JSONField(name = "favoriteVideos")
+    public ArrayList<String> favoriteVideos;
+
     public org.qmbupt.grp105.Entity.Customer converter() {
         return new org.qmbupt.grp105.Entity.Customer(this.cusId, 10, this.name, this.password,
                 this.phoneNo, this.email, this.gender.charAt(0), this.dateOfBirth, this.level + "", this.expireDate.toString(),
