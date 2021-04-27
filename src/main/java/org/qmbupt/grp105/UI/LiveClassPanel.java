@@ -84,11 +84,11 @@ class ContentPanel extends JPanel
         sortFilter = new FilterBox(startFilter + 40, sortString, "dark");
         this.add(sortFilter);
 
-        SearchResultPanelHeight = (int)(UIStyle.height - UIStyle.barHeight - UIStyle.height / 4);
+        SearchResultPanelHeight = (int)(UIStyle.height - UIStyle.barHeight - startFilter - 90);
 
         resultCards = new CardLayout();
         resultContentPanel = new JPanel();
-        resultContentPanel.setBounds(0, (int)(UIStyle.height / 4), (int)(UIStyle.width),(int)(UIStyle.height));
+        resultContentPanel.setBounds(0, startFilter + 90, (int)(UIStyle.width),SearchResultPanelHeight);
         this.add(resultContentPanel);
         resultContentPanel.setLayout(resultCards);
 
@@ -126,9 +126,11 @@ class ContentPanel extends JPanel
 
         for(int i = 0; i <= pageMax; i++)
         {
-            searchResultPanels.add(new ResultPanel(sessions1, pageMax, resultCards, resultContentPanel, i + 1));
-            resultContentPanel.add(searchResultPanels.get(i), i + 1 + "");
+            ResultPanel rp = new ResultPanel(sessions1, pageMax, resultCards, resultContentPanel, i + 1);
+            searchResultPanels.add(i, rp);
+            resultContentPanel.add(rp, i + 1 + "");
         }
+        resultCards.first(resultContentPanel);// if there is no this statement, updateRes from only 1 page to another only 1 page will show blank
 
     }
 }
@@ -138,21 +140,21 @@ class ResultPanel extends JPanel {
         this.setBackground(Color.decode("#14151A"));
 
         int xinterval =(int)((UIStyle.width - 100 - 100 - 200) / 3);
-        for(int i = 8 * page; i < liveSessions.size() && i < 8 * page + 4; i++)
+        for(int i = 8 * (page - 1); i < liveSessions.size() && i < 8 * (page -1) + 4; i++)
         {
-            LivePanel live = new LivePanel(liveSessions.get(i), 100+ xinterval * i%4, 100, "small");
+            LivePanel live = new LivePanel(liveSessions.get(i), 100+ xinterval * (i%4), 40, "small");
             this.add(live);
         }
-        for(int i = 8 *page + 4; i < liveSessions.size() && i < 8*page + 8; i++)
+        for(int i = 8 *(page - 1) + 4; i < liveSessions.size() && i < 8* (page - 1) + 8; i++)
         {
-            LivePanel live = new LivePanel(liveSessions.get(i), 100+ xinterval * (i-4)%4, 250, "small");
+            LivePanel live = new LivePanel(liveSessions.get(i), 100+ xinterval * ((i-4)%4), 40 + 150, "small");
             this.add(live);
         }
-        JSlider pages = new JSlider(1, pageMax + 1, 1);
+        JSlider pages = new JSlider(1, pageMax + 1, page);
 
         int pagesWidth = 100;
         int pagesHeight = 50;
-        pages.setBounds((int) (UIStyle.width / 2 - pagesWidth / 2), (int) (SearchPanel.SearchResultPanelHeight - pagesHeight), pagesWidth, pagesHeight);
+        pages.setBounds((int) (UIStyle.width / 2 - pagesWidth / 2), (int) (SearchPanel.SearchResultPanelHeight - 2 * pagesHeight), pagesWidth, pagesHeight);
 
         this.add(pages);
         // 设置主刻度间隔
@@ -166,9 +168,9 @@ class ResultPanel extends JPanel {
 //        pages.setPaintLabels(true);
         pages.setSnapToTicks(true);
         JTextField pageShow = new JTextField();
-        pageShow.setBounds((int) (UIStyle.width / 2 + pagesWidth / 1.5), (int) (SearchPanel.SearchResultPanelHeight - pagesHeight + 10), 30, 30);
+        pageShow.setBounds((int) (UIStyle.width / 2 + pagesWidth / 1.5), (int) (SearchPanel.SearchResultPanelHeight - 2 * pagesHeight + 10), 30, 30);
         this.add(pageShow);
-        pageShow.setText("1");
+        pageShow.setText(page + "");
         pages.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
@@ -176,6 +178,13 @@ class ResultPanel extends JPanel {
 
             }
         });
-        this.setVisible(true);
+        pageShow.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                resultCards.show(resultContentPanel, pageShow.getText() + "");
+                pageShow.setText(page + "");
+                pages.setValue(page);
+            }
+        });
     }
 }

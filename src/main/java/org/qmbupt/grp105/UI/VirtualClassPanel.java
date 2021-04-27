@@ -72,22 +72,72 @@ class CategoryPanel extends JPanel
         CategoryButton HITT = new CategoryButton(UIStyle.VirtualClass_HITT, buttonWidth, buttonHeight, "HITT");
         HITT.setBounds(buttonWidth, 0, buttonWidth, buttonHeight);
         this.add(HITT);
+        HITT.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                cards.show(contentPanel, "searchPanel");
+                searchPanel.setCate("HITT");
+                searchPanel.updateRes();
+
+            }
+        });
 
         CategoryButton flexbility = new CategoryButton(UIStyle.VirtualClass_flexibility, buttonWidth, buttonHeight, "Flexibility");
         flexbility.setBounds(buttonWidth * 2, 0, buttonWidth, buttonHeight);
         this.add(flexbility);
+        flexbility.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                cards.show(contentPanel, "searchPanel");
+                searchPanel.setCate("Flexibility");
+                searchPanel.updateRes();
+
+            }
+        });
 
         CategoryButton yoga = new CategoryButton(UIStyle.VirtualClass_yoga, buttonWidth, buttonHeight, "Yoga");
         yoga.setBounds(0, buttonHeight, buttonWidth, buttonHeight);
         this.add(yoga);
+        yoga.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                cards.show(contentPanel, "searchPanel");
+                searchPanel.setCate("Yoga");
+                searchPanel.updateRes();
+
+            }
+        });
 
         CategoryButton strength = new CategoryButton(UIStyle.VirtualClass_strength, buttonWidth, buttonHeight, "Strength");
         strength.setBounds(buttonWidth, buttonHeight, buttonWidth, buttonHeight);
         this.add(strength);
+        strength.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                cards.show(contentPanel, "searchPanel");
+                searchPanel.setCate("Strength");
+                searchPanel.updateRes();
+
+            }
+        });
 
         CategoryButton weightLoss = new CategoryButton(UIStyle.VirtualClass_loseWeight, buttonWidth, buttonHeight, "Weight Loss");
         weightLoss.setBounds(2 * buttonWidth, buttonHeight, buttonWidth, buttonHeight);
         this.add(weightLoss);
+        weightLoss.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                cards.show(contentPanel, "searchPanel");
+                searchPanel.setCate("Weight Loss");
+                searchPanel.updateRes();
+
+            }
+        });
 
 
 
@@ -190,6 +240,7 @@ class SearchPanel extends JPanel
             searchResultPanels.add(new SearchResultPanel(videos1, pageMax, resultCards, resultContentPanel, mainCards, mainPanel, i + 1));
             resultContentPanel.add(searchResultPanels.get(i), i + 1 + "");
         }
+        resultCards.first(resultContentPanel);// if there is no this statement, updateRes from only 1 page to another only 1 page will show blank
 
     }
 }
@@ -245,6 +296,5 @@ class SearchResultPanel extends JPanel
                 pages.setValue(page);
             }
         });
-        this.setVisible(true);
     }
 }
