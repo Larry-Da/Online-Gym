@@ -77,7 +77,7 @@ public class Coach
         coach.age = this.age;
         coach.coachId = this.coachId;
         coach.email = this.email;
-        coach.gender = this.gender;
+        coach.gender = "" + this.gender;
         coach.password = this.password;
         coach.phoneNo = this.phoneNo;
         coach.name = this.name;

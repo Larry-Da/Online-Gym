@@ -1,10 +1,7 @@
 package org.qmbupt.grp105.backend.dblayer;
 
 import com.alibaba.fastjson.JSON;
-import org.qmbupt.grp105.backend.model.Customer;
-import org.qmbupt.grp105.backend.model.Session;
-import org.qmbupt.grp105.backend.model.Transaction;
-import org.qmbupt.grp105.backend.model.Video;
+import org.qmbupt.grp105.backend.model.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,6 +20,7 @@ public class DataManager {
     public ArrayList<Video>       videos;
     public ArrayList<Transaction> transactions;
     public ArrayList<Session>     sessions;
+    public ArrayList<Coach>       coaches;
 
     private DataManager() throws IOException {
 
@@ -33,7 +31,7 @@ public class DataManager {
         videos       = (ArrayList<Video>)       JSON.parseArray(IO.read("video.json"),       Video.class);
         transactions = (ArrayList<Transaction>) JSON.parseArray(IO.read("transaction.json"), Transaction.class);
         sessions     = (ArrayList<Session>)     JSON.parseArray(IO.read("sessions.json"),    Session.class);
-
+        coaches      = (ArrayList<Coach>)       JSON.parseArray(IO.read("coaches.json"),     Coach.class);
     }
 
     public void commit() throws IOException {
@@ -41,12 +39,7 @@ public class DataManager {
         IO.write("video.json",       JSON.toJSONString(videos));
         IO.write("transaction.json", JSON.toJSONString(transactions));
         IO.write("sessions.json",    JSON.toJSONString(sessions));
-    }
-
-
-    public static void main(String[] args) throws IOException {
-        System.out.println(DataManager.getInstance().transactions.get(0).transactionId);
-
+        IO.write("coaches.json",     JSON.toJSONString(coaches));
     }
 
 }
