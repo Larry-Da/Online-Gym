@@ -16,6 +16,9 @@ public class Mail {
 
     @JSONField(name = "content")
     public String content;
-
+    public org.qmbupt.grp105.Entity.Mail converter()
+    {
+        return new org.qmbupt.grp105.Entity.Mail(from, to, time, content);
+    }
 
 }

@@ -19,9 +19,11 @@ public class InputText extends JTextField
     private Font font = UIStyle.NORMAL_FONT;
     private boolean arc = true;
 
+
     public InputText(int x, int y, int width, int height, int numberOfChars, boolean autoVanish, String defaultText)
     {
         super(numberOfChars);
+
 
         setParameters(x, y, width, height, defaultText);
         setEvent(autoVanish, defaultText);
@@ -143,4 +145,28 @@ public class InputText extends JTextField
         repaint();
     }
 
+    @Override
+    public void setEditable(boolean b) {
+        super.setEditable(b);
+        if(b)
+        {
+            borderColor_unselected = Color.decode("#DEE2E6");
+            borderColor_selected = UIStyle.BLUE_BUTTRESS;
+            textColor_unselected = UIStyle.GRAY_BUTTRESS;
+            textColor_selected = Color.BLACK;
+            backgroundColor_unselected = UIStyle.GRAY_SHALLOW;
+            backgroundColor_selected = Color.WHITE;
+            setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
+        }
+        else
+        {
+            borderColor_unselected = Color.decode("#DEE2E6");
+            borderColor_selected = borderColor_unselected;
+            textColor_unselected = UIStyle.GRAY_BUTTRESS;
+            textColor_selected = textColor_unselected;
+            backgroundColor_unselected = UIStyle.GRAY_SHALLOW;
+            backgroundColor_selected = backgroundColor_unselected;
+            setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+        }
+    }
 }

@@ -1,6 +1,7 @@
 package org.qmbupt.grp105.UI;
 
 import org.qmbupt.grp105.Controller.VideoController;
+import org.qmbupt.grp105.Entity.Mail;
 import org.qmbupt.grp105.Entity.Video;
 import org.qmbupt.grp105.UI.MyUIComponent.MyReminder;
 import org.qmbupt.grp105.UI.MyUIComponent.TextButton;
@@ -20,6 +21,7 @@ public class TempContentPanel extends JPanel
     private String currentContent;
     private VideoDetailPanel videoPanel;
     private VideoModifyPanel videoModifyPanel;
+    private EmailDetailPanel emailPanel;
     public static MyReminder reminder;
     public TempContentPanel(CardLayout cards, JPanel mainPanel)
     {
@@ -47,12 +49,44 @@ public class TempContentPanel extends JPanel
         this.add(contentContainer);
         contentContainer.setLayout(innerCards);
         videoPanel = new VideoDetailPanel();
+
         contentContainer.add(videoPanel, "video");
         currentContent = "video";
         videoModifyPanel = new VideoModifyPanel();
         contentContainer.add(videoModifyPanel, "videoModify");
+        emailPanel = new EmailDetailPanel();
+        contentContainer.add(emailPanel, "email");
 
 
+    }
+    public void setContent(String type, Mail email)
+    {
+        if(type.equals("emailRead"))
+        {
+            if(currentContent.equals("emailRead"))
+            {
+                emailPanel.setEmail(email, false);
+            }
+            else
+            {
+                currentContent = "emailRead";
+                emailPanel.setEmail(email, false);
+                innerCards.show(contentContainer, "email");
+            }
+        }
+        else if(type.equals("emailWrite"))
+        {
+            if(currentContent.equals("emailWrite"))
+            {
+                emailPanel.setEmail(email, true);
+            }
+            else
+            {
+                currentContent = "emailWrite";
+                emailPanel.setEmail(email, true);
+                innerCards.show(contentContainer, "email");
+            }
+        }
     }
     public void setContent(String type, String id)
     {
@@ -81,7 +115,6 @@ public class TempContentPanel extends JPanel
                 innerCards.show(contentContainer, "videoModify");
             }
         }
-
 
     }
 

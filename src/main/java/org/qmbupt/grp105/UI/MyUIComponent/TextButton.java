@@ -126,6 +126,7 @@ public class TextButton extends MyLabelComponent implements MouseListener
         g2.setColor(colors[0]);
         g2.fillRoundRect(insets.left, insets.top, getWidth() - insets.left - insets.right, getHeight() - insets.top - insets.bottom, 20, 20);
 
+
         FontMetrics metrics = Toolkit.getDefaultToolkit().getFontMetrics(font);
         int x2 = (getWidth() - metrics.stringWidth(text)) / 2;
         int y2 = ((getHeight() - metrics.getHeight()) / 2) + metrics.getAscent();

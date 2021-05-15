@@ -1,5 +1,7 @@
 package org.qmbupt.grp105.UI;
 
+import org.qmbupt.grp105.Entity.Mail;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -40,6 +42,10 @@ public class MainPanel extends JPanel
         tempContentPanel = new TempContentPanel(cards, this);
         this.add(tempContentPanel, "tempContentPanel");
 
+    }
+    public void setTempContent(String content, Mail email)
+    {
+        tempContentPanel.setContent(content, email);
     }
     public void setTempContent(String content, String id)
     {

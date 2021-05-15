@@ -13,14 +13,13 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import org.qmbupt.grp105.Controller.LiveController;
+import org.qmbupt.grp105.Controller.MailController;
 import org.qmbupt.grp105.Controller.PersonalController;
 import org.qmbupt.grp105.Controller.VideoController;
-import org.qmbupt.grp105.Entity.Coach;
-import org.qmbupt.grp105.Entity.Customer;
-import org.qmbupt.grp105.Entity.LiveSession;
-import org.qmbupt.grp105.Entity.Video;
+import org.qmbupt.grp105.Entity.*;
 import org.qmbupt.grp105.UI.MyUIComponent.*;
 import org.qmbupt.grp105.UI.MyUIComponent.MenuBar;
+import org.qmbupt.grp105.backend.dblayer.MailManager;
 
 public class PersonalPanel extends JPanel
 {
@@ -196,7 +195,7 @@ class CustomerLeftPanel extends JPanel
         setBackground(UIStyle.COLOR_3);
         this.setLayout(null);
 
-        int buttonStart = (int)(UIStyle.height / 2.2);
+        int buttonStart = (int)(UIStyle.height / 3.0);
         int buttonHeight = (int)(UIStyle.height * 0.09);
         int buttonWidth = panelWidth;
 
@@ -204,6 +203,7 @@ class CustomerLeftPanel extends JPanel
         TextButton myBookedLive = new TextButton(UIStyle.COLOR_3, UIStyle.COLOR_4, "My Booked LiveSession", (int)(0.15 * panelWidth), buttonStart + buttonHeight, buttonWidth, buttonHeight, UIStyle.NORMAL_FONT, false, "left");
         TextButton myVideoHistory = new TextButton(UIStyle.COLOR_3, UIStyle.COLOR_4, "My Video History", (int)(0.15 * panelWidth), buttonStart + 2 * buttonHeight, buttonWidth, buttonHeight, UIStyle.NORMAL_FONT, false, "left");
         TextButton myFavorite = new TextButton(UIStyle.COLOR_3, UIStyle.COLOR_4, "My Favorite Video", (int)(0.15 * panelWidth), buttonStart + 3 * buttonHeight, buttonWidth, buttonHeight, UIStyle.NORMAL_FONT, false, "left");
+        TextButton myEmails = new TextButton(UIStyle.COLOR_3, UIStyle.COLOR_4, "My Emails", (int)(0.15 * panelWidth), buttonStart + 4 * buttonHeight, buttonWidth, buttonHeight, UIStyle.NORMAL_FONT, false, "left");
 
         myMembership.addMouseListener(new MouseAdapter() {
             @Override
@@ -227,14 +227,22 @@ class CustomerLeftPanel extends JPanel
             }
         });
         myFavorite.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mouseClicked(MouseEvent e) {
-            super.mouseClicked(e);
-            contentCards.show(rightPanel, "Favorite");
-        }
-    });
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                contentCards.show(rightPanel, "Favorite");
+            }
+        });
 
+        myEmails.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                contentCards.show(rightPanel, "Emails");
+            }
+        });
 
+        this.add(myEmails);
         this.add(myMembership);
         this.add(myBookedLive);
         this.add(myVideoHistory);
@@ -293,6 +301,7 @@ class CustomerRightPanel extends JPanel
     VideoHistoryPanel videoHistoryPanel;
     PersonalController controller;
     FavoritePanel favoritePanel;
+    CustomerEmailPanel customerEmailPanel;
     public CustomerRightPanel(CardLayout innerCards, CardLayout mainCards, MainPanel mainPanel) {
         this.innerCards = innerCards;
         this.mainCards = mainCards;
@@ -329,6 +338,14 @@ class CustomerRightPanel extends JPanel
         ArrayList<Video> favoritesVideos = PersonalController.getController().getFavouriteVideoByCusId(LoginToken.getId());
         favoritePanel = new FavoritePanel(favoritesVideos, mainCards, mainPanel);
         this.add(favoritePanel, "Favorite");
+
+        if(customerEmailPanel != null)
+            this.remove(customerEmailPanel);
+
+        ArrayList<Mail> emails = MailController.getController().getMailsById(LoginToken.getId());
+
+        customerEmailPanel = new CustomerEmailPanel(emails, mainCards, mainPanel);
+        this.add(customerEmailPanel, "Emails");
 
 
     }
@@ -370,20 +387,20 @@ class CustomerMembershipPanel extends JPanel
         this.add(phone_upper);
         this.add(phone_lower);
 
-        int stikerWidth = (int)(0.15*UIStyle.width);
-        int stikerHeight = (int)(0.116 * UIStyle.height);
+        int stickerWidth = (int)(0.15*UIStyle.width);
+        int stickerHeight = (int)(0.116 * UIStyle.height);
 
 
-        Sticker balance = new Sticker(stikerWidth, stikerHeight
+        Sticker balance = new Sticker(stickerWidth, stickerHeight
                 , "Total Balance", ""+cus.getBalance(), buttonStartX, buttonStartY - 3*buttonHeight, UIStyle.CustomerMember_Money);
         this.add(balance);
 
-        Sticker level = new Sticker(stikerWidth, stikerHeight
-                , "User Level", cus.getMembershipLevel(), (int)(buttonStartX + stikerWidth * 1.3), buttonStartY - 3*buttonHeight, UIStyle.CustomerMember_Level);
+        Sticker level = new Sticker(stickerWidth, stickerHeight
+                , "User Level", cus.getMembershipLevel(), (int)(buttonStartX + stickerWidth * 1.3), buttonStartY - 3*buttonHeight, UIStyle.CustomerMember_Level);
         this.add(level);
 
-        Sticker expireTime = new Sticker(stikerWidth, stikerHeight
-                , "VIP Expire time", cus.getExpiredTime(), (int)(buttonStartX + stikerWidth * 2.6), buttonStartY - 3*buttonHeight, UIStyle.CustomerMember_Time);
+        Sticker expireTime = new Sticker(stickerWidth, stickerHeight
+                , "VIP Expire time", cus.getExpiredTime(), (int)(buttonStartX + stickerWidth * 2.6), buttonStartY - 3*buttonHeight, UIStyle.CustomerMember_Time);
         this.add(expireTime);
 
         TextButton save = new TextButton(UIStyle.GREEN_OK, Color.WHITE, "Save", (int)(buttonStartX + 1.5 * buttonWidth), buttonStartY + 7 * buttonHeight, buttonWidth / 2, buttonHeight, UIStyle.NORMAL_FONT, true, "mid");
@@ -402,6 +419,106 @@ class CustomerMembershipPanel extends JPanel
         });
 
     }
+}
+class CustomerEmailOnePage extends JPanel
+{
+
+    public CustomerEmailOnePage(ArrayList<Mail> emails, CardLayout cards, MainPanel mainPanel, CardLayout innerCards, JPanel contentPanel, int page, int pageMax)
+    {
+        int panelWidth = (int) (UIStyle.width * 0.76);
+        int panelHeight = (int) (UIStyle.height - UIStyle.barHeight - 160);
+
+        setBounds((int) (UIStyle.width * 0.24), UIStyle.barHeight, panelWidth, panelHeight);
+        setBackground(Color.WHITE);
+        this.setLayout(null);
+        for(int i = (page - 1) * 3; i < emails.size() && i < page * 3; i++) {
+            EmailEntry test = new EmailEntry(emails.get(i), 0, 150 * (i % 3), cards, mainPanel);
+            this.add(test);
+        }
+
+        JSlider pages = new JSlider(1, pageMax + 1, page);
+
+        int pagesWidth = 100;
+        int pagesHeight = 50;
+        pages.setBounds((int)(panelWidth / 2 - pagesWidth / 2), (int)(panelHeight - pagesHeight+7), pagesWidth,pagesHeight);
+
+        this.add(pages);
+        // 设置主刻度间隔
+        pages.setMajorTickSpacing(3);
+
+        // 设置次刻度间隔
+        pages.setMinorTickSpacing(1);
+        pages.setForeground(Color.white);
+        pages.setBackground(Color.white);
+//        pages.setPaintTicks(true);
+//        pages.setPaintLabels(true);
+        pages.setSnapToTicks(true);
+        JTextField pageShow = new JTextField();
+        pageShow.setBounds((int)(panelWidth / 2 + pagesWidth / 1.5), (int)(panelHeight - pagesHeight + 17), 30, 30);
+        this.add(pageShow);
+        pageShow.setText(page + "");
+        pages.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                pageShow.setText(pages.getValue() + "");
+            }
+        });
+        pageShow.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                innerCards.show(contentPanel, pageShow.getText() + "");
+                pageShow.setText(page + "");
+                pages.setValue(page);
+            }
+        });
+    }
+}
+class CustomerEmailPanel extends JPanel
+{
+    private int pageMax;
+    ArrayList<CustomerEmailOnePage> resultPanels = new ArrayList<>();
+    public CustomerEmailPanel(ArrayList<Mail> emails, CardLayout cards, MainPanel mainPanel)
+    {
+        pageMax = (emails.size() -1) / 3;
+        int panelWidth = (int) (UIStyle.width * 0.76);
+        int panelHeight = (int) (UIStyle.height - UIStyle.barHeight);
+        setBounds((int) (UIStyle.width * 0.24), UIStyle.barHeight, panelWidth, panelHeight);
+        CardLayout innerCards = new CardLayout();
+        this.setLayout(null);
+        this.setBackground(Color.white);
+
+        JPanel contentPanel = new JPanel();
+        contentPanel.setVisible(true);
+        contentPanel.setBounds(0, 160, panelWidth, panelHeight - 160);
+        contentPanel.setLayout(innerCards);
+        this.add(contentPanel);
+
+        for(CustomerEmailOnePage i : resultPanels)
+        {
+            contentPanel.remove(i);
+        }
+        resultPanels.clear();
+
+        for(int i = 0; i <= pageMax; i++)
+        {
+            resultPanels.add(new CustomerEmailOnePage(emails, cards, mainPanel, innerCards, contentPanel, i + 1, pageMax));
+            contentPanel.add(resultPanels.get(i), i + 1 + "");
+        }
+        innerCards.first(contentPanel);
+
+
+        TextButton send = new TextButton((int)(panelWidth / 2 + 200), 100, UIStyle.BLUE_BUTTRESS, Color.white, "Send Email",  200, 40, "normal",true);
+        this.add(send);
+        send.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                cards.show(mainPanel, "tempContentPanel");
+                mainPanel.setTempContent("emailWrite", new Mail("", "", new Date(), ""));
+            }
+        });
+    }
+
 }
 class CustomerBookedLivePanel extends JPanel
 {
@@ -761,9 +878,9 @@ class AdministratorRightPanel extends JPanel
         AdministratorMembershipPanel membership = new AdministratorMembershipPanel();
         this.add(membership, "Membership");
 
-        //Video videos[] = {Video.getSampleVideo(), Video.getSampleVideo(), Video.getSampleVideo(), Video.getSampleVideo(), Video.getSampleVideo(), Video.getSampleVideo(), Video.getSampleVideo()};
-        //AdministratorVideoManagement videoManagement = new AdministratorVideoManagement(videos, mainCards, mainPanel);
-        //this.add(videoManagement, "Video");
+        ArrayList<Video> videos = VideoController.getController().getAllVideos();
+        AdministratorVideoManagement videoManagement = new AdministratorVideoManagement(videos, mainCards, mainPanel);
+        this.add(videoManagement, "Video");
     }
 }
 
@@ -971,16 +1088,42 @@ class AdministratorMembershipOnePage extends JPanel
 class AdministratorVideoManagement extends JPanel
 {
     private int pageMax;
-    public AdministratorVideoManagement(Video[] videos, CardLayout cards, MainPanel mainPanel)
-    {
+    ArrayList<AdministratorVideoOnePage> resultPanels = new ArrayList<>();
 
+    public AdministratorVideoManagement(ArrayList<Video> videos, CardLayout cards, MainPanel mainPanel)
+    {
+        pageMax = (videos.size() -1) / 3;
         int panelWidth = (int) (UIStyle.width * 0.76);
         int panelHeight = (int) (UIStyle.height - UIStyle.barHeight);
+        setBounds((int) (UIStyle.width * 0.24), UIStyle.barHeight, panelWidth, panelHeight);
+        CardLayout innerCards = new CardLayout();
+        this.setLayout(null);
+        this.setBackground(Color.white);
 
-        InputText searchBar = new InputText(500, 50, 40, true, (int)(panelWidth/2), 50, "Search", true);
+        JPanel contentPanel = new JPanel();
+        contentPanel.setVisible(true);
+        contentPanel.setBounds(0, 160, panelWidth, panelHeight - 160);
+        contentPanel.setLayout(innerCards);
+        this.add(contentPanel);
+
+        for(AdministratorVideoOnePage i : resultPanels)
+        {
+            contentPanel.remove(i);
+        }
+        resultPanels.clear();
+
+        for(int i = 0; i <= pageMax; i++)
+        {
+            resultPanels.add(new AdministratorVideoOnePage(videos, cards, mainPanel, innerCards, contentPanel, i + 1, pageMax));
+            contentPanel.add(resultPanels.get(i), i + 1 + "");
+        }
+        innerCards.first(contentPanel);
+
+
+        InputText searchBar = new InputText(500, 50, 40, true, (int)(panelWidth/2), 40, "Search", true);
         this.add(searchBar);
 
-        int startFilter = 85;
+        int startFilter = 75;
         String[] categoryFilterString = {"Category", "Bicycle Training", "HITT", "Flexibility", "Yoga", "Strength", "Weight Loss"};
         FilterBox categoryFilter = new FilterBox(startFilter, categoryFilterString, "light");
         this.add(categoryFilter);
@@ -989,18 +1132,24 @@ class AdministratorVideoManagement extends JPanel
         FilterBox sortFilter = new FilterBox(startFilter + 40, sortString, "light", true);
         this.add(sortFilter);
 
-        pageMax = 10;
-
+    }
+}
+class AdministratorVideoOnePage extends JPanel
+{
+    public AdministratorVideoOnePage(ArrayList<Video> videos, CardLayout cards, MainPanel mainPanel, CardLayout innerCards, JPanel contentPanel, int page, int pageMax)
+    {
+        int panelWidth = (int) (UIStyle.width * 0.76);
+        int panelHeight = (int) (UIStyle.height - UIStyle.barHeight - 160);
 
         setBounds((int) (UIStyle.width * 0.24), UIStyle.barHeight, panelWidth, panelHeight);
         setBackground(Color.WHITE);
         this.setLayout(null);
-        for(int i = 0; i < 3; i++) {
-            VideoPanel test = new VideoPanel(videos[i], 0, 150 * i + 160, mainPanel, cards, "manage");
+        for(int i = (page - 1) * 3; i < videos.size() && i < page * 3; i++) {
+            VideoPanel test = new VideoPanel(videos.get(i), 0, 150 * (i % 3), mainPanel, cards, "manage");
             this.add(test);
         }
 
-        JSlider pages = new JSlider(1, pageMax, 1);
+        JSlider pages = new JSlider(1, pageMax + 1, page);
 
         int pagesWidth = 100;
         int pagesHeight = 50;
@@ -1020,15 +1169,24 @@ class AdministratorVideoManagement extends JPanel
         JTextField pageShow = new JTextField();
         pageShow.setBounds((int)(panelWidth / 2 + pagesWidth / 1.5), (int)(panelHeight - pagesHeight + 17), 30, 30);
         this.add(pageShow);
-        pageShow.setText("1");
+        pageShow.setText(page + "");
         pages.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
                 pageShow.setText(pages.getValue() + "");
             }
         });
+        pageShow.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                innerCards.show(contentPanel, pageShow.getText() + "");
+                pageShow.setText(page + "");
+                pages.setValue(page);
+            }
+        });
     }
 }
+
 class CoachPanel extends JPanel
 {
     private CoachRightPanel coachRightPanel;
