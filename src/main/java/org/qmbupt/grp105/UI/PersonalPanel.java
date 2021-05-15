@@ -8,7 +8,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -19,7 +18,6 @@ import org.qmbupt.grp105.Controller.VideoController;
 import org.qmbupt.grp105.Entity.*;
 import org.qmbupt.grp105.UI.MyUIComponent.*;
 import org.qmbupt.grp105.UI.MyUIComponent.MenuBar;
-import org.qmbupt.grp105.backend.dblayer.MailManager;
 
 public class PersonalPanel extends JPanel
 {
@@ -301,7 +299,7 @@ class CustomerRightPanel extends JPanel
     VideoHistoryPanel videoHistoryPanel;
     PersonalController controller;
     FavoritePanel favoritePanel;
-    CustomerEmailPanel customerEmailPanel;
+    EmailPanel emailPanel;
     public CustomerRightPanel(CardLayout innerCards, CardLayout mainCards, MainPanel mainPanel) {
         this.innerCards = innerCards;
         this.mainCards = mainCards;
@@ -339,13 +337,13 @@ class CustomerRightPanel extends JPanel
         favoritePanel = new FavoritePanel(favoritesVideos, mainCards, mainPanel);
         this.add(favoritePanel, "Favorite");
 
-        if(customerEmailPanel != null)
-            this.remove(customerEmailPanel);
+        if(emailPanel != null)
+            this.remove(emailPanel);
 
         ArrayList<Mail> emails = MailController.getController().getMailsById(LoginToken.getId());
 
-        customerEmailPanel = new CustomerEmailPanel(emails, mainCards, mainPanel);
-        this.add(customerEmailPanel, "Emails");
+        emailPanel = new EmailPanel(emails, mainCards, mainPanel);
+        this.add(emailPanel, "Emails");
 
 
     }
@@ -420,10 +418,10 @@ class CustomerMembershipPanel extends JPanel
 
     }
 }
-class CustomerEmailOnePage extends JPanel
+class EmailOnePage extends JPanel
 {
 
-    public CustomerEmailOnePage(ArrayList<Mail> emails, CardLayout cards, MainPanel mainPanel, CardLayout innerCards, JPanel contentPanel, int page, int pageMax)
+    public EmailOnePage(ArrayList<Mail> emails, CardLayout cards, MainPanel mainPanel, CardLayout innerCards, JPanel contentPanel, int page, int pageMax)
     {
         int panelWidth = (int) (UIStyle.width * 0.76);
         int panelHeight = (int) (UIStyle.height - UIStyle.barHeight - 160);
@@ -473,11 +471,11 @@ class CustomerEmailOnePage extends JPanel
         });
     }
 }
-class CustomerEmailPanel extends JPanel
+class EmailPanel extends JPanel
 {
     private int pageMax;
-    ArrayList<CustomerEmailOnePage> resultPanels = new ArrayList<>();
-    public CustomerEmailPanel(ArrayList<Mail> emails, CardLayout cards, MainPanel mainPanel)
+    ArrayList<EmailOnePage> resultPanels = new ArrayList<>();
+    public EmailPanel(ArrayList<Mail> emails, CardLayout cards, MainPanel mainPanel)
     {
         pageMax = (emails.size() -1) / 3;
         int panelWidth = (int) (UIStyle.width * 0.76);
@@ -493,7 +491,7 @@ class CustomerEmailPanel extends JPanel
         contentPanel.setLayout(innerCards);
         this.add(contentPanel);
 
-        for(CustomerEmailOnePage i : resultPanels)
+        for(EmailOnePage i : resultPanels)
         {
             contentPanel.remove(i);
         }
@@ -501,7 +499,7 @@ class CustomerEmailPanel extends JPanel
 
         for(int i = 0; i <= pageMax; i++)
         {
-            resultPanels.add(new CustomerEmailOnePage(emails, cards, mainPanel, innerCards, contentPanel, i + 1, pageMax));
+            resultPanels.add(new EmailOnePage(emails, cards, mainPanel, innerCards, contentPanel, i + 1, pageMax));
             contentPanel.add(resultPanels.get(i), i + 1 + "");
         }
         innerCards.first(contentPanel);
@@ -1233,6 +1231,8 @@ class CoachLeftPanel extends JPanel
 
         TextButton myMembership = new TextButton(UIStyle.COLOR_3, UIStyle.COLOR_4, "My Membership", (int)(0.15 * panelWidth), buttonStart, buttonWidth, buttonHeight, UIStyle.NORMAL_FONT, false, "left");
         TextButton myLive = new TextButton(UIStyle.COLOR_3, UIStyle.COLOR_4, "My Teaching LiveSession", (int)(0.15 * panelWidth), buttonStart + buttonHeight, buttonWidth, buttonHeight, UIStyle.NORMAL_FONT, false, "left");
+        TextButton myEmails = new TextButton(UIStyle.COLOR_3, UIStyle.COLOR_4, "My Emails", (int)(0.15 * panelWidth), buttonStart + 2* buttonHeight, buttonWidth, buttonHeight, UIStyle.NORMAL_FONT, false, "left");
+
 
         myMembership.addMouseListener(new MouseAdapter() {
             @Override
@@ -1248,10 +1248,19 @@ class CoachLeftPanel extends JPanel
                 contentCards.show(rightPanel, "Live");
             }
         });
+        myEmails.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                contentCards.show(rightPanel, "Email");
+
+            }
+        });
 
 
         this.add(myMembership);
         this.add(myLive);
+        this.add(myEmails);
 
 
         int signOutWidth = buttonWidth;
@@ -1289,23 +1298,18 @@ class CoachRightPanel extends JPanel
 {
     private CoachMembershipPanel membership;
     private CoachLivePanel coachLivePanel;
+    private EmailPanel emailPanel;
+    private CardLayout mainCards;
+    private MainPanel mainPanel;
     public CoachRightPanel(CardLayout innerCards, JPanel contentPanel, CardLayout mainCards, MainPanel mainPanel) {
         int panelWidth = (int) (UIStyle.width * 0.76);
         int panelHeight = (int) (UIStyle.height - UIStyle.barHeight);
+        this.mainCards = mainCards;
+        this.mainPanel = mainPanel;
         setBounds((int) (UIStyle.width * 0.24), 0, panelWidth, panelHeight);
         setBackground(Color.WHITE);
         this.setLayout(innerCards);
 
-
-
-
-
-//        AdministratorMembershipPanel membership = new AdministratorMembershipPanel(controller);
-//        this.add(membership, "Membership");
-//
-//        Video videos[] = {Video.getSampleVideo(), Video.getSampleVideo(), Video.getSampleVideo(), Video.getSampleVideo(), Video.getSampleVideo(), Video.getSampleVideo(), Video.getSampleVideo()};
-//        AdministratorVideoManagement videoManagement = new AdministratorVideoManagement(videos, mainCards, mainPanel);
-//        this.add(videoManagement, "Video");
     }
     public void update(String id)
     {
@@ -1321,10 +1325,17 @@ class CoachRightPanel extends JPanel
         coachLivePanel = new CoachLivePanel(liveSessions);
         this.add(coachLivePanel, "Live");
 
+        if(emailPanel != null)
+            this.remove(emailPanel);
+        ArrayList<Mail> emails = MailController.getController().getMailsById(LoginToken.getId());
+        emailPanel = new EmailPanel(emails, mainCards, mainPanel);
+        this.add(emailPanel, "Email");
+
 
 
     }
 }
+
 class CoachMembershipPanel extends JPanel
 {
     public CoachMembershipPanel(Coach coach)
