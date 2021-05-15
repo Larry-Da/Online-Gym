@@ -4,6 +4,8 @@ import org.qmbupt.grp105.UI.UIStyle;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -13,6 +15,12 @@ public class FilterBox extends JPanel
     private FontMetrics mt;
     private String color;
     private ArrayList<JCheckBox> options = new ArrayList<>();
+    private boolean isSingleSelected = false;
+    public FilterBox(int y, String contents[], String color, boolean isSingleSelected)
+    {
+        this(y, contents, color);
+        this.isSingleSelected = isSingleSelected;
+    }
 
     public void setState(boolean state, int index)
     {
@@ -32,6 +40,7 @@ public class FilterBox extends JPanel
 
     public FilterBox (int y, String contents[], String color)
     {
+
         setLayout(null);
         this.color = color;
         font = UIStyle.SMALL_FONT;
@@ -58,6 +67,21 @@ public class FilterBox extends JPanel
         for(int i = 1; i < contents.length; i++)
         {
             JCheckBox option = new JCheckBox(contents[i]);
+            option.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if(isSingleSelected) {
+                        if (option.isSelected()) {
+                            for (JCheckBox j : options) {
+                                if (j != option) {
+                                    j.setSelected(false);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
             options.add(option);
             option.setFont(font);
             if(color.equals("dark"))

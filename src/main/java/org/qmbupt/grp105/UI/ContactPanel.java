@@ -7,7 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 public class ContactPanel extends JLayeredPane
 {
-    public ContactPanel(CardLayout cards, JPanel mainPanel)
+    public ContactPanel(CardLayout cards, MainPanel mainPanel)
     {
         MenuBar mb = new MenuBar(cards, mainPanel);
         mb.setVisible(true);

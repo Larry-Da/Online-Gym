@@ -26,6 +26,7 @@ public class PersonalPanel extends JPanel
 {
     public static MyReminder reminder;
     private CustomerPanel customerPanel;
+    private CoachPanel coachPanel;
     public PersonalPanel(CardLayout cards, MainPanel mainPanel)
     {
         MenuBar menuBar = new MenuBar(cards, mainPanel);
@@ -48,13 +49,17 @@ public class PersonalPanel extends JPanel
         contentPanel.add(customerPanel, "customerPanel");
         AdministratorPanel administratorPanel = new AdministratorPanel(loginCards, contentPanel, cards, mainPanel);
         contentPanel.add(administratorPanel, "administratorPanel");
-        CoachPanel coachPanel = new CoachPanel(loginCards, contentPanel, cards, mainPanel);
+        coachPanel = new CoachPanel(loginCards, contentPanel, cards, mainPanel);
         contentPanel.add(coachPanel, "coachPanel");
 
     }
     public void updateCus(String id)
     {
         customerPanel.updateCus(id);
+    }
+    public void updateCoach(String id)
+    {
+        coachPanel.updateCoach(id);
     }
 }
 
@@ -144,29 +149,35 @@ class SignInPanel extends JPanel
         String acc = account.getText();
         String pass = password.getText();
         PersonalController controller = PersonalController.getController();
-        String id = controller.getIdByEmail(acc);
+        int status = controller.check(acc, pass);
 
-        if (acc.equals("1")) {
+        if (acc.equals("root")) {
             cards.show(contentPanel, "administratorPanel");
-        } else if (acc.equals("2") ) {
+        } else if (status == 2) {
+            String id = controller.getIdByEmail(acc);
+            Coach co = controller.getCoachInfoById(id);
+            LoginToken.setId(id);
+            LoginToken.setType("Coach");
+            personalPanel.updateCoach(id);
+
             cards.show(contentPanel, "coachPanel");
-        } else if(id == null)
+            PersonalPanel.reminder.OK("Hello," + co.getName()+ "!");
+        } else if(status == 3)
         {
             PersonalPanel.reminder.WRONG("Email doesn't exist");
         }
+        else if(status == 4)
+        {
+            PersonalPanel.reminder.WRONG("Password Wrong!");
+        }
         else {
+            String id = controller.getIdByEmail(acc);
             Customer cus = controller.getCusInfoByCusId(id);
-            String passwordReal = cus.getPassword();
-            if(passwordReal.equals(pass)) {
-                LoginToken.setId(id);
-                personalPanel.updateCus(id);
-                cards.show(contentPanel, "customerPanel");
-                PersonalPanel.reminder.OK("Hello," + cus.getName()+ "!");
-            }
-            else
-            {
-                PersonalPanel.reminder.WRONG("Wrong Password");
-            }
+            LoginToken.setId(id);
+            LoginToken.setType("Customer");
+            personalPanel.updateCus(id);
+            cards.show(contentPanel, "customerPanel");
+            PersonalPanel.reminder.OK("Hello," + cus.getName()+ "!");
         }
     }
 }
@@ -313,9 +324,11 @@ class CustomerRightPanel extends JPanel
         videoHistoryPanel = new VideoHistoryPanel(videos, mainCards, mainPanel);
         this.add(videoHistoryPanel, "VideoHistory");
 
-//        this.remove(favoritePanel);
-//        ArrayList<Video> favorites = VideoController.getController();
-
+        if(favoritePanel != null)
+            this.remove(favoritePanel);
+        ArrayList<Video> favoritesVideos = PersonalController.getController().getFavouriteVideoByCusId(LoginToken.getId());
+        favoritePanel = new FavoritePanel(favoritesVideos, mainCards, mainPanel);
+        this.add(favoritePanel, "Favorite");
 
 
     }
@@ -393,17 +406,41 @@ class CustomerMembershipPanel extends JPanel
 class CustomerBookedLivePanel extends JPanel
 {
     private int pageMax;
+    private ArrayList<CustomerBookedLiveOnePage> resultPanels = new ArrayList<>();
     public CustomerBookedLivePanel(ArrayList<LiveSession> liveSessions)
     {
-        pageMax = 10;
+        pageMax = liveSessions.size() / 4;
+        int panelWidth = (int) (UIStyle.width * 0.76);
+        int panelHeight = (int) (UIStyle.height - UIStyle.barHeight);
+        setBounds((int) (UIStyle.width * 0.24), UIStyle.barHeight, panelWidth, panelHeight);
+        CardLayout innerCards = new CardLayout();
+        this.setLayout(innerCards);
+
+        for(CustomerBookedLiveOnePage i : resultPanels)
+        {
+            this.remove(i);
+        }
+        resultPanels.clear();
+        for(int i = 0; i <= pageMax; i++)
+        {
+            resultPanels.add(new CustomerBookedLiveOnePage(liveSessions, innerCards, this, i + 1, pageMax));
+            this.add(resultPanels.get(i), i + 1 + "");
+        }
+        innerCards.first(this);
+
+
+    }
+}
+class CustomerBookedLiveOnePage extends JPanel
+{
+    public CustomerBookedLiveOnePage(ArrayList<LiveSession> liveSessions, CardLayout innerCards, JPanel contentPanel, int page, int pageMax)
+    {
         String expiredContent[] = {"Expired", "Yes", "No"};
         FilterBox expired = new FilterBox(50, expiredContent, "light");
         this.add(expired);
         String[] categoryFilterString = {"Category", "Bicycle Training", "HITT", "Flexibility", "Yoga", "Strength", "Weight Loss"};
         FilterBox categoryFilter = new FilterBox(10, categoryFilterString, "light");
         this.add(categoryFilter);
-
-
 
         int panelWidth = (int) (UIStyle.width * 0.76);
         int panelHeight = (int) (UIStyle.height - UIStyle.barHeight);
@@ -413,12 +450,12 @@ class CustomerBookedLivePanel extends JPanel
         setBackground(Color.WHITE);
         this.setLayout(null);
 
-        for(int i = 0; i < liveSessions.size() && i < 3; i++) {
-            LivePanel test = new LivePanel(liveSessions.get(i), 0, 150 * i + 130, "large");
+        for(int i = (page - 1) * 3; i < liveSessions.size() && i < page * 3; i++) {
+            LivePanel test = new LivePanel(liveSessions.get(i), 0, 150 * (i % 3) + 130, "large");
             this.add(test);
         }
 
-        JSlider pages = new JSlider(1, pageMax, 1);
+        JSlider pages = new JSlider(1, pageMax + 1, page);
 
         int pagesWidth = 100;
         int pagesHeight = 50;
@@ -438,36 +475,67 @@ class CustomerBookedLivePanel extends JPanel
         JTextField pageShow = new JTextField();
         pageShow.setBounds((int)(panelWidth / 2 + pagesWidth / 1.5), (int)(panelHeight - pagesHeight + 17), 30, 30);
         this.add(pageShow);
-        pageShow.setText("1");
+        pageShow.setText(page + "");
         pages.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
                 pageShow.setText(pages.getValue() + "");
             }
         });
-
+        pageShow.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                innerCards.show(contentPanel, pageShow.getText() + "");
+                pageShow.setText(page + "");
+                pages.setValue(page);
+            }
+        });
     }
-
 }
 class VideoHistoryPanel extends JPanel
 {
     private int pageMax;
+    ArrayList<VideoHistoryOnePagePanel> resultPanels = new ArrayList<>();
+
     public VideoHistoryPanel(ArrayList<Video> videos, CardLayout cards, MainPanel mainPanel)
     {
-        pageMax = 10;
+        pageMax = (videos.size() -1) / 4;
+        int panelWidth = (int) (UIStyle.width * 0.76);
+        int panelHeight = (int) (UIStyle.height - UIStyle.barHeight);
+        setBounds((int) (UIStyle.width * 0.24), UIStyle.barHeight, panelWidth, panelHeight);
+        CardLayout innerCards = new CardLayout();
+        this.setLayout(innerCards);
 
+        for(VideoHistoryOnePagePanel i : resultPanels)
+        {
+            this.remove(i);
+        }
+        resultPanels.clear();
+        for(int i = 0; i <= pageMax; i++)
+        {
+            resultPanels.add(new VideoHistoryOnePagePanel(videos, cards, mainPanel, innerCards, this, i + 1, pageMax));
+            this.add(resultPanels.get(i), i + 1 + "");
+        }
+        innerCards.first(this);
+
+    }
+}
+class VideoHistoryOnePagePanel extends JPanel
+{
+    public VideoHistoryOnePagePanel(ArrayList<Video> videos, CardLayout cards, MainPanel mainPanel, CardLayout innerCards, JPanel contentPanel, int page, int pageMax)
+    {
         int panelWidth = (int) (UIStyle.width * 0.76);
         int panelHeight = (int) (UIStyle.height - UIStyle.barHeight);
 
         setBounds((int) (UIStyle.width * 0.24), UIStyle.barHeight, panelWidth, panelHeight);
         setBackground(Color.WHITE);
         this.setLayout(null);
-        for(int i = 0; i < videos.size() && i < 3; i++) {
-            VideoPanel test = new VideoPanel(videos.get(i), 0, 150 * i, mainPanel, cards, "large");
+        for(int i = (page - 1) * 4; i < videos.size() && i < page * 4; i++) {
+            VideoPanel test = new VideoPanel(videos.get(i), 0, 150 * (i % 4), mainPanel, cards, "large");
             this.add(test);
         }
 
-        JSlider pages = new JSlider(1, pageMax, 1);
+        JSlider pages = new JSlider(1, pageMax + 1, page);
 
         int pagesWidth = 100;
         int pagesHeight = 50;
@@ -487,36 +555,70 @@ class VideoHistoryPanel extends JPanel
         JTextField pageShow = new JTextField();
         pageShow.setBounds((int)(panelWidth / 2 + pagesWidth / 1.5), (int)(panelHeight - pagesHeight + 17), 30, 30);
         this.add(pageShow);
-        pageShow.setText("1");
+        pageShow.setText(page + "");
         pages.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
                 pageShow.setText(pages.getValue() + "");
             }
         });
-
+        pageShow.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                innerCards.show(contentPanel, pageShow.getText() + "");
+                pageShow.setText(page + "");
+                pages.setValue(page);
+            }
+        });
     }
-
 }
 class FavoritePanel extends JPanel
 {
     private int pageMax;
+    ArrayList<FavoriteOnePage> resultPanels = new ArrayList<>();
+
     public FavoritePanel(ArrayList<Video> videos, CardLayout cards, MainPanel mainPanel)
     {
-        pageMax = 10;
+        pageMax = videos.size() / 4;
+        int panelWidth = (int) (UIStyle.width * 0.76);
+        int panelHeight = (int) (UIStyle.height - UIStyle.barHeight);
+        setBounds((int) (UIStyle.width * 0.24), UIStyle.barHeight, panelWidth, panelHeight);
+        CardLayout innerCards = new CardLayout();
+        this.setLayout(innerCards);
 
+        for(FavoriteOnePage i : resultPanels)
+        {
+            this.remove(i);
+        }
+        resultPanels.clear();
+        for(int i = 0; i <= pageMax; i++)
+        {
+            resultPanels.add(new FavoriteOnePage(videos, cards, mainPanel, innerCards, this, i + 1, pageMax));
+            this.add(resultPanels.get(i), i + 1 + "");
+        }
+        innerCards.first(this);
+
+
+
+    }
+
+}
+class FavoriteOnePage extends JPanel
+{
+    public FavoriteOnePage(ArrayList<Video> videos, CardLayout cards, MainPanel mainPanel, CardLayout innerCards, JPanel contentPanel, int page, int pageMax)
+    {
         int panelWidth = (int) (UIStyle.width * 0.76);
         int panelHeight = (int) (UIStyle.height - UIStyle.barHeight);
 
         setBounds((int) (UIStyle.width * 0.24), UIStyle.barHeight, panelWidth, panelHeight);
         setBackground(Color.WHITE);
         this.setLayout(null);
-        for(int i = 0; i < 3 && i < videos.size(); i++) {
-            VideoPanel test = new VideoPanel(videos.get(i), 0, 150 * i, mainPanel, cards, "large");
+        for(int i = (page - 1) * 4; i < videos.size() && i < page * 4; i++) {
+            VideoPanel test = new VideoPanel(videos.get(i), 0, 150 * (i % 4), mainPanel, cards, "large");
             this.add(test);
         }
 
-        JSlider pages = new JSlider(1, pageMax, 1);
+        JSlider pages = new JSlider(1, pageMax + 1, page);
 
         int pagesWidth = 100;
         int pagesHeight = 50;
@@ -536,16 +638,22 @@ class FavoritePanel extends JPanel
         JTextField pageShow = new JTextField();
         pageShow.setBounds((int)(panelWidth / 2 + pagesWidth / 1.5), (int)(panelHeight - pagesHeight + 17), 30, 30);
         this.add(pageShow);
-        pageShow.setText("1");
+        pageShow.setText(page + "");
         pages.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
                 pageShow.setText(pages.getValue() + "");
             }
         });
-
+        pageShow.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                innerCards.show(contentPanel, pageShow.getText() + "");
+                pageShow.setText(page + "");
+                pages.setValue(page);
+            }
+        });
     }
-
 }
 
 class AdministratorPanel extends JPanel
@@ -563,7 +671,6 @@ class AdministratorPanel extends JPanel
         AdministratorLeftPanel administratorLeftPanel = new AdministratorLeftPanel(loginCards, contentPanel, innerCards, administratorRightPanel);
         this.add(administratorLeftPanel);
         administratorLeftPanel.setVisible(true);
-
 
 //        CardLayout innerCards = new CardLayout();
 //        Personal_RightPanel personalRightPanel = new Personal_RightPanel(innerCards, controller);
@@ -650,24 +757,130 @@ class AdministratorRightPanel extends JPanel
         this.setLayout(innerCards);
 
 
-        AdministratorMembershipPanel membership = new AdministratorMembershipPanel(controller);
+
+        AdministratorMembershipPanel membership = new AdministratorMembershipPanel();
         this.add(membership, "Membership");
 
-        Video videos[] = {Video.getSampleVideo(), Video.getSampleVideo(), Video.getSampleVideo(), Video.getSampleVideo(), Video.getSampleVideo(), Video.getSampleVideo(), Video.getSampleVideo()};
-        AdministratorVideoManagement videoManagement = new AdministratorVideoManagement(videos, mainCards, mainPanel);
-        this.add(videoManagement, "Video");
+        //Video videos[] = {Video.getSampleVideo(), Video.getSampleVideo(), Video.getSampleVideo(), Video.getSampleVideo(), Video.getSampleVideo(), Video.getSampleVideo(), Video.getSampleVideo()};
+        //AdministratorVideoManagement videoManagement = new AdministratorVideoManagement(videos, mainCards, mainPanel);
+        //this.add(videoManagement, "Video");
     }
 }
 
 class AdministratorMembershipPanel extends JPanel
 {
 
-    public AdministratorMembershipPanel(PersonalController controller)
-    {
+    private int pageMax;
+    private ArrayList<AdministratorMembershipOnePage> resultPanels = new ArrayList<>();
+    private ArrayList<Customer> customersData = new ArrayList<>();
+    private JPanel contentPanel = new JPanel();
+    private CardLayout innerCards;
+    private FilterBox level;
+    private FilterBox gender;
+    private FilterBox sort;
+    private String[] levelContent = {"Level", "LV1", "LV2", "LV3", "LV4", "LV5"};
+    private String[] genderContent = {"Gender", "Male", "Female"};
+    private String[] sortContent = {"Sort By", "Age", "Level", "Balance", "Credit"};
+    private InputText search;
 
+
+    public AdministratorMembershipPanel()
+    {
         int panelWidth = (int) (UIStyle.width * 0.76);
         int panelHeight = (int) (UIStyle.height - UIStyle.barHeight);
-        setBounds((int) (UIStyle.width * 0.24), UIStyle.barHeight, panelWidth, panelHeight);
+        this.setLayout(null);
+
+        setBounds(0, 0, panelWidth, panelHeight);
+
+        this.setBackground(Color.white);
+
+
+        level = new FilterBox(20, levelContent, "light");
+        this.add(level);
+
+        gender = new FilterBox(60, genderContent, "light", true);
+        this.add(gender);
+
+        sort = new FilterBox(100, sortContent, "light", true);
+        this.add(sort);
+
+        search = new InputText(300, 25, 30, true, panelWidth / 2 - 200, 160, "Search", true);
+        this.add(search);
+        TextButton applyChange = new TextButton(panelWidth / 2 + 200, 160, UIStyle.BLUE_BUTTRESS, Color.white, "Apply Change", 150, 25, "tiny", true);
+        this.add(applyChange);
+        applyChange.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                updateRes();
+            }
+        });
+
+        int contentStart = 185;
+
+        innerCards = new CardLayout();
+        contentPanel.setLayout(innerCards);
+        contentPanel.setBounds(0, contentStart, panelWidth, (int)(UIStyle.height - UIStyle.barHeight - contentStart));
+        contentPanel.setVisible(true);
+        this.add(contentPanel);
+        updateRes();
+
+    }
+    public void updateRes()
+    {
+        customersData = PersonalController.getController().getAllCustomer();
+        String keyword = search.getText();
+        if(keyword.equals("") || keyword.equals("Search"))
+            keyword = null;
+        customersData = PersonalController.getController().filterByKeyword(customersData, keyword);
+        boolean states[] = level.getStates();
+        ArrayList<String> levelKey = new ArrayList<>();
+        int cnt = 1;
+        for(boolean i : states)
+        {
+            if(i)
+            {
+                levelKey.add(levelContent[cnt].substring(2));
+            }
+            cnt++;
+        }
+        customersData = PersonalController.getController().filterByCusLevel(customersData, levelKey);
+        char genderKey = 'n';
+        states = gender.getStates();
+        cnt = 1;
+        for(boolean i : states)
+        {
+            if(i)
+            {
+                genderKey = genderContent[cnt].charAt(0);
+            }
+            cnt++;
+        }
+        customersData = PersonalController.getController().filterByGender(customersData, genderKey);
+        for(AdministratorMembershipOnePage i : resultPanels)
+        {
+            contentPanel.remove(i);
+        }
+        resultPanels.clear();
+        pageMax = customersData.size() / 12;
+
+        for(int i = 0; i <= pageMax; i++)
+        {
+            resultPanels.add(new AdministratorMembershipOnePage(customersData, innerCards, contentPanel, i + 1, pageMax));
+            contentPanel.add(resultPanels.get(i), i + 1 + "");
+        }
+        innerCards.first(contentPanel);
+    }
+
+}
+class AdministratorMembershipOnePage extends JPanel
+{
+    public AdministratorMembershipOnePage(ArrayList<Customer> cusList, CardLayout innerCards, JPanel contentPanel, int page, int pageMax)
+    {
+        int contentStart = 185;
+        int panelWidth = (int) (UIStyle.width * 0.76);
+        int panelHeight = (int)(UIStyle.height - UIStyle.barHeight - contentStart);
+        setBounds(0, 0, panelWidth, panelHeight);
         setBackground(Color.WHITE);
 
         this.setLayout(null);
@@ -676,26 +889,33 @@ class AdministratorMembershipPanel extends JPanel
 
         String[] column = {"CusId", "Name", "Age", "Gender", "PhoneNo", "Email", "MembershipLevel", "Balance", "Points", "DateOfBirth", "ExpiredTime"};
         String[][] values = new String[itemsPerPage][column.length];
-        int numOfCustomer = controller.getNumOfAllCustomers();
+        String[] titles = {"ID", "Name", "Age", "Gender", "Phone", "Email", "Level", "Balance", "Points", "DoB", "Expire"};
+
+        //int numOfCustomer = controller.getNumOfAllCustomers();
+        int index = 0;
+        int titleWidth = panelWidth / 11;
+        for(String i : titles)
+        {
+            this.add(new DynamicText(index * titleWidth, 10, "mid", Color.white, UIStyle.GRAY_BUTTRESS, i, titleWidth, 20, UIStyle.SMALL_FONT));
+            index++;
+        }
 
         //ArrayList<Customer> cusList = new ArrayList<>(controller.getCustomerByPage(0, numOfCustomer - 1));
-        Customer[] cusList = {Customer.getSample(), Customer.getSample(), Customer.getSample(), Customer.getSample(), Customer.getSample(), Customer.getSample(), Customer.getSample(), Customer.getSample(), Customer.getSample(), Customer.getSample(), Customer.getSample(), Customer.getSample()};
 
         int cnt = 0;
-        for (Customer i : cusList)
+        for (int i = (page - 1) * itemsPerPage ; i < page * itemsPerPage && i < cusList.size(); i++)
         {
             for(int j = 0; j < column.length; j++)
             {
                 try {
-
                     if(column[j].equals("Age") || column[j].equals("Balance") || column[j].equals("Points"))
-                        values[cnt][j] = ""+(int)(i.getClass().getMethod("get" + column[j]).invoke(i));
+                        values[cnt][j] = ""+(int)(cusList.get(i).getClass().getMethod("get" + column[j]).invoke(cusList.get(i)));
                     else if(column[j].equals("DateOfBirth"))
-                        values[cnt][j] = ((Date)(i.getClass().getMethod("get" + column[j]).invoke(i))).toString();
+                        values[cnt][j] = ((Date)(cusList.get(i).getClass().getMethod("get" + column[j]).invoke(cusList.get(i)))).toString();
                     else if(column[j].equals("Gender"))
-                        values[cnt][j] = ((char)(i.getClass().getMethod("get" + column[j]).invoke(i))) + "";
+                        values[cnt][j] = ((char)(cusList.get(i).getClass().getMethod("get" + column[j]).invoke(cusList.get(i)))) + "";
                     else
-                        values[cnt][j] = (String)(i.getClass().getMethod("get" + column[j]).invoke(i));
+                        values[cnt][j] = (String)(cusList.get(i).getClass().getMethod("get" + column[j]).invoke(cusList.get(i)));
                 }
                 catch(Exception e)
                 {
@@ -706,12 +926,11 @@ class AdministratorMembershipPanel extends JPanel
         }
         int pagesWidth = 100;
         int pagesHeight = 50;
-        TableList customerTable = new TableList(column, values, Color.BLACK, Color.WHITE, UIStyle.BLUE_SHALLOW, 0, UIStyle.barHeight * 3, getWidth(), (int)(UIStyle.height - UIStyle.barHeight - pagesHeight * 5));
+        TableList customerTable = new TableList(column, values, Color.BLACK, Color.WHITE, UIStyle.BLUE_SHALLOW, 0, 35, getWidth(), panelHeight - pagesHeight - 15);
 
         this.add(customerTable);
-        int pageMax = 10;
 
-        JSlider pages = new JSlider(1, pageMax, 1);
+        JSlider pages = new JSlider(1, pageMax + 1, page);
 
 
         pages.setBounds((int)(panelWidth / 2 - pagesWidth / 2), (int)(panelHeight - pagesHeight+7), pagesWidth,pagesHeight);
@@ -731,32 +950,23 @@ class AdministratorMembershipPanel extends JPanel
         JTextField pageShow = new JTextField();
         pageShow.setBounds((int)(panelWidth / 2 + pagesWidth / 1.5), (int)(panelHeight - pagesHeight + 17), 30, 30);
         this.add(pageShow);
-        pageShow.setText("1");
+        pageShow.setText(page + "");
         pages.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
                 pageShow.setText(pages.getValue() + "");
             }
         });
-
-        String[] levelContent = {"Level", "LV1", "LV2", "LV3", "LV4", "LV5"};
-        FilterBox level = new FilterBox(20, levelContent, "light");
-        this.add(level);
-
-        String[] genderContent = {"Gender", "Male", "Female"};
-        FilterBox gender = new FilterBox(60, genderContent, "light");
-        this.add(gender);
-
-        String[] sortContent = {"Sort By", "Age", "Level", "Balance", "Credit"};
-        FilterBox sort = new FilterBox(100, sortContent, "light");
-        this.add(sort);
-
-        TextButton applyChange = new TextButton(panelWidth / 2, 160, UIStyle.BLUE_BUTTRESS, Color.white, "Apply Change", 150, 25, "tiny", true);
-        this.add(applyChange);
-
+        pageShow.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                innerCards.show(contentPanel, pageShow.getText() + "");
+                pageShow.setText(page + "");
+                pages.setValue(page);
+            }
+        });
 
     }
-
 }
 class AdministratorVideoManagement extends JPanel
 {
@@ -776,7 +986,7 @@ class AdministratorVideoManagement extends JPanel
         this.add(categoryFilter);
 
         String[] sortString = {"Sort", "Like", "Rating", "View"};
-        FilterBox sortFilter = new FilterBox(startFilter + 40, sortString, "light");
+        FilterBox sortFilter = new FilterBox(startFilter + 40, sortString, "light", true);
         this.add(sortFilter);
 
         pageMax = 10;
@@ -821,21 +1031,26 @@ class AdministratorVideoManagement extends JPanel
 }
 class CoachPanel extends JPanel
 {
+    private CoachRightPanel coachRightPanel;
+    private CoachLeftPanel coachLeftPanel;
     public CoachPanel(CardLayout loginCards, JPanel contentPanel, CardLayout mainCards, MainPanel mainPanel)
     {
         this.setLayout(null);
         int barHeight = (int)(UIStyle.height) / 10;
         this.setBounds(0, 0, (int)(UIStyle.width), (int)(UIStyle.height - barHeight));
         CardLayout innerCards = new CardLayout();
-        CoachRightPanel coachRightPanel = new CoachRightPanel(innerCards, contentPanel, mainCards, mainPanel);
-
-        CoachLeftPanel coachLeftPanel = new CoachLeftPanel(loginCards, contentPanel, innerCards, coachRightPanel);
+        coachRightPanel = new CoachRightPanel(innerCards, contentPanel, mainCards, mainPanel);
+        coachLeftPanel = new CoachLeftPanel(loginCards, contentPanel, innerCards, coachRightPanel);
         this.add(coachLeftPanel);
         this.add(coachRightPanel);
 //        CustomerLeftPanel customerLeftPanel = new CustomerLeftPanel(loginCards, contentPanel, innerCards, personalRightPanel);
 //        this.add(customerLeftPanel);
         //customerLeftPanel.setVisible(true);
-
+    }
+    public void updateCoach(String id)
+    {
+        coachRightPanel.update(id);
+        coachLeftPanel.updateInfo();
 
     }
 }
@@ -844,6 +1059,8 @@ class CoachLeftPanel extends JPanel
 {
     int panelWidth;
     int panelHeight;
+    private DynamicText name;
+    private Picture circleIcon;
     public CoachLeftPanel(final CardLayout loginCards, final JPanel contentPanel, CardLayout contentCards, JPanel rightPanel)
     {
         panelWidth = (int)(UIStyle.width * 0.24);
@@ -875,19 +1092,8 @@ class CoachLeftPanel extends JPanel
         });
 
 
-
-
         this.add(myMembership);
         this.add(myLive);
-        Coach coach = Coach.getSample();
-
-
-        Picture circleIcon = new Picture(UIStyle.CustomerPanel_PersonIcon, (int)(panelWidth * 0.26), (int)(panelWidth * 0.26));
-        circleIcon.setBounds((int)(UIStyle.width * 0.0875), (int)(UIStyle.height * 0.12), (int)(panelWidth * 0.26), (int)(panelWidth * 0.26));
-        this.add(circleIcon);
-
-        DynamicText name = new DynamicText(UIStyle.COLOR_3, UIStyle.COLOR_4, coach.getName(), (int)(panelWidth / 2), (int)(panelHeight * 0.30), (int)(panelWidth / 2), (int)(panelHeight * 0.05), UIStyle.NORMAL_ARIAL_BOLD);
-        this.add(name);
 
 
         int signOutWidth = buttonWidth;
@@ -903,21 +1109,38 @@ class CoachLeftPanel extends JPanel
             }
         });
     }
+    public void updateInfo()
+    {
+        Coach coach = PersonalController.getController().getCoachInfoById(LoginToken.getId());
+        if(name != null)
+            this.remove(name);
+        name = new DynamicText(UIStyle.COLOR_3, UIStyle.COLOR_4, coach.getName(), (int)(panelWidth / 2), (int)(panelHeight * 0.30), (int)(panelWidth / 2), (int)(panelHeight * 0.05), UIStyle.NORMAL_ARIAL_BOLD);
+        this.add(name);
+
+        if(circleIcon != null)
+            this.remove(circleIcon);
+
+        String picPath = UIStyle.class.getClassLoader().getResource(coach.getCoachId() + ".png").getPath();
+        circleIcon = new Picture(picPath, (int)(panelWidth * 0.26), (int)(panelWidth * 0.26));
+        circleIcon.setBounds((int)(UIStyle.width * 0.0875), (int)(UIStyle.height * 0.12), (int)(panelWidth * 0.26), (int)(panelWidth * 0.26));
+        this.add(circleIcon);
+
+    }
 }
 class CoachRightPanel extends JPanel
 {
+    private CoachMembershipPanel membership;
+    private CoachLivePanel coachLivePanel;
     public CoachRightPanel(CardLayout innerCards, JPanel contentPanel, CardLayout mainCards, MainPanel mainPanel) {
         int panelWidth = (int) (UIStyle.width * 0.76);
         int panelHeight = (int) (UIStyle.height - UIStyle.barHeight);
         setBounds((int) (UIStyle.width * 0.24), 0, panelWidth, panelHeight);
         setBackground(Color.WHITE);
         this.setLayout(innerCards);
-        Coach coach = Coach.getSample();
-        CoachMembershipPanel membership = new CoachMembershipPanel(coach);
-        this.add(membership, "Membership");
-        LiveSession liveSession[] = {LiveSession.getSample(), LiveSession.getSample(), LiveSession.getSample(), LiveSession.getSample(), LiveSession.getSample()};
-        CoachLivePanel coachLivePanel = new CoachLivePanel(liveSession);
-        this.add(coachLivePanel, "Live");
+
+
+
+
 
 //        AdministratorMembershipPanel membership = new AdministratorMembershipPanel(controller);
 //        this.add(membership, "Membership");
@@ -925,6 +1148,23 @@ class CoachRightPanel extends JPanel
 //        Video videos[] = {Video.getSampleVideo(), Video.getSampleVideo(), Video.getSampleVideo(), Video.getSampleVideo(), Video.getSampleVideo(), Video.getSampleVideo(), Video.getSampleVideo()};
 //        AdministratorVideoManagement videoManagement = new AdministratorVideoManagement(videos, mainCards, mainPanel);
 //        this.add(videoManagement, "Video");
+    }
+    public void update(String id)
+    {
+        PersonalController controller =PersonalController.getController();
+        if(membership != null)
+            this.remove(membership);
+        membership = new CoachMembershipPanel(controller.getCoachInfoById(id));
+        this.add(membership, "Membership");
+
+        if(coachLivePanel != null)
+            this.remove(coachLivePanel);
+        ArrayList<LiveSession> liveSessions = LiveController.getController().getLiveSessionByCoachId(id);
+        coachLivePanel = new CoachLivePanel(liveSessions);
+        this.add(coachLivePanel, "Live");
+
+
+
     }
 }
 class CoachMembershipPanel extends JPanel
@@ -969,21 +1209,37 @@ class CoachMembershipPanel extends JPanel
 
     }
 }
-class CoachLivePanel extends JPanel
-{
+class CoachLivePanel extends JPanel {
     private int pageMax;
-    public CoachLivePanel(LiveSession[] liveSessions)
-    {
+    private ArrayList<CoachLiveOnePage> resultPanels = new ArrayList<>();
 
-        pageMax = 10;
+    public CoachLivePanel(ArrayList<LiveSession> liveSessions) {
+        pageMax = liveSessions.size() / 4;
+        int panelWidth = (int) (UIStyle.width * 0.76);
+        int panelHeight = (int) (UIStyle.height - UIStyle.barHeight);
+        setBounds((int) (UIStyle.width * 0.24), UIStyle.barHeight, panelWidth, panelHeight);
+        CardLayout innerCards = new CardLayout();
+        this.setLayout(innerCards);
+
+        for (CoachLiveOnePage i : resultPanels) {
+            this.remove(i);
+        }
+        resultPanels.clear();
+        for (int i = 0; i <= pageMax; i++) {
+            resultPanels.add(new CoachLiveOnePage(liveSessions, innerCards, this, i + 1, pageMax));
+            this.add(resultPanels.get(i), i + 1 + "");
+        }
+        innerCards.first(this);
+    }
+}
+class CoachLiveOnePage extends JPanel {
+    public CoachLiveOnePage(ArrayList<LiveSession> liveSessions, CardLayout innerCards, JPanel contentPanel, int page, int pageMax) {
         String expiredContent[] = {"Expired", "Yes", "No"};
         FilterBox expired = new FilterBox(50, expiredContent, "light");
         this.add(expired);
         String[] categoryFilterString = {"Category", "Bicycle Training", "HITT", "Flexibility", "Yoga", "Strength", "Weight Loss"};
         FilterBox categoryFilter = new FilterBox(10, categoryFilterString, "light");
         this.add(categoryFilter);
-
-
 
         int panelWidth = (int) (UIStyle.width * 0.76);
         int panelHeight = (int) (UIStyle.height - UIStyle.barHeight);
@@ -992,16 +1248,17 @@ class CoachLivePanel extends JPanel
         setBounds((int) (UIStyle.width * 0.24), UIStyle.barHeight, panelWidth, panelHeight);
         setBackground(Color.WHITE);
         this.setLayout(null);
-        for(int i = 0; i < 3; i++) {
-            LivePanel test = new LivePanel(liveSessions[i], 0, 150 * i + 130, "large");
+
+        for (int i = (page - 1) * 3; i < liveSessions.size() && i < page * 3; i++) {
+            LivePanel test = new LivePanel(liveSessions.get(i), 0, 150 * (i % 3) + 130, "large");
             this.add(test);
         }
 
-        JSlider pages = new JSlider(1, pageMax, 1);
+        JSlider pages = new JSlider(1, pageMax + 1, page);
 
         int pagesWidth = 100;
         int pagesHeight = 50;
-        pages.setBounds((int)(panelWidth / 2 - pagesWidth / 2), (int)(panelHeight - pagesHeight+7), pagesWidth,pagesHeight);
+        pages.setBounds((int) (panelWidth / 2 - pagesWidth / 2), (int) (panelHeight - pagesHeight + 7), pagesWidth, pagesHeight);
 
         this.add(pages);
         // 设置主刻度间隔
@@ -1015,16 +1272,23 @@ class CoachLivePanel extends JPanel
 //        pages.setPaintLabels(true);
         pages.setSnapToTicks(true);
         JTextField pageShow = new JTextField();
-        pageShow.setBounds((int)(panelWidth / 2 + pagesWidth / 1.5), (int)(panelHeight - pagesHeight + 17), 30, 30);
+        pageShow.setBounds((int) (panelWidth / 2 + pagesWidth / 1.5), (int) (panelHeight - pagesHeight + 17), 30, 30);
         this.add(pageShow);
-        pageShow.setText("1");
+        pageShow.setText(page + "");
         pages.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
                 pageShow.setText(pages.getValue() + "");
             }
         });
-
+        pageShow.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                innerCards.show(contentPanel, pageShow.getText() + "");
+                pageShow.setText(page + "");
+                pages.setValue(page);
+            }
+        });
     }
 }
 

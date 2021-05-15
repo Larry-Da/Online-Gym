@@ -7,7 +7,7 @@ import java.awt.*;
 
 public class ClassPanel extends JPanel
 {
-    public ClassPanel(CardLayout cards, JPanel mainPanel)
+    public ClassPanel(CardLayout cards, MainPanel mainPanel)
     {
         MenuBar mb = new MenuBar(cards, mainPanel);
         mb.setVisible(true);

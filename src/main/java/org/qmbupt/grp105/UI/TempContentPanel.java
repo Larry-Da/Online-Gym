@@ -1,6 +1,8 @@
 package org.qmbupt.grp105.UI;
 
+import org.qmbupt.grp105.Controller.VideoController;
 import org.qmbupt.grp105.Entity.Video;
+import org.qmbupt.grp105.UI.MyUIComponent.MyReminder;
 import org.qmbupt.grp105.UI.MyUIComponent.TextButton;
 import org.qmbupt.grp105.UI.MyUIComponent.VideoModifyPanel;
 
@@ -18,6 +20,7 @@ public class TempContentPanel extends JPanel
     private String currentContent;
     private VideoDetailPanel videoPanel;
     private VideoModifyPanel videoModifyPanel;
+    public static MyReminder reminder;
     public TempContentPanel(CardLayout cards, JPanel mainPanel)
     {
         this.setLayout(null);
@@ -25,6 +28,7 @@ public class TempContentPanel extends JPanel
         JPanel backBar = new JPanel();
         backBar.setBounds(0, 0, (int) UIStyle.width, UIStyle.barHeight);
         backBar.setBackground(UIStyle.COLOR_1);
+        reminder = new MyReminder(backBar);
         this.add(backBar);
         backBar.setLayout(null);
 
@@ -50,18 +54,18 @@ public class TempContentPanel extends JPanel
 
 
     }
-    public void setContent(String type, String name)
+    public void setContent(String type, String id)
     {
         updateUI();
         if(type.equals("video"))
         {
             if(currentContent.equals("video"))
             {
-                videoPanel.setCurrentVideo(Video.getSampleVideo());
+                videoPanel.setCurrentVideo(VideoController.getController().getVideoByVideoId(id));
             }
             else {
                 currentContent = "video";
-                videoPanel.setCurrentVideo(Video.getSampleVideo());
+                videoPanel.setCurrentVideo(VideoController.getController().getVideoByVideoId(id));
                 innerCards.show(contentContainer, "video");
             }
         }

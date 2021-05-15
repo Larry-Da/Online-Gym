@@ -14,12 +14,20 @@ public class Customer
     private int balance;//余额
     private int points; //积分
     private ArrayList<String> videosHistory;
+    private ArrayList<String> favouriteVideos;
     //private String exerciseLevel;
     protected String name;
     protected String password;
     protected String phoneNo;
     protected String email;
 
+    public ArrayList<String> getFavouriteVideos() {
+        return favouriteVideos;
+    }
+
+    public void setFavouriteVideos(ArrayList<String> favouriteVideos) {
+        this.favouriteVideos = favouriteVideos;
+    }
 
     public String getCusId() {
         return cusId;
@@ -158,7 +166,8 @@ public class Customer
     }
 
     public Customer(String cusId, int age, String name, String password, String phoneNo, String email, char gender,
-                    Date dateOfBirth, String membershipLevel, String expiredTime, int balance, int points, ArrayList<String> videosHistory, ArrayList<String> bookedSessions) {
+                    Date dateOfBirth, String membershipLevel, String expiredTime, int balance, int points,
+                    ArrayList<String> videosHistory, ArrayList<String> bookedSessions, ArrayList<String> favouriteVideos) {
 
         this.bookedSessions = bookedSessions;
         this.name = name;
@@ -174,6 +183,7 @@ public class Customer
         this.balance = balance;
         this.points = points;
         this.videosHistory = videosHistory;
+        this.favouriteVideos = favouriteVideos;
     }
 
     @Override
@@ -209,6 +219,7 @@ public class Customer
         customer.password = this.password;
         customer.phoneNo = this.phoneNo;
         customer.xp = 0;
+        customer.favoriteVideos = this.favouriteVideos;
         return customer;
     }
 

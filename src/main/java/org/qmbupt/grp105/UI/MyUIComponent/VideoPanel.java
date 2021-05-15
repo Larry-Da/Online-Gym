@@ -1,9 +1,9 @@
 package org.qmbupt.grp105.UI.MyUIComponent;
 
+import org.qmbupt.grp105.Controller.PersonalController;
+import org.qmbupt.grp105.Controller.VideoController;
 import org.qmbupt.grp105.Entity.Video;
-import org.qmbupt.grp105.UI.MainPanel;
-import org.qmbupt.grp105.UI.UIStyle;
-import org.qmbupt.grp105.UI.VideoDetailPanel;
+import org.qmbupt.grp105.UI.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -37,6 +37,7 @@ public class VideoPanel extends JPanel implements MouseListener
     private MainPanel mainPanel;
     private CardLayout cards;
     private String size;
+    private String videoId;
 
 
     public VideoPanel(Video video, int x, int y, MainPanel mainPanel, CardLayout cards, String size)
@@ -44,6 +45,7 @@ public class VideoPanel extends JPanel implements MouseListener
         this.setLayout(null);
         this.size = size;
         this.mainPanel = mainPanel;
+        this.videoId = video.getVideoId();
 
         int width;
         int height;
@@ -180,12 +182,14 @@ public class VideoPanel extends JPanel implements MouseListener
     {
         if(size.equals("manage")) {
             cards.show(mainPanel, "tempContentPanel");
-            mainPanel.setTempContent("videoModify", title);
+            mainPanel.setTempContent("videoModify", videoId);
         }
         else
         {
             cards.show(mainPanel, "tempContentPanel");
-            mainPanel.setTempContent("video", title);
+            mainPanel.setTempContent("video", videoId);
+            if(LoginToken.getId() != null && LoginToken.getType().equals("Customer"))
+                PersonalController.getController().watchVideo(LoginToken.getId(), videoId);
         }
         //MainPanel.tempContentPanel.setContent(new VideoDetailPanel());
         //

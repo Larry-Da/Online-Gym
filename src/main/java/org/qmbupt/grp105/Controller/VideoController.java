@@ -26,6 +26,7 @@ public class VideoController {
 
 
 
+
     public ArrayList<Video> getAllVideos() {
         ArrayList<Video> videos = new ArrayList<>();
 
@@ -51,6 +52,40 @@ public class VideoController {
         }
         return video;
 
+    }
+    public ArrayList<Video> sort(ArrayList<Video> videos, String param) {
+        if(param == null)
+            return videos;
+        if(param.equals("View")) {
+            Collections.sort(videos, new Comparator<Video>() {
+                @Override
+                public int compare(Video o1, Video o2) {
+                    return o2.getViewsCount() - o1.getViewsCount();
+                }
+            });
+        }
+        else if(param.equals("Rating")) {
+            Collections.sort(videos, new Comparator<Video>() {
+                @Override
+                public int compare(Video o1, Video o2) {
+                    if(o2.getRating() - o1.getRating() > 0)
+                        return 1;
+                    else if(o2.getRating() == o1.getRating())
+                        return 0;
+                    else
+                        return -1;
+                }
+            });
+        }
+        else if(param.equals("Like")) {
+            Collections.sort(videos, new Comparator<Video>() {
+                @Override
+                public int compare(Video o1, Video o2) {
+                    return o1.getLikes() - o2.getLikes();
+                }
+            });
+        }
+        return videos;
     }
     public Video getVideoByName(String videoName) {
         ArrayList<Video> videos = getAllVideos();

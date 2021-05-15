@@ -41,9 +41,17 @@ public class MainPanel extends JPanel
         this.add(tempContentPanel, "tempContentPanel");
 
     }
-    public void setTempContent(String content, String name)
+    public void setTempContent(String content, String id)
     {
-        tempContentPanel.setContent(content, name);
+        tempContentPanel.setContent(content, id);
+    }
+    public void updatePersonalInfo()
+    {
+        if(LoginToken.getId() != null && LoginToken.getType().equals("Customer"))
+            personalPanel.updateCus(LoginToken.getId());
+        if(LoginToken.getId() != null && LoginToken.getType().equals("Coach"))
+            personalPanel.updateCoach(LoginToken.getId());
+
     }
 
 }

@@ -1,11 +1,17 @@
 package org.qmbupt.grp105.UI.MyUIComponent;
 
+import org.qmbupt.grp105.Controller.LiveController;
+import org.qmbupt.grp105.Controller.PersonalController;
 import org.qmbupt.grp105.Entity.LiveSession;
 import org.qmbupt.grp105.Entity.Video;
+import org.qmbupt.grp105.UI.LiveClassPanel;
+import org.qmbupt.grp105.UI.LoginToken;
 import org.qmbupt.grp105.UI.UIStyle;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -81,10 +87,31 @@ public class LivePanel extends JPanel
             button = new TextButton((int)(width - buttonWidth / 1.5), (int)(height-1.5*buttonHeight), Color.decode("#192D33"), Color.WHITE, buttonText, buttonWidth, buttonHeight, "tiny", true);
         else
             button = new TextButton((int)(width - buttonWidth / 1.5), (int)(height-1.5*buttonHeight), Color.decode("#192D33"), Color.WHITE, buttonText, buttonWidth, buttonHeight, "small", true);
+        if(size.equals("small"))
+        {
+            button.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    super.mouseClicked(e);
+                    if(LoginToken.getId() != null && LoginToken.getType().equals("Customer")) {
+                        PersonalController.getController().bookLiveSession(LoginToken.getId(), live.getLiveSessionId());
+                        LiveClassPanel.reminder.OK("Book Success!");
+                    }
+                }
 
+            });
+        }
         this.add(button);
-        //String picPath = UIStyle.class.getClassLoader().getResource(live.getUrl()).getPath();
-        String picPath = UIStyle.VirtualClass_favorite;
+
+        String a = live.getCoach_coachId()+".png";
+        String picPath = null;
+        try {
+            picPath = UIStyle.class.getClassLoader().getResource(a).getPath();
+        }
+        catch (Exception e)
+        {
+            System.out.println(live.getLiveSessionId());
+        }
         JLabel picturePreview = new Picture(picPath, picHeight, picHeight);
         this.add(picturePreview);
         picturePreview.setBounds(space, space, picHeight, picHeight);

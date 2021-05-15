@@ -34,6 +34,19 @@ public class LiveController {
         }
         return res;
     }
+    public ArrayList<LiveSession> getLiveSessionByCoachId(String coId)
+    {
+        ArrayList<LiveSession> sessions = getAllLiveSessions();
+        ArrayList<LiveSession> res = new ArrayList<>();
+        for(LiveSession i : sessions)
+        {
+            if(i.getCoach_coachId().equals(coId))
+            {
+                res.add(i);
+            }
+        }
+        return res;
+    }
     public ArrayList<LiveSession> getAllLiveSessions() {
         ArrayList<Session> sessions = null;
         ArrayList<LiveSession> res = new ArrayList<>();
@@ -58,23 +71,27 @@ public class LiveController {
     }
     public ArrayList<LiveSession> getSessionsByCoach(String keyword) {
         ArrayList<LiveSession> liveSessions = getAllLiveSessions();
-        ArrayList<LiveSession> res = new ArrayList<>();
-        for(LiveSession s: liveSessions) {
-            if(s.getCoach_coachId().equals("co3")) {
-                res.add(s);
-            }
-        }
-        return res;
+        return liveSessions;
+//        ArrayList<LiveSession> res = new ArrayList<>();
+//        for(LiveSession s: liveSessions) {
+//            if(s.getCoach_coachId().equals("co3")) {
+//                res.add(s);
+//            }
+//        }
+//        return res;
     }
     public ArrayList<LiveSession> filterSessionByCategory(ArrayList<LiveSession> sessions, List<String> category) {
         ArrayList<LiveSession> sessions1 = null;
         ArrayList<LiveSession> res = new ArrayList<>();
+
         if(sessions == null) {
             sessions1 = getAllLiveSessions();
         }
         else {
             sessions1 = sessions;
         }
+        if(category.size() == 0)
+            return sessions1;
         for(LiveSession s: sessions1) {
             if(category.contains(s.getCategory())) {
                 res.add(s);
