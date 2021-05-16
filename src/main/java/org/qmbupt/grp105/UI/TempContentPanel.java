@@ -5,22 +5,19 @@ import org.qmbupt.grp105.Entity.Mail;
 import org.qmbupt.grp105.Entity.Video;
 import org.qmbupt.grp105.UI.MyUIComponent.MyReminder;
 import org.qmbupt.grp105.UI.MyUIComponent.TextButton;
-import org.qmbupt.grp105.UI.MyUIComponent.VideoModifyPanel;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.HashSet;
-import java.util.Set;
 
 public class TempContentPanel extends JPanel
 {
     private JPanel contentContainer;
     private CardLayout innerCards = new CardLayout();
     private String currentContent;
-    private VideoDetailPanel videoPanel;
-    private VideoModifyPanel videoModifyPanel;
+    private VideoPlayerPanel videoPanel;
+    private VideoDetailPanel videoDetailPanel;
     private EmailDetailPanel emailPanel;
     public static MyReminder reminder;
     public TempContentPanel(CardLayout cards, JPanel mainPanel)
@@ -48,12 +45,12 @@ public class TempContentPanel extends JPanel
         contentContainer.setBounds(0, UIStyle.barHeight, (int)UIStyle.width, (int)(UIStyle.height - UIStyle.barHeight ));
         this.add(contentContainer);
         contentContainer.setLayout(innerCards);
-        videoPanel = new VideoDetailPanel();
+        videoPanel = new VideoPlayerPanel();
 
         contentContainer.add(videoPanel, "video");
         currentContent = "video";
-        videoModifyPanel = new VideoModifyPanel();
-        contentContainer.add(videoModifyPanel, "videoModify");
+        videoDetailPanel = new VideoDetailPanel();
+        contentContainer.add(videoDetailPanel, "videoModify");
         emailPanel = new EmailDetailPanel();
         contentContainer.add(emailPanel, "email");
 
@@ -112,6 +109,21 @@ public class TempContentPanel extends JPanel
             else
             {
                 currentContent = "videoModify";
+                Video video = VideoController.getController().getVideoByVideoId(id);
+                videoDetailPanel.setCurrentVideo(video);
+                innerCards.show(contentContainer, "videoModify");
+            }
+        }
+        else if(type.equals("videoAdd"))
+        {
+            if(currentContent.equals("videoAdd"))
+            {
+
+            }
+            else
+            {
+                currentContent = "videoAdd";
+                videoDetailPanel.setAdding(true);
                 innerCards.show(contentContainer, "videoModify");
             }
         }

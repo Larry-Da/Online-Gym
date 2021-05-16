@@ -1130,6 +1130,17 @@ class AdministratorVideoManagement extends JPanel
         FilterBox sortFilter = new FilterBox(startFilter + 40, sortString, "light", true);
         this.add(sortFilter);
 
+        TextButton send = new TextButton((int)(panelWidth / 2 + 320), 40, UIStyle.BLUE_BUTTRESS, Color.white, "Add Video",  100, 40, "normal",true);
+        this.add(send);
+        send.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                cards.show(mainPanel, "tempContentPanel");
+                mainPanel.setTempContent("videoAdd", "nullVideo");
+            }
+        });
+
     }
 }
 class AdministratorVideoOnePage extends JPanel
