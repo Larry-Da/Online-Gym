@@ -482,9 +482,20 @@ class EmailPanel extends JPanel
 {
     private int pageMax;
     ArrayList<EmailOnePage> resultPanels = new ArrayList<>();
+    private TextButton send;
+
+    public EmailPanel(ArrayList<Mail> emails, CardLayout cards, MainPanel mainPanel, boolean isAdvice)
+    {
+        this(emails, cards, mainPanel);
+        if(isAdvice)
+        {
+            send.setVisible(false);
+        }
+    }
     public EmailPanel(ArrayList<Mail> emails, CardLayout cards, MainPanel mainPanel)
     {
-        pageMax = (emails.size() -1) / 3;
+
+
         int panelWidth = (int) (UIStyle.width * 0.76);
         int panelHeight = (int) (UIStyle.height - UIStyle.barHeight);
         setBounds((int) (UIStyle.width * 0.24), UIStyle.barHeight, panelWidth, panelHeight);
@@ -512,7 +523,8 @@ class EmailPanel extends JPanel
         innerCards.first(contentPanel);
 
 
-        TextButton send = new TextButton((int)(panelWidth / 2 + 200), 100, UIStyle.BLUE_BUTTRESS, Color.white, "Send Email",  200, 40, "normal",true);
+
+        send = new TextButton((int) (panelWidth / 2), 100, UIStyle.BLUE_BUTTRESS, Color.white, "Send Email", 200, 40, "normal", true);
         this.add(send);
         send.addMouseListener(new MouseAdapter() {
             @Override
@@ -520,8 +532,11 @@ class EmailPanel extends JPanel
                 super.mouseClicked(e);
                 cards.show(mainPanel, "tempContentPanel");
                 mainPanel.setTempContent("emailWrite", new Mail("", "", new Date(), ""));
+                PersonalPanel.reminder.OK("Send Successful!");
             }
         });
+
+
     }
 
 }
@@ -824,6 +839,7 @@ class AdministratorLeftPanel extends JPanel
         TextButton Membership = new TextButton(UIStyle.COLOR_3, UIStyle.COLOR_4, "Membership Management", (int)(0.15 * panelWidth), buttonStart, buttonWidth, buttonHeight, UIStyle.NORMAL_FONT, false, "left");
         TextButton Videos = new TextButton(UIStyle.COLOR_3, UIStyle.COLOR_4, "Video Management", (int)(0.15 * panelWidth), buttonStart + buttonHeight, buttonWidth, buttonHeight, UIStyle.NORMAL_FONT, false, "left");
         TextButton LiveSession = new TextButton(UIStyle.COLOR_3, UIStyle.COLOR_4, "Live Session Management", (int)(0.15 * panelWidth), buttonStart + 2 * buttonHeight, buttonWidth, buttonHeight, UIStyle.NORMAL_FONT, false, "left");
+        TextButton Advice = new TextButton(UIStyle.COLOR_3, UIStyle.COLOR_4, "Advice", (int)(0.15 * panelWidth), buttonStart + 3 * buttonHeight, buttonWidth, buttonHeight, UIStyle.NORMAL_FONT, false, "left");
 
         Membership.addMouseListener(new MouseAdapter() {
             @Override
@@ -839,10 +855,19 @@ class AdministratorLeftPanel extends JPanel
                 contentCards.show(rightPanel, "Video");
             }
         });
+        Advice.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                contentCards.show(rightPanel, "Advice");
+            }
+        });
+
 
         this.add(Membership);
         this.add(Videos);
         this.add(LiveSession);
+        this.add(Advice);
 
 
 
@@ -891,6 +916,10 @@ class AdministratorRightPanel extends JPanel
 
         videoManagement = new AdministratorVideoManagement( mainCards, mainPanel);
         this.add(videoManagement, "Video");
+
+        ArrayList<Mail> emails = MailController.getController().getMailsById("Admin");
+        EmailPanel advice = new EmailPanel(emails, mainCards, mainPanel, true);
+        this.add(advice, "Advice");
     }
     public void updateRes()
     {

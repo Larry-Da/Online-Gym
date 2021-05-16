@@ -1,15 +1,22 @@
 package org.qmbupt.grp105.UI;
 
+import org.qmbupt.grp105.Controller.MailController;
 import org.qmbupt.grp105.UI.MyUIComponent.*;
 import org.qmbupt.grp105.UI.MyUIComponent.MenuBar;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
 public class ContactPanel extends JLayeredPane
 {
+    public static MyReminder reminder;
     public ContactPanel(CardLayout cards, MainPanel mainPanel)
     {
         MenuBar mb = new MenuBar(cards, mainPanel);
+        reminder = new MyReminder(mb);
         mb.setVisible(true);
         this.setLayout(null);
         this.add(mb);
@@ -22,11 +29,7 @@ public class ContactPanel extends JLayeredPane
         this.add(picture);
         int inputWidth = (int)(UIStyle.width / 3);
         int inputHeight = 30;
-//
-//        JPanel contentPanel = new JPanel();
-//        contentPanel.setVisible(true);
-//        contentPanel.setBounds(0, 0, (int)UIStyle.width, (int)UIStyle.height);
-//
+
 
         InputText email = new InputText(inputWidth, inputHeight, 20, true, (int)(UIStyle.width/2 - (inputWidth / 2)) - 10, 300, "Email", false);
         email.setOpaque(false);
@@ -44,6 +47,24 @@ public class ContactPanel extends JLayeredPane
 
         TextButton submit = new TextButton((int)(UIStyle.width / 2), (int)(UIStyle.height -  inputHeight * 3),  UIStyle.BLUE_BUTTRESS, java.awt.Color.WHITE, "Submit", (int)(inputWidth / 2), (int)inputHeight, "normal", true);
         this.add(submit);
+        submit.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                String content = "Email: " + email.getText() +
+                        "\nSubject: " + subject.getText()+
+                        "\nAdvice: " + advice.getText();
+                if("Customer".equals(LoginToken.getType())) {
+                    MailController.getController().writeMail(LoginToken.getId(), "Admin", content);
+                    reminder.OK("Submit Advice Successfully!");
+                }
+                else
+                {
+                    reminder.WRONG("Please Login First.");
+                }
+
+            }
+        });
         setLayer(submit, 0);
         setLayer(advice, 0);
         setLayer(email, 0);
