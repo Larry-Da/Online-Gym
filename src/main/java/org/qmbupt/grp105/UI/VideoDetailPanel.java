@@ -1,5 +1,6 @@
 package org.qmbupt.grp105.UI;
 
+import org.qmbupt.grp105.Controller.VideoController;
 import org.qmbupt.grp105.Entity.Video;
 import org.qmbupt.grp105.UI.MyUIComponent.DynamicText;
 import org.qmbupt.grp105.UI.MyUIComponent.InputText;
@@ -9,6 +10,14 @@ import org.qmbupt.grp105.UI.UIStyle;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class VideoDetailPanel extends JPanel
 {
@@ -19,7 +28,14 @@ public class VideoDetailPanel extends JPanel
     InputText category_lower;
     InputText like_lower;
     InputText rating_lower;
+    DynamicText file_upper;
     Picture pic;
+    TextButton save;
+    TextButton delete;
+    JFileChooser jfc;
+    InputText file_lower;
+    MouseListener addingVideo;
+    MouseListener modifyVideo;
 
     public VideoDetailPanel() {
         this.setBackground(Color.WHITE);
@@ -57,16 +73,105 @@ public class VideoDetailPanel extends JPanel
         this.add(rating_upper);
         this.add(rating_lower);
 
-
-
-        TextButton save = new TextButton(UIStyle.GREEN_OK, Color.WHITE, "Save", (int)(buttonStartX +  2.5* buttonWidth), buttonStartY + 9 * buttonHeight, buttonWidth / 2, buttonHeight, UIStyle.NORMAL_FONT, true, "mid");
+        save = new TextButton(UIStyle.GREEN_OK, Color.WHITE, "Save", (int)(buttonStartX +  2.5* buttonWidth ), buttonStartY + 9 * buttonHeight, buttonWidth / 2, buttonHeight, UIStyle.NORMAL_FONT, true, "mid");
         this.add(save);
+
+        delete = new TextButton(Color.decode("#E04147"), Color.WHITE, "Delete", (int)(buttonStartX +  1.6* buttonWidth ), buttonStartY + 9 * buttonHeight, buttonWidth / 2, buttonHeight, UIStyle.NORMAL_FONT, true, "mid");
+        this.add(delete);
+
+        delete.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                VideoController.getController().deleteVideo(currentVideo.getVideoId());
+                TempContentPanel.reminder.OK("Delete Success!");
+            }
+        });
+
+        file_upper = new DynamicText((int) (buttonStartX + 1.5 * buttonWidth + 0.02*buttonWidth), buttonStartY , "left", Color.WHITE, Color.BLACK, "Url", buttonWidth, buttonHeight, UIStyle.NORMAL_ARIAL_BOLD);
+        file_lower = new InputText((int) (buttonStartX + 1.5 * buttonWidth), buttonStartY +buttonHeight, buttonWidth, buttonHeight , 15, false,  "");
+        this.add(file_upper);
+        this.add(file_lower);
+        file_lower.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                jfc = new JFileChooser();
+                jfc.setBackground(Color.white);
+                int returnVal = jfc.showOpenDialog(null);
+                if (returnVal == JFileChooser.APPROVE_OPTION) {
+                    file_lower.setText(jfc.getSelectedFile().toString());
+                } else {
+
+                }
+            }
+        });
+
+        modifyVideo = new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+
+                Video videoToBeModify = new Video(currentVideo.getVideoId(), currentVideo.getUrl(), title_lower.getText(),
+                        Double.parseDouble(rating_lower.getText()), category_lower.getText(), Integer.parseInt(like_lower.getText()),
+                        currentVideo.getViewsCount(), level_lower.getText());
+                VideoController.getController().modifyVideo(videoToBeModify);
+                TempContentPanel.reminder.OK("Save Success!");
+            }
+        };
+
+        addingVideo = new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                String url = file_lower.getText();
+                String fileName = url.substring(url.lastIndexOf('/') + 1);
+
+
+                Video videoToBeAdd = new Video(null, fileName, title_lower.getText(),
+                        Double.parseDouble(rating_lower.getText()), category_lower.getText(), Integer.parseInt(like_lower.getText()),
+                        0, level_lower.getText());
+                VideoController.getController().AddVideo(videoToBeAdd);
+                TempContentPanel.reminder.OK("Adding Success!");
+
+                String path = UIStyle.class.getClassLoader().getResource("HIIT.jpg").getPath();
+                String toBeMoved = path.substring(0, path.length() - 9);
+                toBeMoved = toBeMoved + "/" + fileName;
+
+                String srcFile = url;
+                String desFile = toBeMoved;
+                try {
+                    // 使用缓冲字节流进行文件复制
+                    BufferedInputStream bis = new BufferedInputStream(new FileInputStream(srcFile));
+                    BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(desFile));
+                    byte[] b = new byte[1024];
+                    Integer len = 0;
+                    //一次读取1024字节的数据
+                    while ((len = bis.read(b)) != -1) {
+                        bos.write(b, 0, len);
+                    }
+                    bis.close();
+                    bos.close();
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
+            }
+        };
+
+
+
+
 
     }
     public void setAdding(boolean isAdding)
     {
         this.isAdding = isAdding;
-        setCurrentVideo(null);
+        if(isAdding) {
+            setCurrentVideo(null);
+
+        }
+
+
     }
     public void setCurrentVideo(Video currentVideo) {
         if(!isAdding) {
@@ -76,6 +181,12 @@ public class VideoDetailPanel extends JPanel
             level_lower.setText(currentVideo.getLevel());
             like_lower.setText(currentVideo.getLikes() + "");
             rating_lower.setText(currentVideo.getRating() + "");
+            file_lower.setVisible(false);
+            file_upper.setVisible(false);
+            save.removeMouseListener(addingVideo);
+            save.addMouseListener(modifyVideo);
+            delete.setVisible(true);
+
             int buttonWidth = (int)(0.244 * UIStyle.width);
             int buttonStartY = (int)(0.1 * UIStyle.height);
             int buttonStartX = (int)(0.1 * UIStyle.width);
@@ -102,8 +213,16 @@ public class VideoDetailPanel extends JPanel
             level_lower.setText("");
             like_lower.setText("");
             rating_lower.setText("");
+            file_upper.setVisible(true);
+            file_lower.setVisible(true);
+            file_lower.setText("");
             if(pic != null)
                 this.remove(pic);
+            save.addMouseListener(addingVideo);
+            save.removeMouseListener(modifyVideo);
+            delete.setVisible(false);
+
+
         }
 
 

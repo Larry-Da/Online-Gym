@@ -20,7 +20,7 @@ public class TempContentPanel extends JPanel
     private VideoDetailPanel videoDetailPanel;
     private EmailDetailPanel emailPanel;
     public static MyReminder reminder;
-    public TempContentPanel(CardLayout cards, JPanel mainPanel)
+    public TempContentPanel(CardLayout cards, MainPanel mainPanel)
     {
         this.setLayout(null);
         this.setBounds(0, 0, (int)UIStyle.width, (int)UIStyle.height);
@@ -37,6 +37,7 @@ public class TempContentPanel extends JPanel
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 cards.show(mainPanel, MainPanel.currentPanel);
+                mainPanel.updatePersonalInfo();
             }
         });
         backBar.add(back);
@@ -104,13 +105,18 @@ public class TempContentPanel extends JPanel
         {
             if(currentContent.equals("videoModify"))
             {
-
+                Video video = VideoController.getController().getVideoByVideoId(id);
+                videoDetailPanel.setAdding(false);
+                videoDetailPanel.setCurrentVideo(video);
+                innerCards.show(contentContainer, "videoModify");
             }
             else
             {
                 currentContent = "videoModify";
                 Video video = VideoController.getController().getVideoByVideoId(id);
+                videoDetailPanel.setAdding(false);
                 videoDetailPanel.setCurrentVideo(video);
+
                 innerCards.show(contentContainer, "videoModify");
             }
         }
@@ -118,7 +124,8 @@ public class TempContentPanel extends JPanel
         {
             if(currentContent.equals("videoAdd"))
             {
-
+                videoDetailPanel.setAdding(true);
+                innerCards.show(contentContainer, "videoModify");
             }
             else
             {

@@ -154,21 +154,9 @@ public class VideoController {
      * @return return true if add successfully, otherwise return false
      */
     public void AddVideo(Video video) {
-//        String json = gson.toJson(video);
-//        param = gson.fromJson(json, Map.class);
-//        request = new Request("addVideo",param);
-//        Double likes = (Double) param.get("likes");
-//        Double viewCounts = (Double)param.get("viewsCount");
-//        param.replace("likes",likes.intValue());
-//        param.replace("viewsCount",viewCounts.intValue());
-//        response = new Response(backendServer.execute(request.toJsonString()));
-////        response = new Response("{\"status\":\"success\"}");
-//        String status = response.getStatus();
-//        if(status.equalsIgnoreCase("success")) {
-//            param.clear();
-//            return true;
-//        }
-//        param.clear();
+        int num = getAllVideos().size();
+        String videoId = String.format("%03d", num + 1);
+        video.setVideoId(videoId);
         try {
             VideoManager.writeVideoInfo(video.convert());
         } catch (IOException e) {

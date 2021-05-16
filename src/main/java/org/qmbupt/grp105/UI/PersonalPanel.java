@@ -24,6 +24,7 @@ public class PersonalPanel extends JPanel
     public static MyReminder reminder;
     private CustomerPanel customerPanel;
     private CoachPanel coachPanel;
+    private AdministratorPanel administratorPanel;
     public PersonalPanel(CardLayout cards, MainPanel mainPanel)
     {
         MenuBar menuBar = new MenuBar(cards, mainPanel);
@@ -44,7 +45,7 @@ public class PersonalPanel extends JPanel
         contentPanel.add(signInPanel, "signInPanel");
         customerPanel = new CustomerPanel(loginCards, contentPanel, cards, mainPanel);
         contentPanel.add(customerPanel, "customerPanel");
-        AdministratorPanel administratorPanel = new AdministratorPanel(loginCards, contentPanel, cards, mainPanel);
+        administratorPanel = new AdministratorPanel(loginCards, contentPanel, cards, mainPanel);
         contentPanel.add(administratorPanel, "administratorPanel");
         coachPanel = new CoachPanel(loginCards, contentPanel, cards, mainPanel);
         contentPanel.add(coachPanel, "coachPanel");
@@ -57,6 +58,10 @@ public class PersonalPanel extends JPanel
     public void updateCoach(String id)
     {
         coachPanel.updateCoach(id);
+    }
+    public void updateAdmin()
+    {
+        administratorPanel.updateRes();
     }
 }
 
@@ -149,6 +154,8 @@ class SignInPanel extends JPanel
         int status = controller.check(acc, pass);
 
         if (acc.equals("root")) {
+            LoginToken.setId("root");
+            LoginToken.setType("Admin");
             cards.show(contentPanel, "administratorPanel");
         } else if (status == 2) {
             String id = controller.getIdByEmail(acc);
@@ -774,13 +781,14 @@ class FavoriteOnePage extends JPanel
 class AdministratorPanel extends JPanel
 {
 
+    private AdministratorRightPanel administratorRightPanel;
     public AdministratorPanel(CardLayout loginCards, JPanel contentPanel, CardLayout mainCards, MainPanel mainPanel)
     {
         this.setLayout(null);
         int barHeight = (int)(UIStyle.height) / 10;
         this.setBounds(0, 0, (int)(UIStyle.width), (int)(UIStyle.height - barHeight));
         CardLayout innerCards = new CardLayout();
-        AdministratorRightPanel administratorRightPanel = new AdministratorRightPanel(innerCards, contentPanel, mainCards, mainPanel);
+        administratorRightPanel = new AdministratorRightPanel(innerCards, contentPanel, mainCards, mainPanel);
         this.add(administratorRightPanel);
         administratorRightPanel.setVisible(true);
         AdministratorLeftPanel administratorLeftPanel = new AdministratorLeftPanel(loginCards, contentPanel, innerCards, administratorRightPanel);
@@ -790,6 +798,10 @@ class AdministratorPanel extends JPanel
 //        CardLayout innerCards = new CardLayout();
 //        Personal_RightPanel personalRightPanel = new Personal_RightPanel(innerCards, controller);
 //        this.add(personalRightPanel);
+    }
+    public void updateRes()
+    {
+        administratorRightPanel.updateRes();
     }
 }
 
@@ -863,6 +875,7 @@ class AdministratorLeftPanel extends JPanel
 
 class AdministratorRightPanel extends JPanel
 {
+    private AdministratorVideoManagement videoManagement;
     public AdministratorRightPanel(CardLayout innerCards, JPanel contentPanel, CardLayout mainCards, MainPanel mainPanel) {
         PersonalController controller = PersonalController.getController();
         int panelWidth = (int) (UIStyle.width * 0.76);
@@ -876,10 +889,14 @@ class AdministratorRightPanel extends JPanel
         AdministratorMembershipPanel membership = new AdministratorMembershipPanel();
         this.add(membership, "Membership");
 
-        ArrayList<Video> videos = VideoController.getController().getAllVideos();
-        AdministratorVideoManagement videoManagement = new AdministratorVideoManagement(videos, mainCards, mainPanel);
+        videoManagement = new AdministratorVideoManagement( mainCards, mainPanel);
         this.add(videoManagement, "Video");
     }
+    public void updateRes()
+    {
+        videoManagement.updateRes();
+    }
+
 }
 
 class AdministratorMembershipPanel extends JPanel
@@ -1087,52 +1104,57 @@ class AdministratorVideoManagement extends JPanel
 {
     private int pageMax;
     ArrayList<AdministratorVideoOnePage> resultPanels = new ArrayList<>();
+    JPanel contentPanel;
+    CardLayout cards;
+    MainPanel mainPanel;
+    CardLayout innerCards;
+    InputText searchBar;
+    FilterBox categoryFilter;
+    FilterBox sortFilter;
+    private String[] sortString = {"Sort", "Like", "Rating", "View"};
+    private String[] categoryFilterString = {"Category", "Bicycle Training", "HITT", "Flexibility", "Yoga", "Strength", "Weight Loss"};
 
-    public AdministratorVideoManagement(ArrayList<Video> videos, CardLayout cards, MainPanel mainPanel)
+
+
+    public AdministratorVideoManagement( CardLayout cards, MainPanel mainPanel)
     {
-        pageMax = (videos.size() -1) / 3;
+
+        this.cards = cards;
+        this.mainPanel = mainPanel;
+
         int panelWidth = (int) (UIStyle.width * 0.76);
         int panelHeight = (int) (UIStyle.height - UIStyle.barHeight);
         setBounds((int) (UIStyle.width * 0.24), UIStyle.barHeight, panelWidth, panelHeight);
-        CardLayout innerCards = new CardLayout();
+
+        innerCards = new CardLayout();
         this.setLayout(null);
         this.setBackground(Color.white);
 
-        JPanel contentPanel = new JPanel();
+        contentPanel = new JPanel();
         contentPanel.setVisible(true);
         contentPanel.setBounds(0, 160, panelWidth, panelHeight - 160);
         contentPanel.setLayout(innerCards);
         this.add(contentPanel);
 
-        for(AdministratorVideoOnePage i : resultPanels)
-        {
-            contentPanel.remove(i);
-        }
-        resultPanels.clear();
 
-        for(int i = 0; i <= pageMax; i++)
-        {
-            resultPanels.add(new AdministratorVideoOnePage(videos, cards, mainPanel, innerCards, contentPanel, i + 1, pageMax));
-            contentPanel.add(resultPanels.get(i), i + 1 + "");
-        }
-        innerCards.first(contentPanel);
-
-
-        InputText searchBar = new InputText(500, 50, 40, true, (int)(panelWidth/2), 40, "Search", true);
+        searchBar = new InputText(500, 50, 40, true, (int)(panelWidth/2), 40, "Search", true);
         this.add(searchBar);
-
+        searchBar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                updateRes();
+            }
+        });
         int startFilter = 75;
-        String[] categoryFilterString = {"Category", "Bicycle Training", "HITT", "Flexibility", "Yoga", "Strength", "Weight Loss"};
-        FilterBox categoryFilter = new FilterBox(startFilter, categoryFilterString, "light");
+        categoryFilter = new FilterBox(startFilter, categoryFilterString, "light");
         this.add(categoryFilter);
 
-        String[] sortString = {"Sort", "Like", "Rating", "View"};
-        FilterBox sortFilter = new FilterBox(startFilter + 40, sortString, "light", true);
+        sortFilter = new FilterBox(startFilter + 40, sortString, "light", true);
         this.add(sortFilter);
 
-        TextButton send = new TextButton((int)(panelWidth / 2 + 320), 40, UIStyle.BLUE_BUTTRESS, Color.white, "Add Video",  100, 40, "normal",true);
-        this.add(send);
-        send.addMouseListener(new MouseAdapter() {
+        TextButton addVideo = new TextButton((int)(panelWidth / 2 + 320), 40, UIStyle.BLUE_BUTTRESS, Color.white, "Add Video",  100, 40, "normal",true);
+        this.add(addVideo);
+        addVideo.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
@@ -1141,6 +1163,57 @@ class AdministratorVideoManagement extends JPanel
             }
         });
 
+        updateRes();
+
+    }
+    public void updateRes()
+    {
+
+        String key = searchBar.getText();
+        if(key.equals("Search") || key.equals(""))
+        {
+            key = null;
+        }
+        ArrayList<Video> videos = VideoController.getController().getVideosByName(key);
+        ArrayList<String> keyCategory = new ArrayList<>();
+        boolean[] states = categoryFilter.getStates();
+        int cnt = 1;
+        for(boolean i : states)
+        {
+            if(i)
+            {
+                keyCategory.add(categoryFilterString[cnt]);
+            }
+            cnt++;
+        }
+        ArrayList<Video> videos1 = VideoController.getController().filterByCategory(videos, keyCategory);
+        states = sortFilter.getStates();
+        cnt = 1;
+        String sortKey = null;
+        for(boolean i : states)
+        {
+            if(i)
+            {
+                sortKey = sortString[cnt];
+            }
+            cnt++;
+        }
+
+        videos1 = VideoController.getController().sort(videos1, sortKey);
+
+        pageMax = (videos1.size() -1) / 3;
+        for(AdministratorVideoOnePage i : resultPanels)
+        {
+            contentPanel.remove(i);
+        }
+        resultPanels.clear();
+
+        for(int i = 0; i <= pageMax; i++)
+        {
+            resultPanels.add(new AdministratorVideoOnePage(videos1, cards, mainPanel, innerCards, contentPanel, i + 1, pageMax));
+            contentPanel.add(resultPanels.get(i), i + 1 + "");
+        }
+        innerCards.first(contentPanel);
     }
 }
 class AdministratorVideoOnePage extends JPanel

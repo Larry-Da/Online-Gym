@@ -57,7 +57,10 @@ public class MainPanel extends JPanel
             personalPanel.updateCus(LoginToken.getId());
         if(LoginToken.getId() != null && LoginToken.getType().equals("Coach"))
             personalPanel.updateCoach(LoginToken.getId());
+        if(LoginToken.getId() != null && LoginToken.getType().equals("Admin"))
+            personalPanel.updateAdmin();
 
     }
+
 
 }

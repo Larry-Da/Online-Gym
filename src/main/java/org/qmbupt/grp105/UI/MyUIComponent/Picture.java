@@ -14,7 +14,7 @@ public class Picture extends JLabel
 
     public Picture(String path, int x, int y)
     {
-        this.path = path;
+        this.path = path.replace("%20", " ");
         this.width = x;
         this.height = y;
     }

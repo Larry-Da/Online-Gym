@@ -1,6 +1,9 @@
 package org.qmbupt.grp105.UI;
 import  org.qmbupt.grp105.UI.*;
 import javax.swing.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class main
 {
     public static void main(String[] args) {
@@ -12,6 +15,7 @@ public class main
         jf.setVisible(true);
         mp.setVisible(true);
         jf.setBounds((int)((UIStyle.ScreenWidth - UIStyle.width)/2), 0, (int) UIStyle.width, (int) UIStyle.height);
+
 
     }
 }

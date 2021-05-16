@@ -159,6 +159,7 @@ class SearchPanel extends JPanel
     private String[] sortString = {"Sort", "Like", "Rating", "View"};
 
 
+
     public SearchPanel(CardLayout cards, JPanel contentPanel, CardLayout mainCards, MainPanel mainPanel)
     {
         this.setLayout(null);
