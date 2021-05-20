@@ -38,9 +38,9 @@ public class SearchContorllerTest {
         videos = searchController.sortVideoByLikes(videos);
         int length = videos.size();
         for (Video video : videos) {
-
             System.out.print(video.getVideoId() + " ");
         }
+        System.out.println("");
     }
 }
 

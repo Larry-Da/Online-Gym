@@ -50,13 +50,12 @@ public class VideoControllerTest {
         for(Video v: res) {
             System.out.println(v.toString());
         }
-
     }
 
     @Test
     public void getVideoByName() {
-        System.out.println("getVideoByName: yoga training tutorial 1");
-        System.out.println(videoController.getVideoByName("yoga training tutorial 1").toString());
+        System.out.println("getVideoByName: yoga training tutorial 2");
+        System.out.println(videoController.getVideoByName("yoga training tutorial 2").toString());
     }
 
     @Test
@@ -85,12 +84,15 @@ public class VideoControllerTest {
         System.out.println("addVideo");
         Video video = new Video("v098","usr/local","Sdwerrtyry",8.7,"Yoga",500,1000,"easy");
         videoController.AddVideo(video);
+        assert videoController.getVideoByName("Sdwerrtyry") != null;
     }
 
     @Test
     public void deleteVideo() {
         System.out.println("deleteVideo");
-        videoController.deleteVideo("v098");
+        String videoId = videoController.getVideoByName("Sdwerrtyry").getVideoId();
+        videoController.deleteVideo(videoId);
+        assert videoController.getVideoByName("Sdwerrtyry") == null;
     }
 
 

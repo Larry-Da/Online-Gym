@@ -1,7 +1,6 @@
 package org.qmbupt.grp105.Controller;
 
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;

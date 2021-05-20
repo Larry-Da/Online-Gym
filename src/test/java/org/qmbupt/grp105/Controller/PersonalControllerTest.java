@@ -118,6 +118,7 @@ public class PersonalControllerTest {
         Customer cus = personalController.getCusInfoByCusId("cs1");
         System.out.println("Wrong case!");
         System.out.println(personalController.check(cus.getEmail(), "123"));
+        assert personalController.check(cus.getEmail(), cus.getPassword()) == 1;
         System.out.println(personalController.check(cus.getEmail(), cus.getPassword()));
 
     }
@@ -130,22 +131,27 @@ public class PersonalControllerTest {
         System.out.println(customer.toString());
         personalController.updateCustomer(customer);
         System.out.println("after changed");
+        assert personalController.getCusInfoByCusId("cs1").getName().equals("Iceberg");
         System.out.println(customer.toString());
     }
 
     @Test
     public void increaseBalance() {
+        int balance = personalController.getCusInfoByCusId("cs1").getBalance();
         System.out.println(personalController.getCusInfoByCusId("cs1").toString());
         personalController.increaseBalance("cs1", 1000);
         System.out.println("after changed");
+        assert balance + 1000 == personalController.getCusInfoByCusId("cs1").getBalance();
         System.out.println(personalController.getCusInfoByCusId("cs1").getBalance());
     }
 
     @Test
     public void decreaseBalance() {
+        int balance = personalController.getCusInfoByCusId("cs1").getBalance();
         System.out.println(personalController.getCusInfoByCusId("cs1").toString());
-        personalController.increaseBalance("cs1", 800);
+        personalController.decreaseBalance("cs1", 800);
         System.out.println("after changed");
+        assert balance - 800 == personalController.getCusInfoByCusId("cs1").getBalance();
         System.out.println(personalController.getCusInfoByCusId("cs1").getBalance());
     }
 
@@ -159,6 +165,7 @@ public class PersonalControllerTest {
         personalController.bookLiveSession("cs1", "lvs4");
         System.out.println("after changed");
         livesession = personalController.getCusInfoByCusId("cs1").getBookedSessions();
+        assert livesession.contains("lvs4");
         for(String sid: livesession) {
             System.out.println(sid);
         }
@@ -174,6 +181,7 @@ public class PersonalControllerTest {
         personalController.watchVideo("cs1","v005");
         System.out.println("after changed");
         videoIds = personalController.getCusInfoByCusId("cs1").getVideosHistory();
+        assert videoIds.contains("v005");
         for(String sid: videoIds) {
             System.out.println(sid);
         }
@@ -189,6 +197,7 @@ public class PersonalControllerTest {
         personalController.addToFavourite("cs1","v004");
         System.out.println("after changed");
         videoIds = personalController.getCusInfoByCusId("cs1").getFavouriteVideos();
+        assert videoIds.contains("v004");
         for(String sid: videoIds) {
             System.out.println(sid);
         }
@@ -201,9 +210,10 @@ public class PersonalControllerTest {
         for(String sid: videoIds) {
             System.out.println(sid);
         }
-        personalController.addToFavourite("cs1","v004");
+        personalController.removeFromFavourite("cs1","v004");
         System.out.println("after changed");
         videoIds = personalController.getCusInfoByCusId("cs1").getFavouriteVideos();
+        assert !videoIds.contains("v004");
         for(String sid: videoIds) {
             System.out.println(sid);
         }
