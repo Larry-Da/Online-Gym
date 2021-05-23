@@ -22,6 +22,7 @@ public class DataManager {
     public ArrayList<Session>     sessions;
     public ArrayList<Coach>       coaches;
     public ArrayList<Mail>        mails;
+    public ArrayList<Setting>     settings;
 
     private DataManager() throws IOException {
 
@@ -34,6 +35,7 @@ public class DataManager {
         sessions     = (ArrayList<Session>)     JSON.parseArray(IO.read("sessions.json"),    Session.class);
         coaches      = (ArrayList<Coach>)       JSON.parseArray(IO.read("coaches.json"),     Coach.class);
         mails        = (ArrayList<Mail>)        JSON.parseArray(IO.read("mails.json"),       Mail.class);
+        settings     = (ArrayList<Setting>)     JSON.parseArray(IO.read("settings_config.json"), Setting.class);
     }
 
     public void commit() throws IOException {
@@ -43,6 +45,7 @@ public class DataManager {
         IO.write("sessions.json",    JSON.toJSONString(sessions));
         IO.write("coaches.json",     JSON.toJSONString(coaches));
         IO.write("mails.json",       JSON.toJSONString(mails));
+        IO.write("settings_config.json", JSON.toJSONString(settings));
     }
 
 }
