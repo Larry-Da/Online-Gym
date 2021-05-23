@@ -1,5 +1,6 @@
 package org.qmbupt.grp105.Entity;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -66,6 +67,7 @@ public class Customer
     }
 
     public String getExpiredTime() {
+
         return expiredTime;
     }
 
@@ -208,7 +210,16 @@ public class Customer
         org.qmbupt.grp105.backend.model.Customer customer = new org.qmbupt.grp105.backend.model.Customer();
         customer.balance = this.balance;
         customer.cusId = this.cusId;
-        customer.expireDate = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date DoBF = null;
+        try {
+            DoBF = new Date(sdf.parse(this.expiredTime).getTime());
+        }
+        catch (Exception e1)
+        {
+            ;
+        }
+        customer.expireDate = DoBF;
         customer.videosHistory = (ArrayList<String>)this.videosHistory.clone();
         customer.bookedSessions = new ArrayList<>();
         customer.dateOfBirth = this.dateOfBirth;

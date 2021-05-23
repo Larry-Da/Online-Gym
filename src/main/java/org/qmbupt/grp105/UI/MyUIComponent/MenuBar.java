@@ -1,6 +1,4 @@
 package org.qmbupt.grp105.UI.MyUIComponent;
-
-import org.qmbupt.grp105.UI.ContactPanel;
 import org.qmbupt.grp105.UI.MainPanel;
 import org.qmbupt.grp105.UI.UIStyle;
 
@@ -8,7 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.sql.Connection;
+import java.util.HashMap;
 
 public class MenuBar extends JPanel
 {
@@ -18,7 +16,13 @@ public class MenuBar extends JPanel
     TextButton ClassButton;
     TextButton LiveButton;
     TextButton ContactButton;
+    String panelName = null;
 
+    public MenuBar(CardLayout cards, MainPanel mainPanel, String panelName)
+    {
+        this(cards, mainPanel);
+        this.panelName = panelName;
+    }
     public MenuBar(CardLayout cards, MainPanel mainPanel)
     {
         int buttonWidth = (int)(UIStyle.width / 2 / 6);
@@ -26,6 +30,7 @@ public class MenuBar extends JPanel
         int barHeight = (int)(UIStyle.height) / 10;
         UIStyle.barHeight = barHeight;
         int buttonHeight = barHeight / 2;
+
 
 
         this.setBounds(0, 0, (int) UIStyle.width, barHeight);
@@ -58,6 +63,7 @@ public class MenuBar extends JPanel
             public void mouseClicked(MouseEvent e) {
                 cards.show(mainPanel, "virtualClassPanel");
                 MainPanel.currentPanel = "virtualClassPanel";
+                mainPanel.updateVideoInfo();
             }
         });
         LiveButton.addMouseListener(new MouseAdapter() {
@@ -65,6 +71,7 @@ public class MenuBar extends JPanel
             public void mouseClicked(MouseEvent e) {
                 cards.show(mainPanel, "liveSessionPanel");
                 MainPanel.currentPanel = "liveSessionPanel";
+                mainPanel.updateLiveInfo();
             }
         });
         ContactButton.addMouseListener(new MouseAdapter() {
@@ -84,6 +91,39 @@ public class MenuBar extends JPanel
 
 
 
+
+    }
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Graphics2D g2 = (Graphics2D) g;
+        g2.addRenderingHints(new HashMap<RenderingHints.Key, Object>() {{
+            put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            put(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
+        }});
+        if(panelName != null) {
+            String[] panelsName = {"Home", "Personal", "Classes", "Live", "Contacts"};
+            for(int i = 0; i < 5; i++)
+            {
+                if(panelsName[i].equals(panelName))
+                {
+                    g2.setPaint(Color.decode("#EC9730"));
+                    int buttonHeight = UIStyle.barHeight / 2;
+                    int buttonWidth = (int)(UIStyle.width / 2 / 6);
+                    int mid = (int)(UIStyle.width / 2) - buttonWidth / 2;
+                    g2.drawLine(mid + (i + 1)* buttonWidth, buttonHeight * 2 - 15, mid + (i + 2) * buttonWidth, buttonHeight * 2 - 15);
+                }
+                else
+                {
+                    g2.setPaint(UIStyle.GRAY_SHALLOW);
+                    int buttonHeight = UIStyle.barHeight / 2;
+                    int buttonWidth = (int)(UIStyle.width / 2 / 6);
+                    int mid = (int)(UIStyle.width / 2) - buttonWidth / 2;
+                    g2.drawLine(mid + (i + 1)* buttonWidth, buttonHeight * 2 - 15, mid + (i + 2) * buttonWidth, buttonHeight * 2 - 15);
+
+                }
+            }
+        }
     }
 
 }

@@ -1,5 +1,7 @@
 package org.qmbupt.grp105.backend.model;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -50,8 +52,10 @@ public class Customer {
     public ArrayList<String> favoriteVideos;
 
     public org.qmbupt.grp105.Entity.Customer converter() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String expireDateF = sdf.format(this.expireDate);
         return new org.qmbupt.grp105.Entity.Customer(this.cusId, 10, this.name, this.password,
-                this.phoneNo, this.email, this.gender.charAt(0), this.dateOfBirth, this.level + "", this.expireDate.toString(),
+                this.phoneNo, this.email, this.gender.charAt(0), this.dateOfBirth, this.level + "", expireDateF,
                 this.balance, this.xp, this.videosHistory, this.bookedSessions, this.favoriteVideos);
     }
 }

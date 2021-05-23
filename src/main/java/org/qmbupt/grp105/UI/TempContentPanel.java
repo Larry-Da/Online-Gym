@@ -19,6 +19,7 @@ public class TempContentPanel extends JPanel
     private VideoPlayerPanel videoPanel;
     private VideoDetailPanel videoDetailPanel;
     private EmailDetailPanel emailPanel;
+    private RegisterPanel registerPanel;
     public static MyReminder reminder;
     public TempContentPanel(CardLayout cards, MainPanel mainPanel)
     {
@@ -54,8 +55,19 @@ public class TempContentPanel extends JPanel
         contentContainer.add(videoDetailPanel, "videoModify");
         emailPanel = new EmailDetailPanel();
         contentContainer.add(emailPanel, "email");
+        registerPanel = new RegisterPanel();
+        contentContainer.add(registerPanel, "register");
 
 
+
+    }
+    public void setContent(String type)
+    {
+        if(type.equals("register"))
+        {
+            currentContent = "register";
+            innerCards.show(contentContainer, "register");
+        }
     }
     public void setContent(String type, Mail email)
     {

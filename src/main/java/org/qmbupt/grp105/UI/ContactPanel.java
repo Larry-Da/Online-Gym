@@ -15,7 +15,7 @@ public class ContactPanel extends JLayeredPane
     public static MyReminder reminder;
     public ContactPanel(CardLayout cards, MainPanel mainPanel)
     {
-        MenuBar mb = new MenuBar(cards, mainPanel);
+        MenuBar mb = new MenuBar(cards, mainPanel, "Contacts");
         reminder = new MyReminder(mb);
         mb.setVisible(true);
         this.setLayout(null);

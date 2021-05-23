@@ -7,6 +7,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class FilterBox extends JPanel
@@ -14,7 +16,9 @@ public class FilterBox extends JPanel
     private Font font;
     private FontMetrics mt;
     private String color;
+    private int num;
     private ArrayList<JCheckBox> options = new ArrayList<>();
+    private JComboBox options2;
     private boolean isSingleSelected = false;
     public FilterBox(int y, String contents[], String color, boolean isSingleSelected)
     {
@@ -24,10 +28,22 @@ public class FilterBox extends JPanel
 
     public void setState(boolean state, int index)
     {
-        options.get(index).setSelected(state);
+        if(options2 != null)
+            options2.setSelectedIndex(index);
+        else
+            options.get(index).setSelected(state);
     }
     public boolean[] getStates()
     {
+        if(options2 != null)
+        {
+            boolean states[] = new boolean[num];
+            for(int i = 0; i < states.length; i++)
+                states[i] = false;
+            states[options2.getSelectedIndex()] = true;
+            return states;
+
+        }
         boolean states[] = new boolean[options.size()];
         int cnt = 0;
         for(JCheckBox o : options)
@@ -40,8 +56,8 @@ public class FilterBox extends JPanel
 
     public FilterBox (int y, String contents[], String color)
     {
-
         setLayout(null);
+        num = contents.length - 1;
         this.color = color;
         font = UIStyle.SMALL_FONT;
         if(color.equals("dark"))
@@ -56,7 +72,7 @@ public class FilterBox extends JPanel
             head.setForeground(Color.white);
         else
             head.setForeground(Color.black);
-        int posision = 200;
+        int position = 200;
         int space = 25;
 
         head.setBounds(30, 0, mt.stringWidth(contents[0]) + space * 3, 40);
@@ -64,34 +80,50 @@ public class FilterBox extends JPanel
         this.setVisible(true);
         this.setBounds(0, y, (int)UIStyle.width, 40);
 
-        for(int i = 1; i < contents.length; i++)
-        {
-            JCheckBox option = new JCheckBox(contents[i]);
-            option.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    if(isSingleSelected) {
-                        if (option.isSelected()) {
-                            for (JCheckBox j : options) {
-                                if (j != option) {
-                                    j.setSelected(false);
+        if(contents.length < 8)
+            for(int i = 1; i < contents.length; i++)
+            {
+                JCheckBox option = new JCheckBox(contents[i]);
+                option.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        if(isSingleSelected) {
+                            if (option.isSelected()) {
+                                for (JCheckBox j : options) {
+                                    if (j != option) {
+                                        j.setSelected(false);
+                                    }
                                 }
                             }
                         }
                     }
-                }
+                });
+                options.add(option);
+                option.setFont(font);
+                if(color.equals("dark"))
+                    option.setForeground(Color.white);
+                else
+                    option.setForeground(Color.BLACK);
+                int StringWidth = mt.stringWidth(contents[i]);
+                option.setBounds(position, 0, StringWidth+space*2, 40);
+                position += StringWidth + space*2;
+                this.add(option);
+            }
+        else
+        {
+            String[] optionContent = new String[contents.length - 1];
+            for(int i = 1; i < contents.length; i++)
+            {
+                optionContent[i - 1] = contents[i];
+            }
+            options2 = new JComboBox(optionContent);
+            options2.setFont(font);
+            Arrays.sort(optionContent, (String s1, String s2) -> {
+                return s2.length() - s1.length();
             });
-
-            options.add(option);
-            option.setFont(font);
-            if(color.equals("dark"))
-                option.setForeground(Color.white);
-            else
-                option.setForeground(Color.BLACK);
-            int StringWidth = mt.stringWidth(contents[i]);
-            option.setBounds(posision, 0, StringWidth+space*2, 40);
-            posision += StringWidth + space*2;
-            this.add(option);
+            int StringWidth = mt.stringWidth(optionContent[0]);
+            options2.setBounds(position, 0, StringWidth+space*2, 40);
+            this.add(options2);
         }
 
     }

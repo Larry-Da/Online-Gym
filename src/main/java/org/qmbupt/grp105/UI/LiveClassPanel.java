@@ -21,7 +21,7 @@ public class LiveClassPanel extends JPanel
     public static MyReminder reminder;
     public LiveClassPanel(CardLayout cards, MainPanel mainPanel)
     {
-        MenuBar menuBar = new MenuBar(cards, mainPanel);
+        MenuBar menuBar = new MenuBar(cards, mainPanel, "Live");
         reminder = new MyReminder(menuBar);
 
         menuBar.setVisible(true);
@@ -53,7 +53,6 @@ class ContentPanel extends JPanel
     public static int SearchResultPanelHeight;
 
     private InputText searchBar;
-    private String[] categoryFilterString = {"Category", "Bicycle Training", "HITT", "Flexibility", "Yoga", "Strength", "Weight Loss"};
     private String[] sortString = {"Sort", "Like", "Rating", "View"};
 
     private CardLayout resultCards;
@@ -81,7 +80,7 @@ class ContentPanel extends JPanel
         });
 
         int startFilter = 130;
-        categoryFilter = new FilterBox(startFilter, categoryFilterString, "dark");
+        categoryFilter = new FilterBox(startFilter, UIStyle.categories, "dark");
         this.add(categoryFilter);
 
         sortFilter = new FilterBox(startFilter + 40, sortString, "dark", true);
@@ -114,7 +113,7 @@ class ContentPanel extends JPanel
         {
             if(i)
             {
-                keyCategory.add(categoryFilterString[cnt]);
+                keyCategory.add(UIStyle.categories[cnt]);
             }
             cnt++;
         }
