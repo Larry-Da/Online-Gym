@@ -51,15 +51,24 @@ public class MainPanel extends JPanel
     {
         tempContentPanel.setContent(content, id);
     }
+    public void setTempContent(String content){ tempContentPanel.setContent(content);}
     public void updatePersonalInfo()
     {
+        UIStyle.updateSetting();
         if(LoginToken.getId() != null && LoginToken.getType().equals("Customer"))
             personalPanel.updateCus(LoginToken.getId());
         if(LoginToken.getId() != null && LoginToken.getType().equals("Coach"))
             personalPanel.updateCoach(LoginToken.getId());
         if(LoginToken.getId() != null && LoginToken.getType().equals("Admin"))
             personalPanel.updateAdmin();
-
+    }
+    public void updateVideoInfo()
+    {
+        UIStyle.updateSetting();
+    }
+    public void updateLiveInfo()
+    {
+        UIStyle.updateSetting();
     }
 
 

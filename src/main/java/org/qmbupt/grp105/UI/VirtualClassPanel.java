@@ -20,7 +20,7 @@ public class VirtualClassPanel extends JPanel
 {
     public VirtualClassPanel(CardLayout cards, MainPanel mainPanel)
     {
-        MenuBar menuBar = new MenuBar(cards, mainPanel);
+        MenuBar menuBar = new MenuBar(cards, mainPanel, "Classes");
         menuBar.setVisible(true);
         this.setLayout(null);
         this.add(menuBar);
@@ -148,7 +148,6 @@ class SearchPanel extends JPanel
     private int pageMax;
     public static int SearchResultPanelHeight;
     private InputText searchBar;
-    private String[] categoryFilterString = {"Category", "Bicycle Training", "HITT", "Flexibility", "Yoga", "Strength", "Weight Loss"};
     private CardLayout resultCards;
     private ArrayList<SearchResultPanel> searchResultPanels =new ArrayList<>();
     FilterBox categoryFilter;
@@ -178,7 +177,7 @@ class SearchPanel extends JPanel
 
 
         int startFilter = 90;
-        categoryFilter = new FilterBox(startFilter, categoryFilterString, "dark");
+        categoryFilter = new FilterBox(startFilter, UIStyle.categories, "dark");
         this.add(categoryFilter);
 
         sortFilter = new FilterBox(startFilter + 40, sortString, "dark", true);
@@ -200,7 +199,7 @@ class SearchPanel extends JPanel
     public void setCate(String cate)
     {
         int cnt = 0;
-        for(String i : categoryFilterString)
+        for(String i : UIStyle.categories)
         {
             if(i.equals(cate))
             {
@@ -224,7 +223,7 @@ class SearchPanel extends JPanel
         {
             if(i)
             {
-                keyCategory.add(categoryFilterString[cnt]);
+                keyCategory.add(UIStyle.categories[cnt]);
             }
             cnt++;
         }

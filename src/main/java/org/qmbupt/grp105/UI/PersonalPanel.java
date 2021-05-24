@@ -27,7 +27,7 @@ public class PersonalPanel extends JPanel
     private AdministratorPanel administratorPanel;
     public PersonalPanel(CardLayout cards, MainPanel mainPanel)
     {
-        MenuBar menuBar = new MenuBar(cards, mainPanel);
+        MenuBar menuBar = new MenuBar(cards, mainPanel, "Personal");
         reminder = new MyReminder(menuBar);
         menuBar.setVisible(true);
         this.setLayout(null);
@@ -286,8 +286,14 @@ class CustomerLeftPanel extends JPanel
         this.add(name);
 
         this.remove(circleIcon);
-
-        String picPath = UIStyle.class.getClassLoader().getResource(cus.getCusId() + ".png").getPath();
+        String picPath = null;
+        try {
+            picPath = UIStyle.class.getClassLoader().getResource(cus.getCusId() + ".png").getPath();
+        }
+        catch(Exception e)
+        {
+            picPath = UIStyle.class.getClassLoader().getResource("default_user.png").getPath();
+        }
         circleIcon = new Picture(picPath, (int)(panelWidth * 0.26), (int)(panelWidth * 0.26));
         circleIcon.setBounds((int)(UIStyle.width * 0.0875), (int)(UIStyle.height * 0.12), (int)(panelWidth * 0.26), (int)(panelWidth * 0.26));
         this.add(circleIcon);
@@ -575,8 +581,7 @@ class CustomerBookedLiveOnePage extends JPanel
         String expiredContent[] = {"Expired", "Yes", "No"};
         FilterBox expired = new FilterBox(50, expiredContent, "light");
         this.add(expired);
-        String[] categoryFilterString = {"Category", "Bicycle Training", "HITT", "Flexibility", "Yoga", "Strength", "Weight Loss"};
-        FilterBox categoryFilter = new FilterBox(10, categoryFilterString, "light");
+        FilterBox categoryFilter = new FilterBox(10, UIStyle.categories, "light");
         this.add(categoryFilter);
 
         int panelWidth = (int) (UIStyle.width * 0.76);
@@ -939,7 +944,6 @@ class AdministratorMembershipPanel extends JPanel
     private FilterBox level;
     private FilterBox gender;
     private FilterBox sort;
-    private String[] levelContent = {"Level", "LV1", "LV2", "LV3", "LV4", "LV5"};
     private String[] genderContent = {"Gender", "Male", "Female"};
     private String[] sortContent = {"Sort By", "Age", "Level", "Balance", "Credit"};
     private InputText search;
@@ -956,7 +960,7 @@ class AdministratorMembershipPanel extends JPanel
         this.setBackground(Color.white);
 
 
-        level = new FilterBox(20, levelContent, "light");
+        level = new FilterBox(20, UIStyle.memberships, "light");
         this.add(level);
 
         gender = new FilterBox(60, genderContent, "light", true);
@@ -1001,7 +1005,7 @@ class AdministratorMembershipPanel extends JPanel
         {
             if(i)
             {
-                levelKey.add(levelContent[cnt].substring(2));
+                levelKey.add(UIStyle.memberships[cnt].substring(2));
             }
             cnt++;
         }
@@ -1141,8 +1145,6 @@ class AdministratorVideoManagement extends JPanel
     FilterBox categoryFilter;
     FilterBox sortFilter;
     private String[] sortString = {"Sort", "Like", "Rating", "View"};
-    private String[] categoryFilterString = {"Category", "Bicycle Training", "HITT", "Flexibility", "Yoga", "Strength", "Weight Loss"};
-
 
 
     public AdministratorVideoManagement( CardLayout cards, MainPanel mainPanel)
@@ -1175,7 +1177,7 @@ class AdministratorVideoManagement extends JPanel
             }
         });
         int startFilter = 75;
-        categoryFilter = new FilterBox(startFilter, categoryFilterString, "light");
+        categoryFilter = new FilterBox(startFilter, UIStyle.categories, "light");
         this.add(categoryFilter);
 
         sortFilter = new FilterBox(startFilter + 40, sortString, "light", true);
@@ -1211,7 +1213,7 @@ class AdministratorVideoManagement extends JPanel
         {
             if(i)
             {
-                keyCategory.add(categoryFilterString[cnt]);
+                keyCategory.add(UIStyle.categories[cnt]);
             }
             cnt++;
         }
@@ -1399,8 +1401,14 @@ class CoachLeftPanel extends JPanel
 
         if(circleIcon != null)
             this.remove(circleIcon);
-
-        String picPath = UIStyle.class.getClassLoader().getResource(coach.getCoachId() + ".png").getPath();
+        String picPath = null;
+        try {
+            picPath = UIStyle.class.getClassLoader().getResource(coach.getCoachId() + ".png").getPath();
+        }
+        catch(Exception e)
+        {
+            picPath = UIStyle.class.getClassLoader().getResource("default_user.png").getPath();
+        }
         circleIcon = new Picture(picPath, (int)(panelWidth * 0.26), (int)(panelWidth * 0.26));
         circleIcon.setBounds((int)(UIStyle.width * 0.0875), (int)(UIStyle.height * 0.12), (int)(panelWidth * 0.26), (int)(panelWidth * 0.26));
         this.add(circleIcon);
@@ -1519,8 +1527,7 @@ class CoachLiveOnePage extends JPanel {
         String expiredContent[] = {"Expired", "Yes", "No"};
         FilterBox expired = new FilterBox(50, expiredContent, "light");
         this.add(expired);
-        String[] categoryFilterString = {"Category", "Bicycle Training", "HITT", "Flexibility", "Yoga", "Strength", "Weight Loss"};
-        FilterBox categoryFilter = new FilterBox(10, categoryFilterString, "light");
+        FilterBox categoryFilter = new FilterBox(10, UIStyle.categories, "light");
         this.add(categoryFilter);
 
         int panelWidth = (int) (UIStyle.width * 0.76);

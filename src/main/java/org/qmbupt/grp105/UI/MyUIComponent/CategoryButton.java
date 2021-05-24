@@ -17,7 +17,6 @@ public class CategoryButton extends Picture
         this.text = text;
         setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
-
     }
 
     @Override

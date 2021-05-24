@@ -12,6 +12,13 @@ public class Sticker extends JLabel
     String title;
     String contents;
     String imagePath;
+    Color fontColor = null;
+    public Sticker(int width, int height, String title, String contents, int x, int y, String imagePath, Color fontColor)
+    {
+        this(width,  height,  title,  contents,  x,  y,  imagePath);
+        this.fontColor = fontColor;
+        setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+    }
     public Sticker(int width, int height, String title, String contents, int x, int y, String imagePath)
     {
         this.width = width;
@@ -39,10 +46,17 @@ public class Sticker extends JLabel
         g2.setPaint(Color.decode("#F6F6F8"));
         g2.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 20, 20);
 
-        g2.setPaint(Color.BLACK);
+        g2.setPaint(fontColor);
+        if(fontColor == null) {
+            g2.setPaint(Color.BLACK);
+        }
+        else
+        {
+            g2.setPaint(fontColor);
+        }
         g2.setFont(UIStyle.NORMAL_FONT);
-        if(contents!= null)
-            g2.drawString(contents, (int)(0.067 * width), (int)(0.6 * height));
+        if (contents != null)
+            g2.drawString(contents, (int) (0.067 * width), (int) (0.6 * height));
 
         Image img = new ImageIcon(imagePath).getImage();
         g.drawImage(img, width / 2, (int) (0.1 * width), (int)(getHeight() / 1.5), (int)(getHeight() / 1.5),null);// must set width andd height, otherwise it will not display it

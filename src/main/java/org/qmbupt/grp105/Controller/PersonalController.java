@@ -8,6 +8,7 @@ import java.util.*;
 import org.qmbupt.grp105.backend.BackendServer;
 import org.qmbupt.grp105.backend.dblayer.CoachManager;
 import org.qmbupt.grp105.backend.dblayer.CustomerManager;
+import org.qmbupt.grp105.backend.dblayer.DataManager;
 import org.qmbupt.grp105.backend.dblayer.VideoManager;
 
 /**
@@ -58,6 +59,8 @@ public class PersonalController {
         ArrayList<Customer> res = new ArrayList<>();
         if(levelKeys.size() == 0)
             return customers;
+        if(levelKeys.get(0).equals("l"))
+            return customers;
         for(Customer i: customers)
         {
             if(levelKeys.contains(i.getMembershipLevel()))
@@ -74,25 +77,20 @@ public class PersonalController {
      * @return a list of all customers
      */
     public ArrayList<Customer> getAllCustomer() {
-//        param.put("type","Customer");
-//        param.put("fields",new String[]{"cusId"});
-        ArrayList<Customer> customers = new ArrayList<>();
-        request = new Request("getCustomerIds",param);
-        response = new Response(backendServer.execute(request.toJsonString()));
-//        response = new Response("{\"status\":\"success\",\"payload\":{\"cusIds\":[\"C001\",\"C002\"]}}");
-        String status = response.getStatus();
-        if(status.equalsIgnoreCase("success")) {
-            JsonArray jsonArray = response.getPayload().getAsJsonArray("cusIds");
-            List<String> customerIds = gson.fromJson(jsonArray, List.class);
-            for(String customerId : customerIds) {
-                Customer customer = getCusInfoByCusId(customerId);
-                customers.add(customer);
-            }
-            param.clear();
-            return customers;
+        ArrayList<org.qmbupt.grp105.backend.model.Customer> customers = null;
+        try {
+            customers = DataManager.getInstance().customers;
         }
-        param.clear();
-        return null;
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        ArrayList<Customer> res = new ArrayList<>();
+        for(int i = 0; i < customers.size(); i++)
+        {
+            res.add(customers.get(i).converter());
+        }
+        return res;
     }
 
     public int getNumOfAllCustomers() {
@@ -231,6 +229,12 @@ public class PersonalController {
     }
     public void updateCustomer(Customer customer) {
         try {
+            if(customer.getCusId().equals(""))
+            {
+                int num = getAllCustomer().size();
+                String id = "cs" + (num + 1);
+                customer.setCusId(id);
+            }
             CustomerManager.writeCustomerInfo(customer.convert());
         } catch(IOException e) {
             e.printStackTrace();

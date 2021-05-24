@@ -8,6 +8,7 @@ public class main
 {
     public static void main(String[] args) {
         new UIStyle();
+        UIStyle.updateSetting();
         JPanel mp = new MainPanel();
         JFrame jf = new JFrame();
         jf.setUndecorated(true);

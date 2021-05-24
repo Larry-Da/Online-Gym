@@ -56,7 +56,9 @@ public class UIStyle
     public static final String Contact_background = UIStyle.class.getClassLoader().getResource("Contact.jpeg").getPath();
     public static final String VirtualClass_pause = UIStyle.class.getClassLoader().getResource("pause.png").getPath();
     public static final String VirtualClass_favorite = UIStyle.class.getClassLoader().getResource("favorite.png").getPath();
-
+    public static final String HomePanel_register = UIStyle.class.getClassLoader().getResource("register.png").getPath();
+    public static String[] categories;
+    public static String[] memberships;
 
     public UIStyle()
     {
@@ -65,6 +67,15 @@ public class UIStyle
         ScreenHeight = (int)dim.getHeight();
         width = 1120;
         height = 700;
+    }
+    public static void updateSetting()
+    {
+        String[] x = {"Category", "Bicycle Training", "HITT", "Flexibility", "Yoga", "Strength", "Weight Loss"};
+        String[] y = {"Level", "All", "lv1", "lv2", "lv3", "lv4", "lv5"};
+
+        categories = x;
+        memberships = y;
+
     }
 
 }
