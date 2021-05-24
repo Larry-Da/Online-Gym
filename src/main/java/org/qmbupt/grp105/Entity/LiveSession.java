@@ -13,13 +13,14 @@ public class LiveSession {
     private String Customer_cusId;
     private String Coach_coachId;
     private int availableNum;
+    private int price;
 
 
     public static String[] getAllAttributes() {
         return new String[]{"liveSessionId","url","rating","category","startTime","endTime","likes","viewCounts","Customer_cusId","Coach_coachId","availableNum"};
     }
     public LiveSession(String liveSessionId, Double rating, String category, Date startTime, Date endTime,
-                       int likes, int viewCounts, String customer_cusId, String coach_coachId, int availableNum) {
+                       int likes, int viewCounts, String customer_cusId, String coach_coachId, int availableNum, int price) {
         this.liveSessionId = liveSessionId;
         this.rating = rating;
         this.category = category;
@@ -30,10 +31,7 @@ public class LiveSession {
         Customer_cusId = customer_cusId;
         Coach_coachId = coach_coachId;
         this.availableNum = availableNum;
-    }
-    public static LiveSession getSample()
-    {
-        return new LiveSession("1", 8.1, "Yoga", new Date(100000000), new Date(1000000000), 20, 100, "", "2", 10);
+        this.price = price;
     }
 
 
@@ -146,6 +144,7 @@ public class LiveSession {
         session.sessionId = this.liveSessionId;
         session.viewsCount = this.viewCounts;
         session.startTime = this.startTime;
+        session.price = this.price;
         return session;
     }
 }

@@ -35,7 +35,7 @@ public class AdministratorTest {
         System.out.println(v.toString());
 
         System.out.println("Begin to add a live session");
-        LiveSession liveSession = new LiveSession("lvs99",7.8, "HITT", new Date(), new Date(), 100, 120, "cs17","co3", 30);
+        LiveSession liveSession = new LiveSession("lvs99",7.8, "HITT", new Date(), new Date(), 100, 120, "cs17","co3", 30, 10);
         liveController.addSession(liveSession);
         int size = liveController.getAllLiveSessions().size();
         String id = "lvs" + size;
