@@ -31,6 +31,9 @@ public class Session {
     @JSONField(name = "availableNum")
     public int availableNum;
 
+    @JSONField(name = "price")
+    public int price;
+
     public org.qmbupt.grp105.Entity.LiveSession converter() {
         return new org.qmbupt.grp105.Entity.LiveSession(this.sessionId, this.rating, this.category, this.startTime,
                 this.endTime, this.likes, this.viewsCount, null, this.coachId, this.availableNum);

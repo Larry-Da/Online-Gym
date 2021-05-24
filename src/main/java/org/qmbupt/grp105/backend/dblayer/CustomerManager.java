@@ -9,6 +9,7 @@ import java.util.GregorianCalendar;
 import com.alibaba.fastjson.*;
 
 import org.qmbupt.grp105.backend.model.Customer;
+import org.qmbupt.grp105.backend.model.Session;
 import org.qmbupt.grp105.backend.model.Transaction;
 
 public class CustomerManager {
@@ -136,10 +137,33 @@ public class CustomerManager {
      * @param sessionId
      * @throws IOException
      */
-    public static void bookSession(String cusId, String sessionId) throws IOException {
+    public static boolean bookSession(String cusId, String sessionId) throws IOException {
+
+        Session session = SessionManager.getSessionById(sessionId);
+        int reduceMount = session.price;
+
+        /**
+         * Try to decrease balance
+         */
+        if (decreaseBalance(cusId, reduceMount) != reduceMount) {
+            return false;
+        }
+
+        /**
+         * Create and add transaction
+         */
+        Transaction transaction = new Transaction();
+        transaction.transactionId = null;
+        transaction.cusId = cusId;
+        transaction.mount = reduceMount;
+        transaction.time = new Date();
+        TransactionManager.writeTransaction(transaction);
+
         Customer customer = getCustomerById(cusId);
         customer.bookedSessions.add(sessionId);
         DataManager.getInstance().commit();
+
+        return true;
     }
 
     /**
