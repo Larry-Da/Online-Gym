@@ -36,8 +36,9 @@ public class EmailEntry extends JPanel implements MouseListener
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            picPath = UIStyle.class.getClassLoader().getResource("default_user.png").getPath();
         }
+
 
         JLabel picturePreview = new Picture(picPath, picHeight, picHeight);
         this.add(picturePreview);

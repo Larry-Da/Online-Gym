@@ -284,4 +284,42 @@ public class VideoController {
         });
         return hotVideos;
     }
+    public String[] getCategories()
+    {
+        ArrayList<String> res = null;
+        try
+        {
+            res = SettingsManager.getSetting("category");
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        ArrayList<String> temp = new ArrayList<String>(res);
+        temp.add(0, "Category");
+        if(temp.size() > 7)
+        {
+            temp.add(1, "All");
+        }
+        String[] ret = new String[temp.size()];
+        return temp.toArray(ret);
+    }
+    public String[] getMemberships() {
+        {
+            ArrayList<String> res = null;
+            try {
+                res = SettingsManager.getSetting("membership");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            ArrayList<String> temp = new ArrayList<String>(res);
+            temp.add(0, "Level");
+            if(temp.size() > 7)
+            {
+                temp.add(1, "All");
+            }
+            String[] ret = new String[temp.size()];
+            return temp.toArray(ret);
+        }
+    }
 }

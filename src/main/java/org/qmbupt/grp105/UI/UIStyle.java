@@ -1,5 +1,6 @@
 package org.qmbupt.grp105.UI;
 
+import org.qmbupt.grp105.Controller.VideoController;
 import org.w3c.dom.ls.LSParserFilter;
 
 import java.awt.*;
@@ -70,11 +71,8 @@ public class UIStyle
     }
     public static void updateSetting()
     {
-        String[] x = {"Category", "Bicycle Training", "HITT", "Flexibility", "Yoga", "Strength", "Weight Loss"};
-        String[] y = {"Level", "All", "lv1", "lv2", "lv3", "lv4", "lv5"};
-
-        categories = x;
-        memberships = y;
+        categories = VideoController.getController().getCategories();
+        memberships = VideoController.getController().getMemberships();
 
     }
 
