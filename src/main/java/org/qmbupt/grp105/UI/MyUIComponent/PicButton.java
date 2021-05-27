@@ -13,10 +13,7 @@ public class PicButton extends JLabel
         img = new ImageIcon(path);
         this.width = width;
         this.height = height;
-        //icon.setImage(icon.getImage().getScaledInstance(width,height, Image.SCALE_DEFAULT));
-        //setIcon(icon);
-        //setHorizontalAlignment(JLabel.CENTER);
-        //setSize(width, height);
+
         int x = centerx - width / 2;
         int y = centery - height / 2;
         setBounds(x, y, width, height);

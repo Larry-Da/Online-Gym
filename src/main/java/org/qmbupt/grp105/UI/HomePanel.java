@@ -98,23 +98,10 @@ class RegisterPanel extends JPanel
 
         this.setLayout(null);
 
-//        private int age;
-//        private char gender;
-//        private Date dateOfBirth;
-//        private String membershipLevel;//不确定是String类型的
-//        private String expiredTime;//会员剩余时间
-//        private int balance;//余额
-//        private int points; //积分
-//        private ArrayList<String> videosHistory;
-//        private ArrayList<String> favouriteVideos;
-//        //private String exerciseLevel;
-//        protected String name;
-//        protected String password;
-//        protected String phoneNo;
-//        protected String email;
 
         DynamicText gender_upper = new DynamicText((int)(buttonStartX + 0.02*buttonWidth), buttonStartY, "left", Color.WHITE, Color.BLACK, "Gender", buttonWidth, buttonHeight, UIStyle.NORMAL_ARIAL_BOLD);
         gender_lower = new InputText(buttonStartX, buttonStartY + buttonHeight, buttonWidth, buttonHeight , 15, false, "");
+
         this.add(gender_upper);
         this.add(gender_lower);
 

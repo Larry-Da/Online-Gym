@@ -30,16 +30,6 @@ public class InputText extends JTextField
 
 
     }
-    public InputText(Font font, boolean arc, int x, int y, int width, int height, int numberOfChars, boolean autoVanish, String defaultText)
-    {
-        super(numberOfChars);
-        this.font = font;
-        this.arc = arc;
-        setParameters(x, y, width, height, defaultText);
-        setEvent(autoVanish, defaultText);
-
-
-    }
     public InputText(int width, int height, int numberOfChars, boolean autoVanish, int centerX, int centerY, String defaultText, boolean arc)
     {
         super(numberOfChars);
@@ -51,22 +41,6 @@ public class InputText extends JTextField
         setEvent(autoVanish, defaultText);
     }
 
-    public InputText(int x, int y, int width, int height, int numberOfChars, boolean autoVanish, String defaultText, Color textColor_unselected, Color textColor_selected, Color backgroundColor_unselected, Color backgroundColor_selected, Color borderColor_unselected, Color borderColor_selected)
-    {
-        super(numberOfChars);
-
-        this.borderColor_selected = borderColor_selected;
-        this.borderColor_unselected = borderColor_unselected;
-        this.textColor_selected = textColor_selected;
-        this.textColor_unselected = textColor_unselected;
-        this.backgroundColor_selected = backgroundColor_selected;
-        this.backgroundColor_unselected = backgroundColor_unselected;
-
-        setParameters(x, y, width, height, defaultText);
-        setEvent(autoVanish, defaultText);
-
-
-    }
     void setParameters(int x, int y, int width, int height, String text)
     {
         setOpaque(false);

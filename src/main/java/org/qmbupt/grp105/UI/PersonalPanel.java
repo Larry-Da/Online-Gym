@@ -431,63 +431,11 @@ class CustomerMembershipPanel extends JPanel
 
     }
 }
-class EmailOnePage extends JPanel
-{
 
-    public EmailOnePage(ArrayList<Mail> emails, CardLayout cards, MainPanel mainPanel, CardLayout innerCards, JPanel contentPanel, int page, int pageMax)
-    {
-        int panelWidth = (int) (UIStyle.width * 0.76);
-        int panelHeight = (int) (UIStyle.height - UIStyle.barHeight - 160);
-
-        setBounds((int) (UIStyle.width * 0.24), UIStyle.barHeight, panelWidth, panelHeight);
-        setBackground(Color.WHITE);
-        this.setLayout(null);
-        for(int i = (page - 1) * 3; i < emails.size() && i < page * 3; i++) {
-            EmailEntry test = new EmailEntry(emails.get(i), 0, 150 * (i % 3), cards, mainPanel);
-            this.add(test);
-        }
-
-        JSlider pages = new JSlider(1, pageMax + 1, page);
-
-        int pagesWidth = 100;
-        int pagesHeight = 50;
-        pages.setBounds((int)(panelWidth / 2 - pagesWidth / 2), (int)(panelHeight - pagesHeight+7), pagesWidth,pagesHeight);
-
-        this.add(pages);
-        // 设置主刻度间隔
-        pages.setMajorTickSpacing(3);
-
-        // 设置次刻度间隔
-        pages.setMinorTickSpacing(1);
-        pages.setForeground(Color.white);
-        pages.setBackground(Color.white);
-//        pages.setPaintTicks(true);
-//        pages.setPaintLabels(true);
-        pages.setSnapToTicks(true);
-        JTextField pageShow = new JTextField();
-        pageShow.setBounds((int)(panelWidth / 2 + pagesWidth / 1.5), (int)(panelHeight - pagesHeight + 17), 30, 30);
-        this.add(pageShow);
-        pageShow.setText(page + "");
-        pages.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                pageShow.setText(pages.getValue() + "");
-            }
-        });
-        pageShow.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                innerCards.show(contentPanel, pageShow.getText() + "");
-                pageShow.setText(page + "");
-                pages.setValue(page);
-            }
-        });
-    }
-}
 class EmailPanel extends JPanel
 {
     private int pageMax;
-    ArrayList<EmailOnePage> resultPanels = new ArrayList<>();
+    ArrayList<JPanel> resultPanels = new ArrayList<>();
     private TextButton send;
 
     public EmailPanel(ArrayList<Mail> emails, CardLayout cards, MainPanel mainPanel, boolean isAdvice)
@@ -515,7 +463,7 @@ class EmailPanel extends JPanel
         contentPanel.setLayout(innerCards);
         this.add(contentPanel);
 
-        for(EmailOnePage i : resultPanels)
+        for(JPanel i : resultPanels)
         {
             contentPanel.remove(i);
         }
@@ -523,11 +471,56 @@ class EmailPanel extends JPanel
 
         for(int i = 0; i <= pageMax; i++)
         {
-            resultPanels.add(new EmailOnePage(emails, cards, mainPanel, innerCards, contentPanel, i + 1, pageMax));
+            int finalI = i;
+            resultPanels.add(new JPanel(){
+                {
+                    int page = finalI + 1;
+                    int panelWidth = (int) (UIStyle.width * 0.76);
+                    int panelHeight = (int) (UIStyle.height - UIStyle.barHeight - 160);
+
+                    setBounds((int) (UIStyle.width * 0.24), UIStyle.barHeight, panelWidth, panelHeight);
+                    setBackground(Color.WHITE);
+                    this.setLayout(null);
+                    for(int i = (page - 1) * 3; i < emails.size() && i < page * 3; i++) {
+                        EmailEntry test = new EmailEntry(emails.get(i), 0, 150 * (i % 3), cards, mainPanel);
+                        this.add(test);
+                    }
+
+                    JSlider pages = new JSlider(1, pageMax + 1, page);
+
+                    int pagesWidth = 100;
+                    int pagesHeight = 50;
+                    pages.setBounds((int)(panelWidth / 2 - pagesWidth / 2), (int)(panelHeight - pagesHeight+7), pagesWidth,pagesHeight);
+
+                    this.add(pages);
+                    pages.setMajorTickSpacing(3);
+                    pages.setMinorTickSpacing(1);
+                    pages.setForeground(Color.white);
+                    pages.setBackground(Color.white);
+                    pages.setSnapToTicks(true);
+                    JTextField pageShow = new JTextField();
+                    pageShow.setBounds((int)(panelWidth / 2 + pagesWidth / 1.5), (int)(panelHeight - pagesHeight + 17), 30, 30);
+                    this.add(pageShow);
+                    pageShow.setText(page + "");
+                    pages.addChangeListener(new ChangeListener() {
+                        @Override
+                        public void stateChanged(ChangeEvent e) {
+                            pageShow.setText(pages.getValue() + "");
+                        }
+                    });
+                    pageShow.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            innerCards.show(contentPanel, pageShow.getText() + "");
+                            pageShow.setText(page + "");
+                            pages.setValue(page);
+                        }
+                    });
+                }
+            });
             contentPanel.add(resultPanels.get(i), i + 1 + "");
         }
         innerCards.first(contentPanel);
-
 
 
         send = new TextButton((int) (panelWidth / 2), 100, UIStyle.BLUE_BUTTRESS, Color.white, "Send Email", 200, 40, "normal", true);
@@ -549,7 +542,7 @@ class EmailPanel extends JPanel
 class CustomerBookedLivePanel extends JPanel
 {
     private int pageMax;
-    private ArrayList<CustomerBookedLiveOnePage> resultPanels = new ArrayList<>();
+    private ArrayList<JPanel> resultPanels = new ArrayList<>();
     public CustomerBookedLivePanel(ArrayList<LiveSession> liveSessions)
     {
         pageMax = liveSessions.size() / 4;
@@ -559,85 +552,79 @@ class CustomerBookedLivePanel extends JPanel
         CardLayout innerCards = new CardLayout();
         this.setLayout(innerCards);
 
-        for(CustomerBookedLiveOnePage i : resultPanels)
+        for(JPanel i : resultPanels)
         {
             this.remove(i);
         }
         resultPanels.clear();
         for(int i = 0; i <= pageMax; i++)
         {
-            resultPanels.add(new CustomerBookedLiveOnePage(liveSessions, innerCards, this, i + 1, pageMax));
+            int finalI = i;
+            resultPanels.add(new JPanel(){
+                {
+                    int page = finalI + 1;
+                    String expiredContent[] = {"Expired", "Yes", "No"};
+                    FilterBox expired = new FilterBox(50, expiredContent, "light");
+                    this.add(expired);
+                    FilterBox categoryFilter = new FilterBox(10, UIStyle.categories, "light");
+                    this.add(categoryFilter);
+
+                    int panelWidth = (int) (UIStyle.width * 0.76);
+                    int panelHeight = (int) (UIStyle.height - UIStyle.barHeight);
+                    TextButton applyChange = new TextButton(panelWidth / 2, 110, UIStyle.BLUE_BUTTRESS, Color.white, "Apply Change", 150, 25, "tiny", true);
+                    this.add(applyChange);
+                    setBounds((int) (UIStyle.width * 0.24), UIStyle.barHeight, panelWidth, panelHeight);
+                    setBackground(Color.WHITE);
+                    this.setLayout(null);
+
+                    for(int i = (page - 1) * 3; i < liveSessions.size() && i < page * 3; i++) {
+                        LivePanel test = new LivePanel(liveSessions.get(i), 0, 150 * (i % 3) + 130, "large");
+                        this.add(test);
+                    }
+
+                    JSlider pages = new JSlider(1, pageMax + 1, page);
+
+                    int pagesWidth = 100;
+                    int pagesHeight = 50;
+                    pages.setBounds((int)(panelWidth / 2 - pagesWidth / 2), (int)(panelHeight - pagesHeight+7), pagesWidth,pagesHeight);
+
+                    this.add(pages);
+                    pages.setMajorTickSpacing(3);
+
+                    pages.setMinorTickSpacing(1);
+                    pages.setForeground(Color.white);
+                    pages.setBackground(Color.white);
+                    pages.setSnapToTicks(true);
+                    JTextField pageShow = new JTextField();
+                    pageShow.setBounds((int)(panelWidth / 2 + pagesWidth / 1.5), (int)(panelHeight - pagesHeight + 17), 30, 30);
+                    this.add(pageShow);
+                    pageShow.setText(page + "");
+                    pages.addChangeListener(new ChangeListener() {
+                        @Override
+                        public void stateChanged(ChangeEvent e) {
+                            pageShow.setText(pages.getValue() + "");
+                        }
+                    });
+                    pageShow.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            innerCards.show(CustomerBookedLivePanel.this, pageShow.getText() + "");
+                            pageShow.setText(page + "");
+                            pages.setValue(page);
+                        }
+                    });
+                }
+            });
             this.add(resultPanels.get(i), i + 1 + "");
         }
         innerCards.first(this);
-
-
     }
 }
-class CustomerBookedLiveOnePage extends JPanel
-{
-    public CustomerBookedLiveOnePage(ArrayList<LiveSession> liveSessions, CardLayout innerCards, JPanel contentPanel, int page, int pageMax)
-    {
-        String expiredContent[] = {"Expired", "Yes", "No"};
-        FilterBox expired = new FilterBox(50, expiredContent, "light");
-        this.add(expired);
-        FilterBox categoryFilter = new FilterBox(10, UIStyle.categories, "light");
-        this.add(categoryFilter);
 
-        int panelWidth = (int) (UIStyle.width * 0.76);
-        int panelHeight = (int) (UIStyle.height - UIStyle.barHeight);
-        TextButton applyChange = new TextButton(panelWidth / 2, 110, UIStyle.BLUE_BUTTRESS, Color.white, "Apply Change", 150, 25, "tiny", true);
-        this.add(applyChange);
-        setBounds((int) (UIStyle.width * 0.24), UIStyle.barHeight, panelWidth, panelHeight);
-        setBackground(Color.WHITE);
-        this.setLayout(null);
-
-        for(int i = (page - 1) * 3; i < liveSessions.size() && i < page * 3; i++) {
-            LivePanel test = new LivePanel(liveSessions.get(i), 0, 150 * (i % 3) + 130, "large");
-            this.add(test);
-        }
-
-        JSlider pages = new JSlider(1, pageMax + 1, page);
-
-        int pagesWidth = 100;
-        int pagesHeight = 50;
-        pages.setBounds((int)(panelWidth / 2 - pagesWidth / 2), (int)(panelHeight - pagesHeight+7), pagesWidth,pagesHeight);
-
-        this.add(pages);
-        // 设置主刻度间隔
-        pages.setMajorTickSpacing(3);
-
-        // 设置次刻度间隔
-        pages.setMinorTickSpacing(1);
-        pages.setForeground(Color.white);
-        pages.setBackground(Color.white);
-//        pages.setPaintTicks(true);
-//        pages.setPaintLabels(true);
-        pages.setSnapToTicks(true);
-        JTextField pageShow = new JTextField();
-        pageShow.setBounds((int)(panelWidth / 2 + pagesWidth / 1.5), (int)(panelHeight - pagesHeight + 17), 30, 30);
-        this.add(pageShow);
-        pageShow.setText(page + "");
-        pages.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                pageShow.setText(pages.getValue() + "");
-            }
-        });
-        pageShow.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                innerCards.show(contentPanel, pageShow.getText() + "");
-                pageShow.setText(page + "");
-                pages.setValue(page);
-            }
-        });
-    }
-}
 class VideoHistoryPanel extends JPanel
 {
     private int pageMax;
-    ArrayList<VideoHistoryOnePagePanel> resultPanels = new ArrayList<>();
+    ArrayList<JPanel> resultPanels = new ArrayList<>();
 
     public VideoHistoryPanel(ArrayList<Video> videos, CardLayout cards, MainPanel mainPanel)
     {
@@ -648,76 +635,72 @@ class VideoHistoryPanel extends JPanel
         CardLayout innerCards = new CardLayout();
         this.setLayout(innerCards);
 
-        for(VideoHistoryOnePagePanel i : resultPanels)
+        for(JPanel i : resultPanels)
         {
             this.remove(i);
         }
         resultPanels.clear();
         for(int i = 0; i <= pageMax; i++)
         {
-            resultPanels.add(new VideoHistoryOnePagePanel(videos, cards, mainPanel, innerCards, this, i + 1, pageMax));
+            int finalI = i;
+            resultPanels.add(new JPanel(){
+                {
+                    int page = finalI + 1;
+                    int panelWidth = (int) (UIStyle.width * 0.76);
+                    int panelHeight = (int) (UIStyle.height - UIStyle.barHeight);
+
+                    setBounds((int) (UIStyle.width * 0.24), UIStyle.barHeight, panelWidth, panelHeight);
+                    setBackground(Color.WHITE);
+                    this.setLayout(null);
+                    for(int i = (page - 1) * 4; i < videos.size() && i < page * 4; i++) {
+                        VideoPanel test = new VideoPanel(videos.get(i), 0, 150 * (i % 4), mainPanel, cards, "large");
+                        this.add(test);
+                    }
+
+                    JSlider pages = new JSlider(1, pageMax + 1, page);
+
+                    int pagesWidth = 100;
+                    int pagesHeight = 50;
+                    pages.setBounds((int)(panelWidth / 2 - pagesWidth / 2), (int)(panelHeight - pagesHeight+7), pagesWidth,pagesHeight);
+
+                    this.add(pages);
+                    pages.setMajorTickSpacing(3);
+
+                    pages.setMinorTickSpacing(1);
+                    pages.setForeground(Color.white);
+                    pages.setBackground(Color.white);
+                    pages.setSnapToTicks(true);
+                    JTextField pageShow = new JTextField();
+                    pageShow.setBounds((int)(panelWidth / 2 + pagesWidth / 1.5), (int)(panelHeight - pagesHeight + 17), 30, 30);
+                    this.add(pageShow);
+                    pageShow.setText(page + "");
+                    pages.addChangeListener(new ChangeListener() {
+                        @Override
+                        public void stateChanged(ChangeEvent e) {
+                            pageShow.setText(pages.getValue() + "");
+                        }
+                    });
+                    pageShow.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            innerCards.show(VideoHistoryPanel.this, pageShow.getText() + "");
+                            pageShow.setText(page + "");
+                            pages.setValue(page);
+                        }
+                    });
+                }
+            });
             this.add(resultPanels.get(i), i + 1 + "");
         }
         innerCards.first(this);
 
     }
 }
-class VideoHistoryOnePagePanel extends JPanel
-{
-    public VideoHistoryOnePagePanel(ArrayList<Video> videos, CardLayout cards, MainPanel mainPanel, CardLayout innerCards, JPanel contentPanel, int page, int pageMax)
-    {
-        int panelWidth = (int) (UIStyle.width * 0.76);
-        int panelHeight = (int) (UIStyle.height - UIStyle.barHeight);
 
-        setBounds((int) (UIStyle.width * 0.24), UIStyle.barHeight, panelWidth, panelHeight);
-        setBackground(Color.WHITE);
-        this.setLayout(null);
-        for(int i = (page - 1) * 4; i < videos.size() && i < page * 4; i++) {
-            VideoPanel test = new VideoPanel(videos.get(i), 0, 150 * (i % 4), mainPanel, cards, "large");
-            this.add(test);
-        }
-
-        JSlider pages = new JSlider(1, pageMax + 1, page);
-
-        int pagesWidth = 100;
-        int pagesHeight = 50;
-        pages.setBounds((int)(panelWidth / 2 - pagesWidth / 2), (int)(panelHeight - pagesHeight+7), pagesWidth,pagesHeight);
-
-        this.add(pages);
-        // 设置主刻度间隔
-        pages.setMajorTickSpacing(3);
-
-        // 设置次刻度间隔
-        pages.setMinorTickSpacing(1);
-        pages.setForeground(Color.white);
-        pages.setBackground(Color.white);
-//        pages.setPaintTicks(true);
-//        pages.setPaintLabels(true);
-        pages.setSnapToTicks(true);
-        JTextField pageShow = new JTextField();
-        pageShow.setBounds((int)(panelWidth / 2 + pagesWidth / 1.5), (int)(panelHeight - pagesHeight + 17), 30, 30);
-        this.add(pageShow);
-        pageShow.setText(page + "");
-        pages.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                pageShow.setText(pages.getValue() + "");
-            }
-        });
-        pageShow.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                innerCards.show(contentPanel, pageShow.getText() + "");
-                pageShow.setText(page + "");
-                pages.setValue(page);
-            }
-        });
-    }
-}
 class FavoritePanel extends JPanel
 {
     private int pageMax;
-    ArrayList<FavoriteOnePage> resultPanels = new ArrayList<>();
+    ArrayList<JPanel> resultPanels = new ArrayList<>();
 
     public FavoritePanel(ArrayList<Video> videos, CardLayout cards, MainPanel mainPanel)
     {
@@ -728,14 +711,66 @@ class FavoritePanel extends JPanel
         CardLayout innerCards = new CardLayout();
         this.setLayout(innerCards);
 
-        for(FavoriteOnePage i : resultPanels)
+        for(JPanel i : resultPanels)
         {
             this.remove(i);
         }
         resultPanels.clear();
         for(int i = 0; i <= pageMax; i++)
         {
-            resultPanels.add(new FavoriteOnePage(videos, cards, mainPanel, innerCards, this, i + 1, pageMax));
+            int finalI = i;
+            resultPanels.add(new JPanel()
+            {
+                {
+                    int page = finalI + 1;
+                    int panelWidth = (int) (UIStyle.width * 0.76);
+                    int panelHeight = (int) (UIStyle.height - UIStyle.barHeight);
+
+                    setBounds((int) (UIStyle.width * 0.24), UIStyle.barHeight, panelWidth, panelHeight);
+                    setBackground(Color.WHITE);
+                    this.setLayout(null);
+                    for(int i = (page - 1) * 4; i < videos.size() && i < page * 4; i++) {
+                        VideoPanel test = new VideoPanel(videos.get(i), 0, 150 * (i % 4), mainPanel, cards, "large");
+                        this.add(test);
+                    }
+
+                    JSlider pages = new JSlider(1, pageMax + 1, page);
+
+                    int pagesWidth = 100;
+                    int pagesHeight = 50;
+                    pages.setBounds((int)(panelWidth / 2 - pagesWidth / 2), (int)(panelHeight - pagesHeight+7), pagesWidth,pagesHeight);
+
+                    this.add(pages);
+                    // 设置主刻度间隔
+                    pages.setMajorTickSpacing(3);
+
+                    // 设置次刻度间隔
+                    pages.setMinorTickSpacing(1);
+                    pages.setForeground(Color.white);
+                    pages.setBackground(Color.white);
+//        pages.setPaintTicks(true);
+//        pages.setPaintLabels(true);
+                    pages.setSnapToTicks(true);
+                    JTextField pageShow = new JTextField();
+                    pageShow.setBounds((int)(panelWidth / 2 + pagesWidth / 1.5), (int)(panelHeight - pagesHeight + 17), 30, 30);
+                    this.add(pageShow);
+                    pageShow.setText(page + "");
+                    pages.addChangeListener(new ChangeListener() {
+                        @Override
+                        public void stateChanged(ChangeEvent e) {
+                            pageShow.setText(pages.getValue() + "");
+                        }
+                    });
+                    pageShow.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            innerCards.show(FavoritePanel.this, pageShow.getText() + "");
+                            pageShow.setText(page + "");
+                            pages.setValue(page);
+                        }
+                    });
+                }
+            });
             this.add(resultPanels.get(i), i + 1 + "");
         }
         innerCards.first(this);
@@ -744,58 +779,6 @@ class FavoritePanel extends JPanel
 
     }
 
-}
-class FavoriteOnePage extends JPanel
-{
-    public FavoriteOnePage(ArrayList<Video> videos, CardLayout cards, MainPanel mainPanel, CardLayout innerCards, JPanel contentPanel, int page, int pageMax)
-    {
-        int panelWidth = (int) (UIStyle.width * 0.76);
-        int panelHeight = (int) (UIStyle.height - UIStyle.barHeight);
-
-        setBounds((int) (UIStyle.width * 0.24), UIStyle.barHeight, panelWidth, panelHeight);
-        setBackground(Color.WHITE);
-        this.setLayout(null);
-        for(int i = (page - 1) * 4; i < videos.size() && i < page * 4; i++) {
-            VideoPanel test = new VideoPanel(videos.get(i), 0, 150 * (i % 4), mainPanel, cards, "large");
-            this.add(test);
-        }
-
-        JSlider pages = new JSlider(1, pageMax + 1, page);
-
-        int pagesWidth = 100;
-        int pagesHeight = 50;
-        pages.setBounds((int)(panelWidth / 2 - pagesWidth / 2), (int)(panelHeight - pagesHeight+7), pagesWidth,pagesHeight);
-
-        this.add(pages);
-        // 设置主刻度间隔
-        pages.setMajorTickSpacing(3);
-
-        // 设置次刻度间隔
-        pages.setMinorTickSpacing(1);
-        pages.setForeground(Color.white);
-        pages.setBackground(Color.white);
-//        pages.setPaintTicks(true);
-//        pages.setPaintLabels(true);
-        pages.setSnapToTicks(true);
-        JTextField pageShow = new JTextField();
-        pageShow.setBounds((int)(panelWidth / 2 + pagesWidth / 1.5), (int)(panelHeight - pagesHeight + 17), 30, 30);
-        this.add(pageShow);
-        pageShow.setText(page + "");
-        pages.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                pageShow.setText(pages.getValue() + "");
-            }
-        });
-        pageShow.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                innerCards.show(contentPanel, pageShow.getText() + "");
-                pageShow.setText(page + "");
-                pages.setValue(page);
-            }
-        });
-    }
 }
 
 class AdministratorPanel extends JPanel
@@ -937,7 +920,7 @@ class AdministratorMembershipPanel extends JPanel
 {
 
     private int pageMax;
-    private ArrayList<AdministratorMembershipOnePage> resultPanels = new ArrayList<>();
+    private ArrayList<JPanel> resultPanels = new ArrayList<>();
     private ArrayList<Customer> customersData = new ArrayList<>();
     private JPanel contentPanel = new JPanel();
     private CardLayout innerCards;
@@ -1022,7 +1005,7 @@ class AdministratorMembershipPanel extends JPanel
             cnt++;
         }
         customersData = PersonalController.getController().filterByGender(customersData, genderKey);
-        for(AdministratorMembershipOnePage i : resultPanels)
+        for(JPanel i : resultPanels)
         {
             contentPanel.remove(i);
         }
@@ -1031,112 +1014,112 @@ class AdministratorMembershipPanel extends JPanel
 
         for(int i = 0; i <= pageMax; i++)
         {
-            resultPanels.add(new AdministratorMembershipOnePage(customersData, innerCards, contentPanel, i + 1, pageMax));
+            int finalI = i;
+            resultPanels.add(new JPanel(){
+                {
+                    int page = finalI + 1;
+                    int contentStart = 185;
+                    int panelWidth = (int) (UIStyle.width * 0.76);
+                    int panelHeight = (int)(UIStyle.height - UIStyle.barHeight - contentStart);
+                    setBounds(0, 0, panelWidth, panelHeight);
+                    setBackground(Color.WHITE);
+
+                    this.setLayout(null);
+
+                    int itemsPerPage = 12;
+
+                    String[] column = {"CusId", "Name", "Age", "Gender", "PhoneNo", "Email", "MembershipLevel", "Balance", "Points", "DateOfBirth", "ExpiredTime"};
+                    String[][] values = new String[itemsPerPage][column.length];
+                    String[] titles = {"ID", "Name", "Age", "Gender", "Phone", "Email", "Level", "Balance", "Points", "DoB", "Expire"};
+
+                    //int numOfCustomer = controller.getNumOfAllCustomers();
+                    int index = 0;
+                    int titleWidth = panelWidth / 11;
+                    for(String i : titles)
+                    {
+                        this.add(new DynamicText(index * titleWidth, 10, "mid", Color.white, UIStyle.GRAY_BUTTRESS, i, titleWidth, 20, UIStyle.SMALL_FONT));
+                        index++;
+                    }
+
+                    //ArrayList<Customer> cusList = new ArrayList<>(controller.getCustomerByPage(0, numOfCustomer - 1));
+
+                    int cnt = 0;
+                    for (int i = (page - 1) * itemsPerPage ; i < page * itemsPerPage && i < customersData.size(); i++)
+                    {
+                        for(int j = 0; j < column.length; j++)
+                        {
+                            try {
+                                if(column[j].equals("Age") || column[j].equals("Balance") || column[j].equals("Points"))
+                                    values[cnt][j] = ""+(int)(customersData.get(i).getClass().getMethod("get" + column[j]).invoke(customersData.get(i)));
+                                else if(column[j].equals("DateOfBirth"))
+                                    values[cnt][j] = ((Date)(customersData.get(i).getClass().getMethod("get" + column[j]).invoke(customersData.get(i)))).toString();
+                                else if(column[j].equals("Gender"))
+                                    values[cnt][j] = ((char)(customersData.get(i).getClass().getMethod("get" + column[j]).invoke(customersData.get(i)))) + "";
+                                else
+                                    values[cnt][j] = (String)(customersData.get(i).getClass().getMethod("get" + column[j]).invoke(customersData.get(i)));
+                            }
+                            catch(Exception e)
+                            {
+                                e.printStackTrace();
+                            }
+                        }
+                        cnt++;
+                    }
+                    int pagesWidth = 100;
+                    int pagesHeight = 50;
+                    TableList customerTable = new TableList(column, values, Color.BLACK, Color.WHITE, UIStyle.BLUE_SHALLOW, 0, 35, getWidth(), panelHeight - pagesHeight - 15);
+
+                    this.add(customerTable);
+
+                    JSlider pages = new JSlider(1, pageMax + 1, page);
+
+
+                    pages.setBounds((int)(panelWidth / 2 - pagesWidth / 2), (int)(panelHeight - pagesHeight+7), pagesWidth,pagesHeight);
+                    //pages.setBounds((int)(panelWidth / 2 - pagesWidth / 2), 0, pagesWidth,pagesHeight);
+
+                    this.add(pages);
+                    // 设置主刻度间隔
+                    pages.setMajorTickSpacing(3);
+
+                    // 设置次刻度间隔
+                    pages.setMinorTickSpacing(1);
+                    pages.setForeground(Color.white);
+                    pages.setBackground(Color.white);
+//        pages.setPaintTicks(true);
+//        pages.setPaintLabels(true);
+                    pages.setSnapToTicks(true);
+                    JTextField pageShow = new JTextField();
+                    pageShow.setBounds((int)(panelWidth / 2 + pagesWidth / 1.5), (int)(panelHeight - pagesHeight + 17), 30, 30);
+                    this.add(pageShow);
+                    pageShow.setText(page + "");
+                    pages.addChangeListener(new ChangeListener() {
+                        @Override
+                        public void stateChanged(ChangeEvent e) {
+                            pageShow.setText(pages.getValue() + "");
+                        }
+                    });
+                    pageShow.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            innerCards.show(contentPanel, pageShow.getText() + "");
+                            pageShow.setText(page + "");
+                            pages.setValue(page);
+                        }
+                    });
+                }
+
+            });
             contentPanel.add(resultPanels.get(i), i + 1 + "");
         }
         innerCards.first(contentPanel);
     }
 
 }
-class AdministratorMembershipOnePage extends JPanel
-{
-    public AdministratorMembershipOnePage(ArrayList<Customer> cusList, CardLayout innerCards, JPanel contentPanel, int page, int pageMax)
-    {
-        int contentStart = 185;
-        int panelWidth = (int) (UIStyle.width * 0.76);
-        int panelHeight = (int)(UIStyle.height - UIStyle.barHeight - contentStart);
-        setBounds(0, 0, panelWidth, panelHeight);
-        setBackground(Color.WHITE);
 
-        this.setLayout(null);
-
-        int itemsPerPage = 12;
-
-        String[] column = {"CusId", "Name", "Age", "Gender", "PhoneNo", "Email", "MembershipLevel", "Balance", "Points", "DateOfBirth", "ExpiredTime"};
-        String[][] values = new String[itemsPerPage][column.length];
-        String[] titles = {"ID", "Name", "Age", "Gender", "Phone", "Email", "Level", "Balance", "Points", "DoB", "Expire"};
-
-        //int numOfCustomer = controller.getNumOfAllCustomers();
-        int index = 0;
-        int titleWidth = panelWidth / 11;
-        for(String i : titles)
-        {
-            this.add(new DynamicText(index * titleWidth, 10, "mid", Color.white, UIStyle.GRAY_BUTTRESS, i, titleWidth, 20, UIStyle.SMALL_FONT));
-            index++;
-        }
-
-        //ArrayList<Customer> cusList = new ArrayList<>(controller.getCustomerByPage(0, numOfCustomer - 1));
-
-        int cnt = 0;
-        for (int i = (page - 1) * itemsPerPage ; i < page * itemsPerPage && i < cusList.size(); i++)
-        {
-            for(int j = 0; j < column.length; j++)
-            {
-                try {
-                    if(column[j].equals("Age") || column[j].equals("Balance") || column[j].equals("Points"))
-                        values[cnt][j] = ""+(int)(cusList.get(i).getClass().getMethod("get" + column[j]).invoke(cusList.get(i)));
-                    else if(column[j].equals("DateOfBirth"))
-                        values[cnt][j] = ((Date)(cusList.get(i).getClass().getMethod("get" + column[j]).invoke(cusList.get(i)))).toString();
-                    else if(column[j].equals("Gender"))
-                        values[cnt][j] = ((char)(cusList.get(i).getClass().getMethod("get" + column[j]).invoke(cusList.get(i)))) + "";
-                    else
-                        values[cnt][j] = (String)(cusList.get(i).getClass().getMethod("get" + column[j]).invoke(cusList.get(i)));
-                }
-                catch(Exception e)
-                {
-                    e.printStackTrace();
-                }
-            }
-            cnt++;
-        }
-        int pagesWidth = 100;
-        int pagesHeight = 50;
-        TableList customerTable = new TableList(column, values, Color.BLACK, Color.WHITE, UIStyle.BLUE_SHALLOW, 0, 35, getWidth(), panelHeight - pagesHeight - 15);
-
-        this.add(customerTable);
-
-        JSlider pages = new JSlider(1, pageMax + 1, page);
-
-
-        pages.setBounds((int)(panelWidth / 2 - pagesWidth / 2), (int)(panelHeight - pagesHeight+7), pagesWidth,pagesHeight);
-        //pages.setBounds((int)(panelWidth / 2 - pagesWidth / 2), 0, pagesWidth,pagesHeight);
-
-        this.add(pages);
-        // 设置主刻度间隔
-        pages.setMajorTickSpacing(3);
-
-        // 设置次刻度间隔
-        pages.setMinorTickSpacing(1);
-        pages.setForeground(Color.white);
-        pages.setBackground(Color.white);
-//        pages.setPaintTicks(true);
-//        pages.setPaintLabels(true);
-        pages.setSnapToTicks(true);
-        JTextField pageShow = new JTextField();
-        pageShow.setBounds((int)(panelWidth / 2 + pagesWidth / 1.5), (int)(panelHeight - pagesHeight + 17), 30, 30);
-        this.add(pageShow);
-        pageShow.setText(page + "");
-        pages.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                pageShow.setText(pages.getValue() + "");
-            }
-        });
-        pageShow.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                innerCards.show(contentPanel, pageShow.getText() + "");
-                pageShow.setText(page + "");
-                pages.setValue(page);
-            }
-        });
-
-    }
-}
 class AdministratorVideoManagement extends JPanel
 {
     private int pageMax;
-    ArrayList<AdministratorVideoOnePage> resultPanels = new ArrayList<>();
+    ArrayList<JPanel> resultPanels = new ArrayList<>();
     JPanel contentPanel;
     CardLayout cards;
     MainPanel mainPanel;
@@ -1233,7 +1216,7 @@ class AdministratorVideoManagement extends JPanel
         videos1 = VideoController.getController().sort(videos1, sortKey);
 
         pageMax = (videos1.size() -1) / 3;
-        for(AdministratorVideoOnePage i : resultPanels)
+        for(JPanel i : resultPanels)
         {
             contentPanel.remove(i);
         }
@@ -1241,62 +1224,57 @@ class AdministratorVideoManagement extends JPanel
 
         for(int i = 0; i <= pageMax; i++)
         {
-            resultPanels.add(new AdministratorVideoOnePage(videos1, cards, mainPanel, innerCards, contentPanel, i + 1, pageMax));
+            int finalI = i;
+            resultPanels.add(new JPanel(){
+                {
+                    int page = finalI + 1;
+                    int panelWidth = (int) (UIStyle.width * 0.76);
+                    int panelHeight = (int) (UIStyle.height - UIStyle.barHeight - 160);
+
+                    setBounds((int) (UIStyle.width * 0.24), UIStyle.barHeight, panelWidth, panelHeight);
+                    setBackground(Color.WHITE);
+                    this.setLayout(null);
+                    for(int i = (page - 1) * 3; i < videos.size() && i < page * 3; i++) {
+                        VideoPanel test = new VideoPanel(videos.get(i), 0, 150 * (i % 3), mainPanel, cards, "manage");
+                        this.add(test);
+                    }
+
+                    JSlider pages = new JSlider(1, pageMax + 1, page);
+
+                    int pagesWidth = 100;
+                    int pagesHeight = 50;
+                    pages.setBounds((int)(panelWidth / 2 - pagesWidth / 2), (int)(panelHeight - pagesHeight+7), pagesWidth,pagesHeight);
+
+                    this.add(pages);
+                    pages.setMajorTickSpacing(3);
+
+                    pages.setMinorTickSpacing(1);
+                    pages.setForeground(Color.white);
+                    pages.setBackground(Color.white);
+                    pages.setSnapToTicks(true);
+                    JTextField pageShow = new JTextField();
+                    pageShow.setBounds((int)(panelWidth / 2 + pagesWidth / 1.5), (int)(panelHeight - pagesHeight + 17), 30, 30);
+                    this.add(pageShow);
+                    pageShow.setText(page + "");
+                    pages.addChangeListener(new ChangeListener() {
+                        @Override
+                        public void stateChanged(ChangeEvent e) {
+                            pageShow.setText(pages.getValue() + "");
+                        }
+                    });
+                    pageShow.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            innerCards.show(contentPanel, pageShow.getText() + "");
+                            pageShow.setText(page + "");
+                            pages.setValue(page);
+                        }
+                    });
+                }
+            });
             contentPanel.add(resultPanels.get(i), i + 1 + "");
         }
         innerCards.first(contentPanel);
-    }
-}
-class AdministratorVideoOnePage extends JPanel
-{
-    public AdministratorVideoOnePage(ArrayList<Video> videos, CardLayout cards, MainPanel mainPanel, CardLayout innerCards, JPanel contentPanel, int page, int pageMax)
-    {
-        int panelWidth = (int) (UIStyle.width * 0.76);
-        int panelHeight = (int) (UIStyle.height - UIStyle.barHeight - 160);
-
-        setBounds((int) (UIStyle.width * 0.24), UIStyle.barHeight, panelWidth, panelHeight);
-        setBackground(Color.WHITE);
-        this.setLayout(null);
-        for(int i = (page - 1) * 3; i < videos.size() && i < page * 3; i++) {
-            VideoPanel test = new VideoPanel(videos.get(i), 0, 150 * (i % 3), mainPanel, cards, "manage");
-            this.add(test);
-        }
-
-        JSlider pages = new JSlider(1, pageMax + 1, page);
-
-        int pagesWidth = 100;
-        int pagesHeight = 50;
-        pages.setBounds((int)(panelWidth / 2 - pagesWidth / 2), (int)(panelHeight - pagesHeight+7), pagesWidth,pagesHeight);
-
-        this.add(pages);
-        // 设置主刻度间隔
-        pages.setMajorTickSpacing(3);
-
-        // 设置次刻度间隔
-        pages.setMinorTickSpacing(1);
-        pages.setForeground(Color.white);
-        pages.setBackground(Color.white);
-//        pages.setPaintTicks(true);
-//        pages.setPaintLabels(true);
-        pages.setSnapToTicks(true);
-        JTextField pageShow = new JTextField();
-        pageShow.setBounds((int)(panelWidth / 2 + pagesWidth / 1.5), (int)(panelHeight - pagesHeight + 17), 30, 30);
-        this.add(pageShow);
-        pageShow.setText(page + "");
-        pages.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                pageShow.setText(pages.getValue() + "");
-            }
-        });
-        pageShow.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                innerCards.show(contentPanel, pageShow.getText() + "");
-                pageShow.setText(page + "");
-                pages.setValue(page);
-            }
-        });
     }
 }
 
@@ -1501,7 +1479,7 @@ class CoachMembershipPanel extends JPanel
 }
 class CoachLivePanel extends JPanel {
     private int pageMax;
-    private ArrayList<CoachLiveOnePage> resultPanels = new ArrayList<>();
+    private ArrayList<JPanel> resultPanels = new ArrayList<>();
 
     public CoachLivePanel(ArrayList<LiveSession> liveSessions) {
         pageMax = liveSessions.size() / 4;
@@ -1511,75 +1489,74 @@ class CoachLivePanel extends JPanel {
         CardLayout innerCards = new CardLayout();
         this.setLayout(innerCards);
 
-        for (CoachLiveOnePage i : resultPanels) {
+        for (JPanel i : resultPanels) {
             this.remove(i);
         }
         resultPanels.clear();
         for (int i = 0; i <= pageMax; i++) {
-            resultPanels.add(new CoachLiveOnePage(liveSessions, innerCards, this, i + 1, pageMax));
+            int finalI = i;
+            resultPanels.add(new JPanel()
+            {
+                {
+                    int page = finalI + 1;
+                    String expiredContent[] = {"Expired", "Yes", "No"};
+                    FilterBox expired = new FilterBox(50, expiredContent, "light");
+                    this.add(expired);
+                    FilterBox categoryFilter = new FilterBox(10, UIStyle.categories, "light");
+                    this.add(categoryFilter);
+
+                    int panelWidth = (int) (UIStyle.width * 0.76);
+                    int panelHeight = (int) (UIStyle.height - UIStyle.barHeight);
+                    TextButton applyChange = new TextButton(panelWidth / 2, 110, UIStyle.BLUE_BUTTRESS, Color.white, "Apply Change", 150, 25, "tiny", true);
+                    this.add(applyChange);
+                    setBounds((int) (UIStyle.width * 0.24), UIStyle.barHeight, panelWidth, panelHeight);
+                    setBackground(Color.WHITE);
+                    this.setLayout(null);
+
+                    for (int i = (page - 1) * 3; i < liveSessions.size() && i < page * 3; i++) {
+                        LivePanel test = new LivePanel(liveSessions.get(i), 0, 150 * (i % 3) + 130, "large");
+                        this.add(test);
+                    }
+
+                    JSlider pages = new JSlider(1, pageMax + 1, page);
+
+                    int pagesWidth = 100;
+                    int pagesHeight = 50;
+                    pages.setBounds((int) (panelWidth / 2 - pagesWidth / 2), (int) (panelHeight - pagesHeight + 7), pagesWidth, pagesHeight);
+
+                    this.add(pages);
+                    pages.setMajorTickSpacing(3);
+                    pages.setMinorTickSpacing(1);
+                    pages.setForeground(Color.white);
+                    pages.setBackground(Color.white);
+
+                    pages.setSnapToTicks(true);
+                    JTextField pageShow = new JTextField();
+                    pageShow.setBounds((int) (panelWidth / 2 + pagesWidth / 1.5), (int) (panelHeight - pagesHeight + 17), 30, 30);
+                    this.add(pageShow);
+                    pageShow.setText(page + "");
+                    pages.addChangeListener(new ChangeListener() {
+                        @Override
+                        public void stateChanged(ChangeEvent e) {
+                            pageShow.setText(pages.getValue() + "");
+                        }
+                    });
+                    pageShow.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            innerCards.show(CoachLivePanel.this, pageShow.getText() + "");
+                            pageShow.setText(page + "");
+                            pages.setValue(page);
+                        }
+                    });
+                }
+            });
             this.add(resultPanels.get(i), i + 1 + "");
         }
         innerCards.first(this);
     }
 }
-class CoachLiveOnePage extends JPanel {
-    public CoachLiveOnePage(ArrayList<LiveSession> liveSessions, CardLayout innerCards, JPanel contentPanel, int page, int pageMax) {
-        String expiredContent[] = {"Expired", "Yes", "No"};
-        FilterBox expired = new FilterBox(50, expiredContent, "light");
-        this.add(expired);
-        FilterBox categoryFilter = new FilterBox(10, UIStyle.categories, "light");
-        this.add(categoryFilter);
 
-        int panelWidth = (int) (UIStyle.width * 0.76);
-        int panelHeight = (int) (UIStyle.height - UIStyle.barHeight);
-        TextButton applyChange = new TextButton(panelWidth / 2, 110, UIStyle.BLUE_BUTTRESS, Color.white, "Apply Change", 150, 25, "tiny", true);
-        this.add(applyChange);
-        setBounds((int) (UIStyle.width * 0.24), UIStyle.barHeight, panelWidth, panelHeight);
-        setBackground(Color.WHITE);
-        this.setLayout(null);
-
-        for (int i = (page - 1) * 3; i < liveSessions.size() && i < page * 3; i++) {
-            LivePanel test = new LivePanel(liveSessions.get(i), 0, 150 * (i % 3) + 130, "large");
-            this.add(test);
-        }
-
-        JSlider pages = new JSlider(1, pageMax + 1, page);
-
-        int pagesWidth = 100;
-        int pagesHeight = 50;
-        pages.setBounds((int) (panelWidth / 2 - pagesWidth / 2), (int) (panelHeight - pagesHeight + 7), pagesWidth, pagesHeight);
-
-        this.add(pages);
-        // 设置主刻度间隔
-        pages.setMajorTickSpacing(3);
-
-        // 设置次刻度间隔
-        pages.setMinorTickSpacing(1);
-        pages.setForeground(Color.white);
-        pages.setBackground(Color.white);
-//        pages.setPaintTicks(true);
-//        pages.setPaintLabels(true);
-        pages.setSnapToTicks(true);
-        JTextField pageShow = new JTextField();
-        pageShow.setBounds((int) (panelWidth / 2 + pagesWidth / 1.5), (int) (panelHeight - pagesHeight + 17), 30, 30);
-        this.add(pageShow);
-        pageShow.setText(page + "");
-        pages.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                pageShow.setText(pages.getValue() + "");
-            }
-        });
-        pageShow.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                innerCards.show(contentPanel, pageShow.getText() + "");
-                pageShow.setText(page + "");
-                pages.setValue(page);
-            }
-        });
-    }
-}
 
 
 
