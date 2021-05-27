@@ -77,6 +77,9 @@ public class LiveSession {
         this.liveSessionId = liveSessionId;
     }
 
+    public int getPrice() {
+        return price;
+    }
 
     public void setRating(Double rating) {
         this.rating = rating;

@@ -850,6 +850,13 @@ class AdministratorLeftPanel extends JPanel
                 contentCards.show(rightPanel, "Advice");
             }
         });
+        LiveSession.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                contentCards.show(rightPanel, "Live");
+            }
+        });
 
 
         this.add(Membership);
@@ -889,6 +896,7 @@ class AdministratorLeftPanel extends JPanel
 class AdministratorRightPanel extends JPanel
 {
     private AdministratorVideoManagement videoManagement;
+    private AdministratorLiveManagement liveManagement;
     public AdministratorRightPanel(CardLayout innerCards, JPanel contentPanel, CardLayout mainCards, MainPanel mainPanel) {
         PersonalController controller = PersonalController.getController();
         int panelWidth = (int) (UIStyle.width * 0.76);
@@ -904,6 +912,9 @@ class AdministratorRightPanel extends JPanel
 
         videoManagement = new AdministratorVideoManagement( mainCards, mainPanel);
         this.add(videoManagement, "Video");
+
+        liveManagement = new AdministratorLiveManagement(mainCards, mainPanel);
+        this.add(liveManagement, "Live");
 
         ArrayList<Mail> emails = MailController.getController().getMailsById("Admin");
         EmailPanel advice = new EmailPanel(emails, mainCards, mainPanel, true);
@@ -1236,6 +1247,122 @@ class AdministratorVideoManagement extends JPanel
                     this.setLayout(null);
                     for(int i = (page - 1) * 3; i < videos.size() && i < page * 3; i++) {
                         VideoPanel test = new VideoPanel(videos.get(i), 0, 150 * (i % 3), mainPanel, cards, "manage");
+                        this.add(test);
+                    }
+
+                    JSlider pages = new JSlider(1, pageMax + 1, page);
+
+                    int pagesWidth = 100;
+                    int pagesHeight = 50;
+                    pages.setBounds((int)(panelWidth / 2 - pagesWidth / 2), (int)(panelHeight - pagesHeight+7), pagesWidth,pagesHeight);
+
+                    this.add(pages);
+                    pages.setMajorTickSpacing(3);
+
+                    pages.setMinorTickSpacing(1);
+                    pages.setForeground(Color.white);
+                    pages.setBackground(Color.white);
+                    pages.setSnapToTicks(true);
+                    JTextField pageShow = new JTextField();
+                    pageShow.setBounds((int)(panelWidth / 2 + pagesWidth / 1.5), (int)(panelHeight - pagesHeight + 17), 30, 30);
+                    this.add(pageShow);
+                    pageShow.setText(page + "");
+                    pages.addChangeListener(new ChangeListener() {
+                        @Override
+                        public void stateChanged(ChangeEvent e) {
+                            pageShow.setText(pages.getValue() + "");
+                        }
+                    });
+                    pageShow.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            innerCards.show(contentPanel, pageShow.getText() + "");
+                            pageShow.setText(page + "");
+                            pages.setValue(page);
+                        }
+                    });
+                }
+            });
+            contentPanel.add(resultPanels.get(i), i + 1 + "");
+        }
+        innerCards.first(contentPanel);
+    }
+}
+class AdministratorLiveManagement extends JPanel
+{
+    private int pageMax;
+    ArrayList<JPanel> resultPanels = new ArrayList<>();
+    JPanel contentPanel;
+    CardLayout cards;
+    MainPanel mainPanel;
+    CardLayout innerCards;
+
+
+    public AdministratorLiveManagement(CardLayout cards, MainPanel mainPanel)
+    {
+        this.cards = cards;
+        this.mainPanel = mainPanel;
+
+        int panelWidth = (int) (UIStyle.width * 0.76);
+        int panelHeight = (int) (UIStyle.height - UIStyle.barHeight);
+        setBounds((int) (UIStyle.width * 0.24), UIStyle.barHeight, panelWidth, panelHeight);
+
+        innerCards = new CardLayout();
+        this.setLayout(null);
+        this.setBackground(Color.white);
+
+        contentPanel = new JPanel();
+        contentPanel.setVisible(true);
+        contentPanel.setBounds(0, 120, panelWidth, panelHeight - 120);
+        contentPanel.setLayout(innerCards);
+        this.add(contentPanel);
+
+
+
+
+
+
+        TextButton addSession = new TextButton((int)(panelWidth / 2), 40, UIStyle.BLUE_BUTTRESS, Color.white, "Add Session",  150, 40, "normal",true);
+        this.add(addSession);
+        addSession.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                cards.show(mainPanel, "tempContentPanel");
+                mainPanel.setTempContent("liveAdd", "nullVideo");
+            }
+        });
+
+        updateRes();
+
+    }
+    public void updateRes()
+    {
+
+
+        ArrayList<LiveSession> liveSessions1 = LiveController.getController().getAllLiveSessions();
+
+        pageMax = (liveSessions1.size() -1) / 3;
+        for(JPanel i : resultPanels)
+        {
+            contentPanel.remove(i);
+        }
+        resultPanels.clear();
+
+        for(int i = 0; i <= pageMax; i++)
+        {
+            int finalI = i;
+            resultPanels.add(new JPanel(){
+                {
+                    int page = finalI + 1;
+                    int panelWidth = (int) (UIStyle.width * 0.76);
+                    int panelHeight = (int) (UIStyle.height - UIStyle.barHeight - 120);
+
+                    setBounds((int) (UIStyle.width * 0.24), UIStyle.barHeight, panelWidth, panelHeight);
+                    setBackground(Color.WHITE);
+                    this.setLayout(null);
+                    for(int i = (page - 1) * 3; i < liveSessions1.size() && i < page * 3; i++) {
+                        LivePanel test = new LivePanel(liveSessions1.get(i), 0, 150 * (i % 3), "manage", mainPanel, cards );
                         this.add(test);
                     }
 

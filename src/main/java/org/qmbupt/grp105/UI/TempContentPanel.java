@@ -1,6 +1,8 @@
 package org.qmbupt.grp105.UI;
 
+import org.qmbupt.grp105.Controller.LiveController;
 import org.qmbupt.grp105.Controller.VideoController;
+import org.qmbupt.grp105.Entity.LiveSession;
 import org.qmbupt.grp105.Entity.Mail;
 import org.qmbupt.grp105.Entity.Video;
 import org.qmbupt.grp105.UI.MyUIComponent.MyReminder;
@@ -20,6 +22,7 @@ public class TempContentPanel extends JPanel
     private VideoDetailPanel videoDetailPanel;
     private EmailDetailPanel emailPanel;
     private RegisterPanel registerPanel;
+    private LiveDetailPanel liveDetailPanel;
     public static MyReminder reminder;
     public TempContentPanel(CardLayout cards, MainPanel mainPanel)
     {
@@ -57,6 +60,8 @@ public class TempContentPanel extends JPanel
         contentContainer.add(emailPanel, "email");
         registerPanel = new RegisterPanel();
         contentContainer.add(registerPanel, "register");
+        liveDetailPanel = new LiveDetailPanel();
+        contentContainer.add(liveDetailPanel, "liveModify");
 
 
 
@@ -145,6 +150,32 @@ public class TempContentPanel extends JPanel
                 videoDetailPanel.setAdding(true);
                 innerCards.show(contentContainer, "videoModify");
             }
+        }
+        else if(type.equals("liveAdd"))
+        {
+            if(currentContent.equals("liveAdd"))
+            {
+                liveDetailPanel.setAdding(true);
+                innerCards.show(contentContainer, "liveModify");
+            }
+            else
+            {
+                currentContent = "liveAdd";
+                liveDetailPanel.setAdding(true);
+                innerCards.show(contentContainer, "liveModify");
+            }
+        }
+        else if(type.equals("liveModify"))
+        {
+            if(!currentContent.equals("liveModify"))
+            {
+                currentContent = "liveModify";
+            }
+
+            LiveSession liveSession = LiveController.getController().getLiveSessionBySessionId(id);
+            liveDetailPanel.setAdding(false);
+            liveDetailPanel.setCurrentLive(liveSession);
+            innerCards.show(contentContainer, "liveModify");
         }
 
     }

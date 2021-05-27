@@ -23,19 +23,19 @@ public class VideoDetailPanel extends JPanel
 {
     private Video currentVideo = Video.getSampleVideo();
     private boolean isAdding = false;
-    InputText title_lower;
-    InputText level_lower;
-    InputText category_lower;
-    InputText like_lower;
-    InputText rating_lower;
-    DynamicText file_upper;
-    Picture pic;
-    TextButton save;
-    TextButton delete;
-    JFileChooser jfc;
-    InputText file_lower;
-    MouseListener addingVideo;
-    MouseListener modifyVideo;
+    private InputText title_lower;
+    private InputText level_lower;
+    private InputText category_lower;
+    private InputText like_lower;
+    private InputText rating_lower;
+    private DynamicText file_upper;
+    private Picture pic;
+    private TextButton save;
+    private TextButton delete;
+    private JFileChooser jfc;
+    private InputText file_lower;
+    private MouseListener addingVideo;
+    private MouseListener modifyVideo;
 
     public VideoDetailPanel() {
         this.setBackground(Color.WHITE);

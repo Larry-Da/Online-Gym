@@ -6,12 +6,14 @@ import org.qmbupt.grp105.Entity.LiveSession;
 import org.qmbupt.grp105.Entity.Video;
 import org.qmbupt.grp105.UI.LiveClassPanel;
 import org.qmbupt.grp105.UI.LoginToken;
+import org.qmbupt.grp105.UI.MainPanel;
 import org.qmbupt.grp105.UI.UIStyle;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -35,9 +37,17 @@ public class LivePanel extends JPanel
     private String size;
     private int width;
     private int height;
+    private MainPanel mainPanel;
+    private CardLayout cards;
 
 
 
+    public LivePanel(LiveSession live, int x, int y, String size, MainPanel mainPanel, CardLayout cards)
+    {
+        this(live, x, y, size);
+        this.mainPanel = mainPanel;
+        this.cards = cards;
+    }
 
     public LivePanel(LiveSession live, int x, int y, String size)
     {
@@ -65,6 +75,22 @@ public class LivePanel extends JPanel
             buttonWidth = 65;
             buttonHeight = 20;
 
+        }
+        else if(size.equals("manage"))
+        {
+            width = (int)UIStyle.width - (int)(UIStyle.width * 0.24);
+            height = 150;
+            buttonText = "Modify";
+            space = 20;
+            picHeight = 100;
+            dateX = 4 * space + picHeight;
+            dateY = (int)(space * 2);
+            categoryX = dateX;
+            categoryY = dateY + 80;
+            coachIdX = categoryX + 200;
+            coachIdY = categoryY;
+            buttonHeight = 40;
+            buttonWidth = 100;
         }
         else
         {
@@ -99,6 +125,17 @@ public class LivePanel extends JPanel
                     }
                 }
 
+            });
+        }
+        else if(size.equals("manage"))
+        {
+            button.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    super.mouseClicked(e);
+                    cards.show(mainPanel, "tempContentPanel");
+                    mainPanel.setTempContent("liveModify", live.getLiveSessionId());
+                }
             });
         }
         this.add(button);
@@ -159,4 +196,5 @@ public class LivePanel extends JPanel
 
 
     }
+
 }
