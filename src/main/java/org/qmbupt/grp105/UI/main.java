@@ -12,10 +12,11 @@ public class main
         JPanel mp = new MainPanel();
         JFrame jf = new JFrame();
         jf.setUndecorated(true);
+
         jf.add(mp);
         jf.setVisible(true);
         mp.setVisible(true);
-        jf.setBounds((int)((UIStyle.ScreenWidth - UIStyle.width)/2), 0, (int) UIStyle.width, (int) UIStyle.height);
+        jf.setBounds((int)((UIStyle.ScreenWidth - UIStyle.width)/2), (int)(UIStyle.ScreenHeight - UIStyle.height)/2, (int) UIStyle.width, (int) UIStyle.height);
 
 
     }

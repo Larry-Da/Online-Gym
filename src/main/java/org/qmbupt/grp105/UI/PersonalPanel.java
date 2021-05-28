@@ -328,7 +328,7 @@ class CustomerRightPanel extends JPanel
     {
         if(membership != null)
             this.remove(membership);
-        membership = new CustomerMembershipPanel(controller.getCusInfoByCusId(id));
+        membership = new CustomerMembershipPanel(controller.getCusInfoByCusId(id), this);
         this.add(membership, "Membership");
 
         if(bookedLivePanel != null)
@@ -362,7 +362,7 @@ class CustomerRightPanel extends JPanel
 
 class CustomerMembershipPanel extends JPanel
 {
-    public CustomerMembershipPanel(Customer cus)
+    public CustomerMembershipPanel(Customer cus, CustomerRightPanel customerRightPanel)
     {
         int buttonHeight = (int)(0.06 * UIStyle.height);
         int buttonWidth = (int)(0.244 * UIStyle.width);
@@ -403,6 +403,95 @@ class CustomerMembershipPanel extends JPanel
         Sticker balance = new Sticker(stickerWidth, stickerHeight
                 , "Total Balance", ""+cus.getBalance(), buttonStartX, buttonStartY - 3*buttonHeight, UIStyle.CustomerMember_Money);
         this.add(balance);
+        balance.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        balance.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                JFrame jf = new JFrame();
+                jf.setUndecorated(true);
+
+                int width = 300;
+                int height = 300;
+                jf.setBounds((int)(UIStyle.ScreenWidth - width)/2, (int)(UIStyle.ScreenHeight - height)/2, width, height);
+                JPanel innerPanel = new JPanel();
+                innerPanel.setBackground(Color.white);
+                innerPanel.setLayout(null);
+                jf.setVisible(true);
+                jf.add(innerPanel);
+
+
+                InputText amount = new InputText(150, 50, 10, true, width / 2, height / 4, "Charge amount", true);
+                innerPanel.add(amount);
+
+
+                int innerButtonWidth = 100;
+                TextButton cancel = new TextButton(width / 2 - innerButtonWidth / 2 - 10, height / 4 * 3, Color.decode("#E04147"), Color.white, "Cancel", innerButtonWidth, 30, "small", true);
+                innerPanel.add(cancel);
+                TextButton charge = new TextButton(width / 2 + innerButtonWidth / 2 + 10, height / 4 * 3, UIStyle.BLUE_BUTTRESS, Color.white, "Charge", innerButtonWidth, 30, "small", true);
+                innerPanel.add(charge);
+
+                amount.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        try {
+                            Customer cus = PersonalController.getController().getCusInfoByCusId(LoginToken.getId());
+                            if(Integer.parseInt(amount.getText()) > 100000)
+                            {
+                                PersonalPanel.reminder.WRONG("Use a smaller integer, please.");
+
+                            }
+                            cus.setBalance(cus.getBalance() + Integer.parseInt(amount.getText()));
+                            PersonalController.getController().updateCustomer(cus);
+                            jf.setVisible(false);
+                            PersonalPanel.reminder.OK("Charge success for $" + Integer.parseInt(amount.getText()));
+                            customerRightPanel.update(LoginToken.getId());
+
+                        }
+                        catch(Exception e1)
+                        {
+                            PersonalPanel.reminder.WRONG("Number format error, please enter integer.");
+                        }
+                    }
+                });
+
+                cancel.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        super.mouseClicked(e);
+                        jf.setVisible(false);
+
+                    }
+                });
+                charge.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        super.mouseClicked(e);
+
+                        try {
+                            Customer cus = PersonalController.getController().getCusInfoByCusId(LoginToken.getId());
+                            if(Integer.parseInt(amount.getText()) > 100000)
+                            {
+                                PersonalPanel.reminder.WRONG("Use a smaller integer, please.");
+
+                            }
+                            cus.setBalance(cus.getBalance() + Integer.parseInt(amount.getText()));
+                            PersonalController.getController().updateCustomer(cus);
+                            jf.setVisible(false);
+                            PersonalPanel.reminder.OK("Charge success for $" + Integer.parseInt(amount.getText()));
+                            customerRightPanel.update(LoginToken.getId());
+
+                        }
+                        catch(Exception e1)
+                        {
+                            PersonalPanel.reminder.WRONG("Number format error, please enter integer.");
+                        }
+
+
+                    }
+                });
+            }
+        });
 
         Sticker level = new Sticker(stickerWidth, stickerHeight
                 , "User Level", cus.getMembershipLevel(), (int)(buttonStartX + stickerWidth * 1.3), buttonStartY - 3*buttonHeight, UIStyle.CustomerMember_Level);
