@@ -1,5 +1,7 @@
 package org.qmbupt.grp105.Entity;
 
+import java.util.ArrayList;
+
 public class Video
 {
     private String videoId;
@@ -11,6 +13,7 @@ public class Video
     private int likes;      // 点赞数
     private int viewsCount; // 访问量 -> hottest
     private String level;
+    private ArrayList<String> comments = new ArrayList<>();
 
 //    public ArrayList<LiveSession> getLiveSessions() {
 //        backend.getLiveSession(cusId);
@@ -93,6 +96,14 @@ public class Video
         this.viewsCount = viewsCount;
     }
 
+    public ArrayList<String> getComments() {
+        return comments;
+    }
+
+    public void setComments(ArrayList<String> comments) {
+        this.comments = comments;
+    }
+
     public static String[] getAllAttributes() {
         return new String[]{"videoId","url","name","rating","category","likes","viewCounts","level"};
     }
@@ -123,6 +134,8 @@ public class Video
         video.name = this.name;
         video.rating = this.rating;
         video.url=  this.url;
+        video.comments = (ArrayList<String>)this.comments.clone();
+
         return video;
     }
 }

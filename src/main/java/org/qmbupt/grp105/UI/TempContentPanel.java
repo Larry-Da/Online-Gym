@@ -111,10 +111,12 @@ public class TempContentPanel extends JPanel
             if(currentContent.equals("video"))
             {
                 videoPanel.setCurrentVideo(VideoController.getController().getVideoByVideoId(id));
+                videoPanel.updateComment();
             }
             else {
                 currentContent = "video";
                 videoPanel.setCurrentVideo(VideoController.getController().getVideoByVideoId(id));
+                videoPanel.updateComment();
                 innerCards.show(contentContainer, "video");
             }
         }

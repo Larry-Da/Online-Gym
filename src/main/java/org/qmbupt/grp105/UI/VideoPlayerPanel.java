@@ -1,7 +1,9 @@
 package org.qmbupt.grp105.UI;
 
 import org.qmbupt.grp105.Controller.PersonalController;
+import org.qmbupt.grp105.Controller.VideoController;
 import org.qmbupt.grp105.Entity.Video;
+import org.qmbupt.grp105.UI.MyUIComponent.InputArea;
 import org.qmbupt.grp105.UI.MyUIComponent.InputText;
 import org.qmbupt.grp105.UI.MyUIComponent.PicButton;
 import org.qmbupt.grp105.UI.MyUIComponent.TextButton;
@@ -14,6 +16,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 public class VideoPlayerPanel extends JPanel
 {
@@ -21,7 +24,13 @@ public class VideoPlayerPanel extends JPanel
     private TextButton pauseButton;
     private String path = "/Users/daliangrun/Downloads/vue-vr/demos/assets/ClashofClans.mp4";
     private Video currentVideo;
-   // private String path = "/Users/daliangrun/Downloads/corejava/v1ch13fx/fancy/moonlanding.mp4";
+    private ArrayList<InputArea> commentList = new ArrayList<>();
+    private JPanel commentPanel;
+    private CardLayout cards = new CardLayout();
+    private JPanel rightPanels = new JPanel();
+    private TextButton delete;
+
+
     public VideoPlayerPanel()
     {
         this.setLayout(null);
@@ -100,11 +109,86 @@ public class VideoPlayerPanel extends JPanel
 
         InputText comment = new InputText(20, videoPanelHeight + 20, 800, 30, 100, true, "Comment Here");
 
+
         this.add(comment);
+        comment.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(comment.getText().length() > 40)
+                {
+                    TempContentPanel.reminder.WRONG("Comment length should be less than 40 letters");
+                }
+                else if(!comment.getText().equals(""))
+                {
+                    ArrayList<String> commentList = currentVideo.getComments();
+                    commentList.add(0, comment.getText());
+                    VideoController.getController().modifyVideo(currentVideo);
+                    TempContentPanel.reminder.OK("Comment successfully");
+                    comment.setText("");
+                    updateComment();
+
+                }
+                else
+                {
+                    TempContentPanel.reminder.WRONG("Comment can't be empty!");
+                }
+            }
+        });
+        rightPanels.setLayout(cards);
+        rightPanels.setBounds((int)(UIStyle.width - 200), 0, 200, (int)(UIStyle.height - UIStyle.barHeight));
+        rightPanels.setVisible(true);
+        rightPanels.setBackground(Color.white);
+
 
     }
 
     public void setCurrentVideo(Video currentVideo) {
         this.currentVideo = currentVideo;
+
+    }
+    public void updateComment()
+    {
+        if(commentPanel != null)
+            rightPanels.remove(commentPanel);
+        commentPanel = new JPanel();
+        commentPanel.setVisible(true);
+        commentPanel.setLayout(null);
+        commentPanel.setBackground(Color.white);
+        commentPanel.setBounds(0, 0, 200, (int)(UIStyle.height - UIStyle.barHeight));
+
+        ArrayList<String> comments = currentVideo.getComments();
+        for(int i = 0; i < 10 && i < comments.size(); i++)
+        {
+
+            InputArea temp = new InputArea(180, 50, false,100, 50 + i * 50, comments.get(i), false);
+            temp.setEditable(false);
+            temp.setLineWrap(true);
+
+            commentPanel.add(temp);
+        }
+        rightPanels.add(commentPanel);
+        if(delete != null)
+        {
+            commentPanel.remove(delete);
+        }
+        if("Admin".equals(LoginToken.getType()))
+        {
+            delete = new TextButton(Color.decode("#E04147"), Color.WHITE, "Delete Comment", 0, 570, 200, 40, UIStyle.NORMAL_FONT, true, "mid");
+            commentPanel.add(delete);
+            delete.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    super.mouseClicked(e);
+                    currentVideo.setComments(new ArrayList<String>());
+                    VideoController.getController().modifyVideo(currentVideo);
+                    TempContentPanel.reminder.OK("Delete successfully");
+                    updateComment();
+                }
+            });
+        }
+
+        this.add(rightPanels);
+        cards.first(rightPanels);
+
     }
 }

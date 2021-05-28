@@ -24,6 +24,7 @@ public class InputArea extends JTextArea
     public InputArea(int width, int height, boolean autoVanish, int centerX, int centerY, String defaultText, boolean arc)
     {
 
+
         this.arc = arc;
         int x = centerX - width / 2;
         int y = centerY - height / 2;

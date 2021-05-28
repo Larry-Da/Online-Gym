@@ -271,6 +271,8 @@ class CustomerLeftPanel extends JPanel
             @Override
             public void mouseClicked(MouseEvent e) {
                 //cards.next(mainPanel);
+                LoginToken.setType(null);
+                LoginToken.setId(null);
                 loginCards.show(contentPanel, "signInPanel");
             }
         });
