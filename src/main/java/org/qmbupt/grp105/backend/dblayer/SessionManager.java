@@ -68,6 +68,40 @@ public class SessionManager {
         return ret;
     }
 
+    /**
+     * remove session by its id
+     * @return succeed or not
+     */
+    public static boolean removeSession(String sessionId) throws IOException {
+        ArrayList<Session> sessions = DataManager.getInstance().sessions;
+        for (int i = 0; i < sessions.size(); i++) {
+            if (sessions.get(i).sessionId.equals(sessionId)) {
+                sessions.remove(i);
+                DataManager.getInstance().commit();
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    /**
+     * update session information
+     * @return succeed or not
+     */
+    public static boolean updateSession(Session newSession) throws IOException {
+        ArrayList<Session> sessions = DataManager.getInstance().sessions;
+        for (int i = 0; i < sessions.size(); i++) {
+            if (sessions.get(i).sessionId.equals(newSession.sessionId)) {
+                sessions.remove(i);
+                sessions.add(newSession);
+                DataManager.getInstance().commit();
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     /**
      * get all sessions

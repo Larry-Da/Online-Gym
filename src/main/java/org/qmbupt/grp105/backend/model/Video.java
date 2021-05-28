@@ -1,5 +1,7 @@
 package org.qmbupt.grp105.backend.model;
 
+import java.util.ArrayList;
+
 import com.alibaba.fastjson.annotation.JSONField;
 
 public class Video {
@@ -29,6 +31,9 @@ public class Video {
 
     @JSONField(name = "level")
     public String level;
+
+    @JSONField(name = "comments")
+    ArrayList<String> comments;
 
     public org.qmbupt.grp105.Entity.Video converter() {
         return new org.qmbupt.grp105.Entity.Video(this.videoId, this.url, this.name, this.rating, this.category,

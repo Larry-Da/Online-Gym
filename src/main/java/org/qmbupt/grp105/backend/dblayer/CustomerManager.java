@@ -142,12 +142,33 @@ public class CustomerManager {
         Session session = SessionManager.getSessionById(sessionId);
         int reduceMount = session.price;
 
+        Customer customer = getCustomerById(cusId);
+        if ( customer.dateOfBirth.getDay() == new Date().getDay() && customer.dateOfBirth.getMonth() == new Date().getMonth() ) {
+            reduceMount *= 0.9;
+        }
+
+
+        if (SessionManager.getSessionById(sessionId).availableNum == 0) {
+            return false;
+        }
+
+        {
+            ArrayList<String> sessionIds = getCustomerById(cusId).bookedSessions;
+            for (int i = 0; i < sessionIds.size(); i++) {
+                if (sessionIds.get(i).equals(sessionId)) {
+                    return false;
+                }
+            }
+        }
+
         /**
          * Try to decrease balance
          */
         if (decreaseBalance(cusId, reduceMount) != reduceMount) {
             return false;
         }
+
+        SessionManager.getSessionById(sessionId).availableNum--;
 
         /**
          * Create and add transaction
@@ -159,7 +180,6 @@ public class CustomerManager {
         transaction.time = new Date();
         TransactionManager.writeTransaction(transaction);
 
-        Customer customer = getCustomerById(cusId);
         customer.bookedSessions.add(sessionId);
         DataManager.getInstance().commit();
 
@@ -257,6 +277,6 @@ public class CustomerManager {
 
 
     public static void main(String[] args) throws Exception {
-        addFavoriteVideo("cs2", "v001");
+        //addFavoriteVideo("cs2", "v001");
     }
 }
