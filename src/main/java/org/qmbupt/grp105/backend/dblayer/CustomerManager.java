@@ -143,7 +143,7 @@ public class CustomerManager {
         int reduceMount = session.price;
 
         Customer customer = getCustomerById(cusId);
-        if ( customer.dateOfBirth.getDay() == new Date().getDay() && customer.dateOfBirth.getMonth() == new Date().getMonth() ) {
+        if ( customer.dateOfBirth.getDate() == new Date().getDate() && customer.dateOfBirth.getMonth() == new Date().getMonth() ) {
             reduceMount *= 0.9;
         }
 
