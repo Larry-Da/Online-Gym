@@ -221,7 +221,7 @@ public class Customer
         }
         customer.expireDate = DoBF;
         customer.videosHistory = (ArrayList<String>)this.videosHistory.clone();
-        customer.bookedSessions = new ArrayList<>();
+        customer.bookedSessions = (ArrayList<String>)this.bookedSessions.clone();
         customer.dateOfBirth = this.dateOfBirth;
         customer.email = this.email;
         customer.gender = this.gender + "";

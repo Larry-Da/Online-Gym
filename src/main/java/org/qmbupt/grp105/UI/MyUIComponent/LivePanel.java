@@ -4,10 +4,7 @@ import org.qmbupt.grp105.Controller.LiveController;
 import org.qmbupt.grp105.Controller.PersonalController;
 import org.qmbupt.grp105.Entity.LiveSession;
 import org.qmbupt.grp105.Entity.Video;
-import org.qmbupt.grp105.UI.LiveClassPanel;
-import org.qmbupt.grp105.UI.LoginToken;
-import org.qmbupt.grp105.UI.MainPanel;
-import org.qmbupt.grp105.UI.UIStyle;
+import org.qmbupt.grp105.UI.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -42,6 +39,24 @@ public class LivePanel extends JPanel
 
 
 
+    public LivePanel(LiveSession live, int x, int y, String size, CustomerBookedLivePanel livePanel)
+    {
+        this(live, x, y, size);
+        int buttonHeight = 40;
+        int buttonWidth = 100;
+        TextButton button = new TextButton((int)(width - buttonWidth * 2), (int)(height-1.5*buttonHeight), Color.decode("#192D33"), Color.WHITE, "Cancel", buttonWidth, buttonHeight, "small", true);
+        button.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                PersonalController.getController().removeBookedSession(LoginToken.getId(), live.getLiveSessionId());
+                livePanel.updateRes();
+                PersonalPanel.reminder.OK("Cancel Success.");
+            }
+        });
+        this.add(button);
+
+    }
     public LivePanel(LiveSession live, int x, int y, String size, MainPanel mainPanel, CardLayout cards)
     {
         this(live, x, y, size);
