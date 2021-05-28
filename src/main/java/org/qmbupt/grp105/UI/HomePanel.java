@@ -2,6 +2,7 @@ package org.qmbupt.grp105.UI;
 
 
 import org.qmbupt.grp105.Controller.PersonalController;
+import org.qmbupt.grp105.Controller.Toolbox;
 import org.qmbupt.grp105.Controller.VideoController;
 import org.qmbupt.grp105.Entity.Customer;
 import org.qmbupt.grp105.Entity.Video;
@@ -143,20 +144,62 @@ class RegisterPanel extends JPanel
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
 
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                Date DoBF = null;
-                try {
-                    DoBF = new Date(sdf.parse(dateOfBirth_lower.getText()).getTime());
-                }
-                catch (Exception e1)
+                boolean checkPass = true;
+                // check gender
+                if(!Toolbox.isGender(gender_lower.getText()))
                 {
-                    ;
+                    TempContentPanel.reminder.WRONG("Gender should be " + Toolbox.genderFormat);
+                    checkPass = false;
                 }
-                Customer cusToBeAdd = new Customer("", Integer.parseInt(age_lower.getText()), name_lower.getText(), password_lower.getText(), phoneNo_lower.getText(), email_lower.getText(),
-                        gender_lower.getText().equals("") ? gender_lower.getText().charAt(0) : 'M', DoBF, "1", "2025-01-01", 0, 0, new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>());
+                else if(!Toolbox.isDateForm1(dateOfBirth_lower.getText()))
+                {
+                    TempContentPanel.reminder.WRONG("Date of birth should be " + Toolbox.dateForm1Format);
+                    checkPass = false;
+                }
+                else if(!Toolbox.isEmail(email_lower.getText()))
+                {
+                    TempContentPanel.reminder.WRONG("Email should be " + Toolbox.emailFormat);
+                    checkPass = false;
+                }
+                else if(!Toolbox.isPassword(password_lower.getText()))
+                {
+                    TempContentPanel.reminder.WRONG("Password should be " + Toolbox.passwordFormat);
+                    checkPass = false;
+                }
+                else if(name_lower.getText().equals(""))
+                {
+                    TempContentPanel.reminder.WRONG("Name should not be empty");
+                    checkPass = false;
+                }
+                else if(phoneNo_lower.getText().equals(""))
+                {
+                    TempContentPanel.reminder.WRONG("Phone number should not be empty");
+                    checkPass = false;
+                }
+                if(checkPass) {
 
-                PersonalController.getController().updateCustomer(cusToBeAdd);
-                TempContentPanel.reminder.OK("Register Success!");
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    Date DoBF = null;
+                    try {
+                        DoBF = new Date(sdf.parse(dateOfBirth_lower.getText()).getTime());
+                    } catch (Exception e1) {
+                        ;
+                    }
+                    Customer cusToBeAdd = null;
+                    try {
+                        cusToBeAdd = new Customer("", Integer.parseInt(age_lower.getText()), name_lower.getText(), password_lower.getText(), phoneNo_lower.getText(), email_lower.getText(),
+                                gender_lower.getText().equals("") ? gender_lower.getText().charAt(0) : 'M', DoBF, "1", "2025-01-01", 0, 0, new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>());
+                    }
+                    catch(Exception e1)
+                    {
+                        TempContentPanel.reminder.WRONG("Age format error");
+                    }
+
+                    if(cusToBeAdd != null) {
+                        PersonalController.getController().updateCustomer(cusToBeAdd);
+                        TempContentPanel.reminder.OK("Register Success!");
+                    }
+                }
             }
         });
 

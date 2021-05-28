@@ -11,10 +11,7 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Date;
 
-import org.qmbupt.grp105.Controller.LiveController;
-import org.qmbupt.grp105.Controller.MailController;
-import org.qmbupt.grp105.Controller.PersonalController;
-import org.qmbupt.grp105.Controller.VideoController;
+import org.qmbupt.grp105.Controller.*;
 import org.qmbupt.grp105.Entity.*;
 import org.qmbupt.grp105.UI.MyUIComponent.*;
 import org.qmbupt.grp105.UI.MyUIComponent.MenuBar;
@@ -334,8 +331,7 @@ class CustomerRightPanel extends JPanel
 
         if(bookedLivePanel != null)
             this.remove(bookedLivePanel);
-        ArrayList<LiveSession> liveSessions = LiveController.getController().getLiveSessionByCusId(id);
-        bookedLivePanel = new CustomerBookedLivePanel(liveSessions);
+        bookedLivePanel = new CustomerBookedLivePanel();
         this.add(bookedLivePanel, "BookedLive");
 
         if(videoHistoryPanel != null)
@@ -420,12 +416,25 @@ class CustomerMembershipPanel extends JPanel
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                cus.setName(name_lower.getText());
-                cus.setGender(gender_lower.getText().charAt(0));
-                cus.setEmail(email_lower.getText());
-                cus.setPhoneNo(phone_lower.getText());
-                PersonalController.getController().updateCustomer(cus);
-                PersonalPanel.reminder.OK("Save Success!");
+                boolean checkPass = true;
+                if(!Toolbox.isGender(gender_lower.getText()))
+                {
+                    PersonalPanel.reminder.WRONG("Gender should be " + Toolbox.genderFormat);
+                    checkPass = false;
+                }
+                else if(!Toolbox.isEmail(email_lower.getText()))
+                {
+                    PersonalPanel.reminder.WRONG("Email should be " + Toolbox.emailFormat);
+                    checkPass = false;
+                }
+                if(checkPass) {
+                    cus.setName(name_lower.getText());
+                    cus.setGender(gender_lower.getText().charAt(0));
+                    cus.setEmail(email_lower.getText());
+                    cus.setPhoneNo(phone_lower.getText());
+                    PersonalController.getController().updateCustomer(cus);
+                    PersonalPanel.reminder.OK("Save Success!");
+                }
             }
         });
 
@@ -536,6 +545,7 @@ class EmailPanel extends JPanel
         });
 
 
+
     }
 
 }
@@ -543,42 +553,99 @@ class CustomerBookedLivePanel extends JPanel
 {
     private int pageMax;
     private ArrayList<JPanel> resultPanels = new ArrayList<>();
-    public CustomerBookedLivePanel(ArrayList<LiveSession> liveSessions)
+    private FilterBox expired;
+    private FilterBox categoryFilter;
+    private JPanel contentPanel;
+    CardLayout innerCards = new CardLayout();
+    public CustomerBookedLivePanel()
     {
+        this.setLayout(null);
+        String expiredContent[] = {"Expired", "Yes", "No"};
+        expired = new FilterBox(50, expiredContent, "light", true);
+        this.add(expired);
+        categoryFilter = new FilterBox(10, UIStyle.categories, "light");
+        this.add(categoryFilter);
+        int panelWidth = (int) (UIStyle.width * 0.76);
+        int panelHeight = (int) (UIStyle.height - UIStyle.barHeight);
+
+
+        contentPanel = new JPanel();
+        contentPanel.setVisible(true);
+        this.add(contentPanel);
+
+        contentPanel.setLayout(innerCards);
+        contentPanel.setBounds(0,130, panelWidth, panelHeight - 130);
+        TextButton applyChange = new TextButton(panelWidth / 2, 110, UIStyle.BLUE_BUTTRESS, Color.white, "Apply Change", 150, 25, "tiny", true);
+        this.add(applyChange);
+        applyChange.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                updateRes();
+            }
+        });
+        updateRes();
+    }
+    public void updateRes()
+    {
+        ArrayList<LiveSession> liveSessions = LiveController.getController().getLiveSessionByCusId(LoginToken.getId());
+        ArrayList<String> keyCategory = new ArrayList<>();
+        boolean[] states = {};
+        if(categoryFilter != null)
+            states = categoryFilter.getStates();
+        int cnt = 1;
+        for(boolean i : states)
+        {
+            if(i)
+            {
+                keyCategory.add(UIStyle.categories[cnt]);
+            }
+            cnt++;
+        }
+        liveSessions = LiveController.getController().filterSessionByCategory(liveSessions,keyCategory);
+
+
+        states = expired.getStates();
+        if(states[0] == true)
+        {
+            liveSessions = LiveController.getController().filterSessionByExpire(liveSessions, true);
+        }
+        else if(states[1] == true)
+        {
+            liveSessions = LiveController.getController().filterSessionByExpire(liveSessions, false);
+
+        }
+
         pageMax = liveSessions.size() / 4;
         int panelWidth = (int) (UIStyle.width * 0.76);
         int panelHeight = (int) (UIStyle.height - UIStyle.barHeight);
         setBounds((int) (UIStyle.width * 0.24), UIStyle.barHeight, panelWidth, panelHeight);
-        CardLayout innerCards = new CardLayout();
-        this.setLayout(innerCards);
+
+
+        setBackground(Color.white);
 
         for(JPanel i : resultPanels)
         {
-            this.remove(i);
+            contentPanel.remove(i);
         }
         resultPanels.clear();
         for(int i = 0; i <= pageMax; i++)
         {
             int finalI = i;
+            ArrayList<LiveSession> liveSessions1 = liveSessions;
             resultPanels.add(new JPanel(){
                 {
                     int page = finalI + 1;
-                    String expiredContent[] = {"Expired", "Yes", "No"};
-                    FilterBox expired = new FilterBox(50, expiredContent, "light");
-                    this.add(expired);
-                    FilterBox categoryFilter = new FilterBox(10, UIStyle.categories, "light");
-                    this.add(categoryFilter);
 
                     int panelWidth = (int) (UIStyle.width * 0.76);
                     int panelHeight = (int) (UIStyle.height - UIStyle.barHeight);
-                    TextButton applyChange = new TextButton(panelWidth / 2, 110, UIStyle.BLUE_BUTTRESS, Color.white, "Apply Change", 150, 25, "tiny", true);
-                    this.add(applyChange);
-                    setBounds((int) (UIStyle.width * 0.24), UIStyle.barHeight, panelWidth, panelHeight);
+
+                    setBounds((int) (UIStyle.width * 0.24), UIStyle.barHeight, panelWidth, panelHeight- 130);
                     setBackground(Color.WHITE);
                     this.setLayout(null);
 
-                    for(int i = (page - 1) * 3; i < liveSessions.size() && i < page * 3; i++) {
-                        LivePanel test = new LivePanel(liveSessions.get(i), 0, 150 * (i % 3) + 130, "large");
+                    for(int i = (page - 1) * 3; i < liveSessions1.size() && i < page * 3; i++) {
+                        LivePanel test = new LivePanel(liveSessions1.get(i), 0, 150 * (i % 3) , "large");
                         this.add(test);
                     }
 
@@ -586,7 +653,7 @@ class CustomerBookedLivePanel extends JPanel
 
                     int pagesWidth = 100;
                     int pagesHeight = 50;
-                    pages.setBounds((int)(panelWidth / 2 - pagesWidth / 2), (int)(panelHeight - pagesHeight+7), pagesWidth,pagesHeight);
+                    pages.setBounds((int)(panelWidth / 2 - pagesWidth / 2), (int)(getHeight() - pagesHeight+7), pagesWidth,pagesHeight);
 
                     this.add(pages);
                     pages.setMajorTickSpacing(3);
@@ -596,7 +663,7 @@ class CustomerBookedLivePanel extends JPanel
                     pages.setBackground(Color.white);
                     pages.setSnapToTicks(true);
                     JTextField pageShow = new JTextField();
-                    pageShow.setBounds((int)(panelWidth / 2 + pagesWidth / 1.5), (int)(panelHeight - pagesHeight + 17), 30, 30);
+                    pageShow.setBounds((int)(panelWidth / 2 + pagesWidth / 1.5), (int)(getHeight() - pagesHeight + 17), 30, 30);
                     this.add(pageShow);
                     pageShow.setText(page + "");
                     pages.addChangeListener(new ChangeListener() {
@@ -608,16 +675,16 @@ class CustomerBookedLivePanel extends JPanel
                     pageShow.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            innerCards.show(CustomerBookedLivePanel.this, pageShow.getText() + "");
+                            innerCards.show(contentPanel, pageShow.getText() + "");
                             pageShow.setText(page + "");
                             pages.setValue(page);
                         }
                     });
                 }
             });
-            this.add(resultPanels.get(i), i + 1 + "");
+            contentPanel.add(resultPanels.get(i), i + 1 + "");
         }
-        innerCards.first(this);
+        innerCards.first(contentPanel);
     }
 }
 
@@ -923,6 +990,7 @@ class AdministratorRightPanel extends JPanel
     public void updateRes()
     {
         videoManagement.updateRes();
+        liveManagement.updateRes();
     }
 
 }

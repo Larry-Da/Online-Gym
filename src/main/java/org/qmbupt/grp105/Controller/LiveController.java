@@ -8,10 +8,8 @@ import org.qmbupt.grp105.backend.dblayer.SessionManager;
 import org.qmbupt.grp105.backend.model.Session;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.ArrayList;
+import java.util.*;
+
 public class LiveController {
     private static Map<String, Object> param = new HashMap<>();
     private static Gson gson = new Gson();
@@ -80,6 +78,33 @@ public class LiveController {
 //        }
 //        return res;
     }
+    public ArrayList<LiveSession> filterSessionByExpire(ArrayList<LiveSession> sessions, boolean expired) {
+        ArrayList<LiveSession> res = new ArrayList<>();
+        if(expired)
+        {
+            for(LiveSession l: sessions)
+            {
+                Date now = new Date(System.currentTimeMillis());
+                if(now.after(l.getStartTime()))
+                {
+                    res.add(l);
+                }
+            }
+        }
+        else
+        {
+            for(LiveSession l: sessions)
+            {
+                Date now = new Date(System.currentTimeMillis());
+                if(now.before(l.getStartTime()))
+                {
+                    res.add(l);
+                }
+            }
+        }
+        return res;
+    }
+
     public ArrayList<LiveSession> filterSessionByCategory(ArrayList<LiveSession> sessions, List<String> category) {
         ArrayList<LiveSession> sessions1 = null;
         ArrayList<LiveSession> res = new ArrayList<>();

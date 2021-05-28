@@ -1,5 +1,6 @@
 package org.qmbupt.grp105.UI;
 
+import org.qmbupt.grp105.Controller.Toolbox;
 import org.qmbupt.grp105.Controller.VideoController;
 import org.qmbupt.grp105.Entity.Video;
 import org.qmbupt.grp105.UI.MyUIComponent.DynamicText;
@@ -111,12 +112,36 @@ public class VideoDetailPanel extends JPanel
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
+                boolean checkPass = true;
+                if(!Toolbox.isCategory(category_lower.getText()))
+                {
+                    TempContentPanel.reminder.WRONG("Category not exist");
+                    checkPass = false;
+                }
+                else if(!Toolbox.isMembership(level_lower.getText()))
+                {
+                    TempContentPanel.reminder.WRONG("Level not exist");
+                    checkPass = false;
+                }
+                else if(title_lower.getText().equals(""))
+                {
+                    TempContentPanel.reminder.WRONG("Title cannot be empty");
+                    checkPass = false;
+                }
 
-                Video videoToBeModify = new Video(currentVideo.getVideoId(), currentVideo.getUrl(), title_lower.getText(),
-                        Double.parseDouble(rating_lower.getText()), category_lower.getText(), Integer.parseInt(like_lower.getText()),
-                        currentVideo.getViewsCount(), level_lower.getText());
-                VideoController.getController().modifyVideo(videoToBeModify);
-                TempContentPanel.reminder.OK("Save Success!");
+
+                if(checkPass) {
+                    try {
+                        Video videoToBeModify = new Video(currentVideo.getVideoId(), currentVideo.getUrl(), title_lower.getText(),
+                                Double.parseDouble(rating_lower.getText()), category_lower.getText(), Integer.parseInt(like_lower.getText()),
+                                currentVideo.getViewsCount(), level_lower.getText());
+                        VideoController.getController().modifyVideo(videoToBeModify);
+                        TempContentPanel.reminder.OK("Save Success!");
+                    } catch (Exception e1) {
+                        TempContentPanel.reminder.WRONG("Number format error");
+                    }
+                }
+
             }
         };
 
@@ -124,36 +149,77 @@ public class VideoDetailPanel extends JPanel
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                String url = file_lower.getText();
-                String fileName = url.substring(url.lastIndexOf('/') + 1);
 
+                boolean checkPass = true;
+                if(!Toolbox.isCategory(category_lower.getText()))
+                {
+                    TempContentPanel.reminder.WRONG("Category not exist");
+                    checkPass = false;
+                }
+                else if(!Toolbox.isMembership(level_lower.getText()))
+                {
+                    TempContentPanel.reminder.WRONG("Level not exist");
+                    checkPass = false;
+                }
+                else if(!Toolbox.isPicture(file_lower.getText()))
+                {
+                    TempContentPanel.reminder.WRONG("Not a picture");
+                    System.out.println(file_lower.getText());
+                    System.out.println(Toolbox.isPicture(file_lower.getText()));
+                    checkPass = false;
+                }
+                else if(title_lower.getText().equals(""))
+                {
+                    TempContentPanel.reminder.WRONG("Title cannot be empty");
+                    checkPass = false;
+                }
+                else if(file_lower.getText().equals(""))
+                {
+                    TempContentPanel.reminder.WRONG("URL cannot be empty");
+                    checkPass = false;
+                }
 
-                Video videoToBeAdd = new Video(null, fileName, title_lower.getText(),
-                        Double.parseDouble(rating_lower.getText()), category_lower.getText(), Integer.parseInt(like_lower.getText()),
-                        0, level_lower.getText());
-                VideoController.getController().AddVideo(videoToBeAdd);
-                TempContentPanel.reminder.OK("Adding Success!");
+                if(checkPass) {
 
-                String path = UIStyle.class.getClassLoader().getResource("HIIT.jpg").getPath();
-                String toBeMoved = path.substring(0, path.length() - 9);
-                toBeMoved = toBeMoved + "/" + fileName;
+                    String url = file_lower.getText();
+                    String fileName = url.substring(url.lastIndexOf('/') + 1);
 
-                String srcFile = url;
-                String desFile = toBeMoved;
-                try {
-                    // 使用缓冲字节流进行文件复制
-                    BufferedInputStream bis = new BufferedInputStream(new FileInputStream(srcFile));
-                    BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(desFile));
-                    byte[] b = new byte[1024];
-                    Integer len = 0;
-                    //一次读取1024字节的数据
-                    while ((len = bis.read(b)) != -1) {
-                        bos.write(b, 0, len);
+                    try{
+                        Video videoToBeAdd = new Video(null, fileName, title_lower.getText(),
+                                Double.parseDouble(rating_lower.getText()), category_lower.getText(), Integer.parseInt(like_lower.getText()),
+                                0, level_lower.getText());
+                        VideoController.getController().AddVideo(videoToBeAdd);
+
+                        String path = UIStyle.class.getClassLoader().getResource("HIIT.jpg").getPath();
+                        String toBeMoved = path.substring(0, path.length() - 9);
+                        toBeMoved = toBeMoved + "/" + fileName;
+
+                        String srcFile = url;
+                        String desFile = toBeMoved;
+                        try {
+                            // 使用缓冲字节流进行文件复制
+                            BufferedInputStream bis = new BufferedInputStream(new FileInputStream(srcFile));
+                            BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(desFile));
+                            byte[] b = new byte[1024];
+                            Integer len = 0;
+                            //一次读取1024字节的数据
+                            while ((len = bis.read(b)) != -1) {
+                                bos.write(b, 0, len);
+                            }
+                            bis.close();
+                            bos.close();
+                        } catch (Exception e1) {
+                            e1.printStackTrace();
+                        }
+                        TempContentPanel.reminder.OK("Adding Success!");
                     }
-                    bis.close();
-                    bos.close();
-                } catch (Exception e1) {
-                    e1.printStackTrace();
+                    catch(Exception e2)
+                    {
+                        TempContentPanel.reminder.WRONG("Number Format Error");
+                    }
+
+
+
                 }
             }
         };

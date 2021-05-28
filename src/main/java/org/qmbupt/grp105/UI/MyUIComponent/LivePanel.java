@@ -123,6 +123,10 @@ public class LivePanel extends JPanel
                         PersonalController.getController().bookLiveSession(LoginToken.getId(), live.getLiveSessionId());
                         LiveClassPanel.reminder.OK("Book Success!");
                     }
+                    else
+                    {
+                        LiveClassPanel.reminder.WRONG("Login First!");
+                    }
                 }
 
             });
@@ -152,6 +156,19 @@ public class LivePanel extends JPanel
         JLabel picturePreview = new Picture(picPath, picHeight, picHeight);
         this.add(picturePreview);
         picturePreview.setBounds(space, space, picHeight, picHeight);
+        if(size.equals("small"))
+        {
+            picturePreview.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    super.mouseClicked(e);
+                    cards.show(mainPanel, "tempContentPanel");
+                    mainPanel.setTempContent("live", live.getLiveSessionId());
+                    picturePreview.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+                }
+            });
+        }
+
         if(size.equals("small"))
             this.setBackground(Color.decode("#1A1C21"));
         else

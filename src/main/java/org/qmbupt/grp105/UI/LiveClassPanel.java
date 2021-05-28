@@ -1,11 +1,12 @@
 package org.qmbupt.grp105.UI;
 
 import org.qmbupt.grp105.Controller.LiveController;
-import org.qmbupt.grp105.Controller.VideoController;
+import org.qmbupt.grp105.Controller.PersonalController;
+import org.qmbupt.grp105.Controller.Toolbox;
 import org.qmbupt.grp105.Entity.LiveSession;
-import org.qmbupt.grp105.Entity.Video;
 import org.qmbupt.grp105.UI.MyUIComponent.*;
 import org.qmbupt.grp105.UI.MyUIComponent.MenuBar;
+
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -68,9 +69,11 @@ class ContentPanel extends JPanel
     private MainPanel mainPanel;
     private FilterBox sortFilter;
 
-    public ContentPanel(CardLayout cards, JPanel contentPanel)
+    public ContentPanel(CardLayout cards, MainPanel contentPanel)
     {
 
+        this.mainCards = cards;
+        this.mainPanel = contentPanel;
         this.setLayout(null);
         this.setBackground(Color.decode("#14151A"));
 
@@ -134,7 +137,7 @@ class ContentPanel extends JPanel
 
         for(int i = 0; i <= pageMax; i++)
         {
-            ResultPanel rp = new ResultPanel(sessions1, pageMax, resultCards, resultContentPanel, i + 1);
+            ResultPanel rp = new ResultPanel(sessions1, pageMax, resultCards, resultContentPanel, i + 1, mainPanel, mainCards);
             searchResultPanels.add(i, rp);
             resultContentPanel.add(rp, i + 1 + "");
         }
@@ -143,19 +146,19 @@ class ContentPanel extends JPanel
     }
 }
 class ResultPanel extends JPanel {
-    public ResultPanel(ArrayList<LiveSession> liveSessions, int pageMax, CardLayout resultCards, JPanel resultContentPanel, int page) {
+    public ResultPanel(ArrayList<LiveSession> liveSessions, int pageMax, CardLayout resultCards, JPanel resultContentPanel, int page, MainPanel mainPanel, CardLayout cards) {
         this.setLayout(null);
         this.setBackground(Color.decode("#14151A"));
 
         int xinterval =(int)((UIStyle.width - 100 - 100 - 200) / 3);
         for(int i = 8 * (page - 1); i < liveSessions.size() && i < 8 * (page -1) + 4; i++)
         {
-            LivePanel live = new LivePanel(liveSessions.get(i), 100+ xinterval * (i%4), 40, "small");
+            LivePanel live = new LivePanel(liveSessions.get(i), 100+ xinterval * (i%4), 40, "small", mainPanel, cards);
             this.add(live);
         }
         for(int i = 8 *(page - 1) + 4; i < liveSessions.size() && i < 8* (page - 1) + 8; i++)
         {
-            LivePanel live = new LivePanel(liveSessions.get(i), 100+ xinterval * ((i-4)%4), 40 + 150, "small");
+            LivePanel live = new LivePanel(liveSessions.get(i), 100+ xinterval * ((i-4)%4), 40 + 150, "small",  mainPanel, cards);
             this.add(live);
         }
         JSlider pages = new JSlider(1, pageMax + 1, page);
@@ -207,16 +210,19 @@ class LiveDetailPanel extends JPanel
     private InputText category_lower;
     private InputText like_lower;
     private InputText rating_lower;
-    private DynamicText file_upper;
+    private InputText num_lower;
     private Picture pic;
     private TextButton save;
     private TextButton delete;
-    private JFileChooser jfc;
-    private InputText file_lower;
+    private TextButton book;
+    private InputText price_lower;
     private MouseListener addingVideo;
     private MouseListener modifyVideo;
+    private DynamicText coachId_upper;
+    private InputText coachId_lower;
+    private boolean editable = true;
 
-    public LiveDetailPanel() {
+    public LiveDetailPanel(MainPanel mainPanel) {
 
         this.setBackground(Color.WHITE);
         int buttonHeight = (int)(0.06 * UIStyle.height);
@@ -256,6 +262,21 @@ class LiveDetailPanel extends JPanel
         this.add(rating_upper);
         this.add(rating_lower);
 
+        DynamicText num_upper = new DynamicText((int)(buttonStartX + UIStyle.width / 2 + 0.02*buttonWidth), buttonStartY, "left", Color.WHITE, Color.BLACK, "Available Num", buttonWidth, buttonHeight, UIStyle.NORMAL_ARIAL_BOLD);
+        num_lower = new InputText((int)(buttonStartX + UIStyle.width / 2), buttonStartY + 1 * buttonHeight, buttonWidth, buttonHeight , 15, false,  "");
+        this.add(num_upper);
+        this.add(num_lower);
+
+        DynamicText price_upper = new DynamicText((int)(buttonStartX + UIStyle.width / 2 + 0.02*buttonWidth), buttonStartY + 2 * buttonHeight, "left", Color.WHITE, Color.BLACK, "Price", buttonWidth, buttonHeight, UIStyle.NORMAL_ARIAL_BOLD);
+        price_lower = new InputText((int)(buttonStartX + UIStyle.width / 2), buttonStartY + 3 * buttonHeight, buttonWidth, buttonHeight , 15, false,  "");
+        this.add(price_upper);
+        this.add(price_lower);
+
+        coachId_upper = new DynamicText((int)(buttonStartX + UIStyle.width / 2 + 0.02*buttonWidth), buttonStartY + 4 * buttonHeight, "left", Color.WHITE, Color.BLACK, "Coach ID", buttonWidth, buttonHeight, UIStyle.NORMAL_ARIAL_BOLD);
+        coachId_lower = new InputText((int)(buttonStartX + UIStyle.width / 2), buttonStartY + 5 * buttonHeight, buttonWidth, buttonHeight , 15, false,  "");
+        this.add(coachId_upper);
+        this.add(coachId_lower);
+
 
 
         save = new TextButton(UIStyle.GREEN_OK, Color.WHITE, "Save", (int)(buttonStartX +  2.5* buttonWidth ), buttonStartY + 9 * buttonHeight, buttonWidth / 2, buttonHeight, UIStyle.NORMAL_FONT, true, "mid");
@@ -263,6 +284,20 @@ class LiveDetailPanel extends JPanel
 
         delete = new TextButton(Color.decode("#E04147"), Color.WHITE, "Delete", (int)(buttonStartX +  1.6* buttonWidth ), buttonStartY + 9 * buttonHeight, buttonWidth / 2, buttonHeight, UIStyle.NORMAL_FONT, true, "mid");
         this.add(delete);
+
+        book = new TextButton(UIStyle.GREEN_OK, Color.WHITE, "Book", (int)(buttonStartX +  2.5* buttonWidth ), buttonStartY + 9 * buttonHeight, buttonWidth / 2, buttonHeight, UIStyle.NORMAL_FONT, true, "mid");
+        this.add(book);
+        book.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                if(LoginToken.getId() != null && LoginToken.getType().equals("Customer")) {
+                    PersonalController.getController().bookLiveSession(LoginToken.getId(), currentLive.getLiveSessionId());
+                    TempContentPanel.reminder.OK("Book Success!");
+                    num_lower.setText((Integer.parseInt(num_lower.getText()) - 1) + "");
+                }
+            }
+        });
 
 //        delete.addMouseListener(new MouseAdapter() {
 //            @Override
@@ -273,46 +308,35 @@ class LiveDetailPanel extends JPanel
 //            }
 //        });
 
-        file_upper = new DynamicText((int) (buttonStartX + 1.5 * buttonWidth + 0.02*buttonWidth), buttonStartY , "left", Color.WHITE, Color.BLACK, "Url", buttonWidth, buttonHeight, UIStyle.NORMAL_ARIAL_BOLD);
-        file_lower = new InputText((int) (buttonStartX + 1.5 * buttonWidth), buttonStartY +buttonHeight, buttonWidth, buttonHeight , 15, false,  "");
-        this.add(file_upper);
-        this.add(file_lower);
-        file_lower.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-                jfc = new JFileChooser();
-                jfc.setBackground(Color.white);
-                int returnVal = jfc.showOpenDialog(null);
-                if (returnVal == JFileChooser.APPROVE_OPTION) {
-                    file_lower.setText(jfc.getSelectedFile().toString());
-                } else {
 
-                }
-            }
-        });
 
         modifyVideo = new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:SS");
-
-                Date start = null;
-                Date end = null;
-                try {
-                    start = new Date(sdf.parse(start_lower.getText()).getTime());
-                    end = new Date(sdf.parse(end_lower.getText()).getTime());
-
-                }
-                catch(Exception e1)
+                boolean checkPass = true;
+                if(Toolbox.isDateForm2(start_lower.getText()))
                 {
-
+                    TempContentPanel.reminder.WRONG("Start time should be " + Toolbox.dateForm2Format);
+                    checkPass = false;
                 }
-                LiveSession liveToBeModify = new LiveSession(currentLive.getLiveSessionId(), Double.parseDouble(rating_lower.getText()), category_lower.getText(), start, end, Integer.parseInt(like_lower.getText()),
-                        currentLive.getViewCounts(), currentLive.getCustomer_cusId(), currentLive.getCoach_coachId(), currentLive.getAvailableNum(), currentLive.getPrice());
+                else if(Toolbox.isDateForm2(end_lower.getText()))
+                {
+                    TempContentPanel.reminder.WRONG("End time should be " + Toolbox.dateForm2Format);
+                    checkPass = false;
+                }
+                else if(Toolbox.isCategory(category_lower.getText()))
+                {
+                    TempContentPanel.reminder.WRONG("Category not exist");
+                    checkPass = false;
+                }
+                else if(like_lower.getText().equals("") || rating_lower.getText().equals("")
+                        || num_lower.getText().equals("") || price_lower.getText().equals(""))
+                {
+                    TempContentPanel.reminder.WRONG("Some field is empty");
+                    checkPass = false;
+                }
 
-                LiveController.getController().addSession(liveToBeModify);
                 TempContentPanel.reminder.OK("Save Success!");
             }
         };
@@ -321,37 +345,61 @@ class LiveDetailPanel extends JPanel
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-//                String url = file_lower.getText();
-//                String fileName = url.substring(url.lastIndexOf('/') + 1);
-//
-//
-//                Video videoToBeAdd = new Video(null, fileName, title_lower.getText(),
-//                        Double.parseDouble(rating_lower.getText()), category_lower.getText(), Integer.parseInt(like_lower.getText()),
-//                        0, level_lower.getText());
-//                VideoController.getController().AddVideo(videoToBeAdd);
-//                TempContentPanel.reminder.OK("Adding Success!");
-//
-//                String path = UIStyle.class.getClassLoader().getResource("HIIT.jpg").getPath();
-//                String toBeMoved = path.substring(0, path.length() - 9);
-//                toBeMoved = toBeMoved + "/" + fileName;
-//
-//                String srcFile = url;
-//                String desFile = toBeMoved;
-//                try {
-//                    // 使用缓冲字节流进行文件复制
-//                    BufferedInputStream bis = new BufferedInputStream(new FileInputStream(srcFile));
-//                    BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(desFile));
-//                    byte[] b = new byte[1024];
-//                    Integer len = 0;
-//                    //一次读取1024字节的数据
-//                    while ((len = bis.read(b)) != -1) {
-//                        bos.write(b, 0, len);
-//                    }
-//                    bis.close();
-//                    bos.close();
-//                } catch (Exception e1) {
-//                    e1.printStackTrace();
-//                }
+                boolean checkPass = true;
+                if(!Toolbox.isDateForm2(start_lower.getText()))
+                {
+                    TempContentPanel.reminder.WRONG("Start time should be " + Toolbox.dateForm2Format);
+                    checkPass = false;
+                }
+                else if(!Toolbox.isDateForm2(end_lower.getText()))
+                {
+                    TempContentPanel.reminder.WRONG("End time should be " + Toolbox.dateForm2Format);
+                    checkPass = false;
+                }
+                else if(!Toolbox.isCategory(category_lower.getText()))
+                {
+                    TempContentPanel.reminder.WRONG("Category not exist");
+                    checkPass = false;
+                }
+                else if(!Toolbox.isCoachID(coachId_lower.getText()))
+                {
+                    TempContentPanel.reminder.WRONG("Coach not exist");
+                    checkPass = false;
+                }
+                else if(like_lower.getText().equals("") || rating_lower.getText().equals("")
+                        || num_lower.getText().equals("") || price_lower.getText().equals(""))
+                {
+                    TempContentPanel.reminder.WRONG("Some field is empty");
+                    checkPass = false;
+                }
+
+                if(checkPass) {
+
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:SS");
+
+                    Date start = null;
+                    Date end = null;
+                    try {
+                        start = new Date(sdf.parse(start_lower.getText()).getTime());
+                        end = new Date(sdf.parse(end_lower.getText()).getTime());
+
+                    } catch (Exception e1) {
+
+                    }
+                    try {
+                        LiveSession liveToBeModify = new LiveSession("", Double.parseDouble(rating_lower.getText()), category_lower.getText(), start, end, Integer.parseInt(like_lower.getText()),
+                                0, "", coachId_lower.getText(), Integer.parseInt(num_lower.getText()), Integer.parseInt(price_lower.getText()));
+                        LiveController.getController().addSession(liveToBeModify);
+                        TempContentPanel.reminder.OK("Save Success!");
+                        mainPanel.updateLiveInfo();
+                    }
+                    catch(Exception e2)
+                    {
+                        TempContentPanel.reminder.WRONG("Number format error");
+                    }
+
+                }
+
             }
         };
 
@@ -368,6 +416,10 @@ class LiveDetailPanel extends JPanel
         }
     }
 
+    public void setEditable(boolean editable) {
+        this.editable = editable;
+    }
+
     public void setCurrentLive(LiveSession currentLive) {
         if(!isAdding) {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:SS");
@@ -375,13 +427,16 @@ class LiveDetailPanel extends JPanel
             String end = sdf.format(currentLive.getEndTime());
 
             this.currentLive = currentLive;
+            coachId_lower.setVisible(false);
+            coachId_upper.setVisible(false);
+            num_lower.setText(""+currentLive.getAvailableNum());
+            price_lower.setText("" + currentLive.getPrice());
             start_lower.setText(start);
             category_lower.setText(currentLive.getCategory());
             end_lower.setText(end);
             like_lower.setText(currentLive.getLikes() + "");
             rating_lower.setText(currentLive.getRating() + "");
-            file_lower.setVisible(false);
-            file_upper.setVisible(false);
+
             save.removeMouseListener(addingVideo);
             save.addMouseListener(modifyVideo);
             delete.setVisible(true);
@@ -389,15 +444,15 @@ class LiveDetailPanel extends JPanel
             int buttonWidth = (int)(0.244 * UIStyle.width);
             int buttonStartY = (int)(0.1 * UIStyle.height);
             int buttonStartX = (int)(0.1 * UIStyle.width);
-            int picWidth = 200;
-            int picHeight = 200;
+            int picWidth = 150;
+            int picHeight = 150;
             if(pic != null)
                 this.remove(pic);
             try {
                 String path = UIStyle.class.getClassLoader().getResource(currentLive.getCoach_coachId() + ".png").getPath();
                 pic = new Picture(path, picWidth, picHeight);
                 this.add(pic);
-                pic.setBounds((int) (buttonStartX + 2.5 * buttonWidth - (picWidth - buttonWidth / 2)), buttonStartY, picWidth, picHeight);
+                pic.setBounds((int) (buttonStartX + 2.5 * buttonWidth - (picWidth - buttonWidth / 2)), buttonStartY + 200, picWidth, picHeight);
             }
             catch (Exception e)
             {
@@ -407,25 +462,46 @@ class LiveDetailPanel extends JPanel
         else
         {
             this.currentLive = currentLive;
+            num_lower.setText("");
+            price_lower.setText("");
             start_lower.setText("");
             category_lower.setText("");
             end_lower.setText("");
             like_lower.setText("");
             rating_lower.setText("");
-            file_upper.setVisible(true);
-            file_lower.setVisible(true);
-            file_lower.setText("");
+            coachId_lower.setText("");
+            coachId_lower.setVisible(true);
+            coachId_upper.setVisible(true);
+
             if(pic != null)
                 this.remove(pic);
             save.addMouseListener(addingVideo);
             save.removeMouseListener(modifyVideo);
             delete.setVisible(false);
 
-
         }
 
+        num_lower.setEditable(editable);
+        price_lower.setEditable(editable);
+        start_lower.setEditable(editable);
+        category_lower.setEditable(editable);
+        end_lower.setEditable(editable);
+        like_lower.setEditable(editable);
+        rating_lower.setEditable(editable);
+        coachId_lower.setEditable(editable);
 
-
+        if(editable)
+        {
+            book.setVisible(false);
+            delete.setVisible(true);
+            save.setVisible(true);
+        }
+        else
+        {
+            book.setVisible(true);
+            delete.setVisible(false);
+            save.setVisible(false);
+        }
     }
 
 }

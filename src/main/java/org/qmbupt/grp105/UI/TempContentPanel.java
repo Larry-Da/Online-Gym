@@ -60,7 +60,7 @@ public class TempContentPanel extends JPanel
         contentContainer.add(emailPanel, "email");
         registerPanel = new RegisterPanel();
         contentContainer.add(registerPanel, "register");
-        liveDetailPanel = new LiveDetailPanel();
+        liveDetailPanel = new LiveDetailPanel(mainPanel);
         contentContainer.add(liveDetailPanel, "liveModify");
 
 
@@ -153,6 +153,7 @@ public class TempContentPanel extends JPanel
         }
         else if(type.equals("liveAdd"))
         {
+            liveDetailPanel.setEditable(true);
             if(currentContent.equals("liveAdd"))
             {
                 liveDetailPanel.setAdding(true);
@@ -171,8 +172,21 @@ public class TempContentPanel extends JPanel
             {
                 currentContent = "liveModify";
             }
+            liveDetailPanel.setEditable(true);
+            LiveSession liveSession = LiveController.getController().getLiveSessionBySessionId(id);
+            liveDetailPanel.setAdding(false);
+            liveDetailPanel.setCurrentLive(liveSession);
+            innerCards.show(contentContainer, "liveModify");
+        }
+        else if(type.equals("live"))
+        {
+            if(!currentContent.equals("live"))
+            {
+                currentContent = "live";
+            }
 
             LiveSession liveSession = LiveController.getController().getLiveSessionBySessionId(id);
+            liveDetailPanel.setEditable(false);
             liveDetailPanel.setAdding(false);
             liveDetailPanel.setCurrentLive(liveSession);
             innerCards.show(contentContainer, "liveModify");
