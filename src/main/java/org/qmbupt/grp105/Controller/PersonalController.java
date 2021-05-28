@@ -263,6 +263,19 @@ public class PersonalController {
             e.printStackTrace();
         }
     }
+    public void removeBookedSession(String cusId, String sessionId) {
+        try {
+            Customer customer = getCusInfoByCusId(cusId);
+            ArrayList<String> sessions = customer.getBookedSessions();
+            if(sessions.contains(sessionId)) {
+                sessions.remove(sessionId);
+                customer.setBookedSessions(sessions);
+            }
+            CustomerManager.writeCustomerInfo(customer.convert());
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+    }
     public void watchVideo(String cusId, String videoId) {
         try {
             Customer customer = CustomerManager.getCustomerById(cusId).converter();

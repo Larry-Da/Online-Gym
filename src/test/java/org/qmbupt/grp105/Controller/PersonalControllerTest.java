@@ -170,7 +170,22 @@ public class PersonalControllerTest {
             System.out.println(sid);
         }
     }
-
+    @Test
+    public void removeBookedSession() {
+        System.out.println("Remove Booked Session for cs1");
+        System.out.println("Before removal");
+        ArrayList<String> livesession = personalController.getCusInfoByCusId("cs1").getBookedSessions();
+        for(String sid: livesession) {
+            System.out.println(sid);
+        }
+        personalController.removeBookedSession("cs1","lvs4");
+        System.out.println("after changed");
+        livesession = personalController.getCusInfoByCusId("cs1").getBookedSessions();
+        assert !livesession.contains("lvs4");
+        for(String sid: livesession) {
+            System.out.println(sid);
+        }
+    }
     @Test
     public void watchVideo() {
         System.out.println("Video history for cs1");
