@@ -33,7 +33,7 @@ public class Video {
     public String level;
 
     @JSONField(name = "comments")
-    ArrayList<String> comments;
+    public ArrayList<String> comments;
 
     public org.qmbupt.grp105.Entity.Video converter() {
         return new org.qmbupt.grp105.Entity.Video(this.videoId, this.url, this.name, this.rating, this.category,
