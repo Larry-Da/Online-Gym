@@ -135,8 +135,17 @@ public class LivePanel extends JPanel
                 public void mouseClicked(MouseEvent e) {
                     super.mouseClicked(e);
                     if(LoginToken.getId() != null && LoginToken.getType().equals("Customer")) {
-                        PersonalController.getController().bookLiveSession(LoginToken.getId(), live.getLiveSessionId());
-                        LiveClassPanel.reminder.OK("Book Success!");
+
+                        boolean res = PersonalController.getController().bookLiveSession(LoginToken.getId(), live.getLiveSessionId());
+                        if(res == true)
+                            LiveClassPanel.reminder.OK("Book Success!");
+                        else
+                        {
+                            if(PersonalController.getController().getCusInfoByCusId(LoginToken.getId()).getBalance() < live.getPrice())
+                                LiveClassPanel.reminder.WRONG("Insufficient funds");
+                            else
+                                LiveClassPanel.reminder.WRONG("You have already booked this live.");
+                        }
                     }
                     else
                     {

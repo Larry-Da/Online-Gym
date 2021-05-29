@@ -256,12 +256,14 @@ public class PersonalController {
         }
 
     }
-    public void bookLiveSession(String cusId, String sessionId) {
+    public boolean bookLiveSession(String cusId, String sessionId) {
+        boolean res = false;
         try {
-            CustomerManager.bookSession(cusId, sessionId);
+            res = CustomerManager.bookSession(cusId, sessionId);
         } catch(IOException e) {
             e.printStackTrace();
         }
+        return res;
     }
     public void removeBookedSession(String cusId, String sessionId) {
         try {
