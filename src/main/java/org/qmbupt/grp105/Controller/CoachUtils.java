@@ -6,5 +6,6 @@ import org.qmbupt.grp105.Entity.Coach;
 public interface CoachUtils {
 
     public Coach getCoachInfoById(String coId);
+    public void updateCoach(Coach coach);
 
 }

@@ -1657,6 +1657,32 @@ class CoachMembershipPanel extends JPanel
         TextButton save = new TextButton(UIStyle.GREEN_OK, Color.WHITE, "Save", (int)(buttonStartX + 1.5 * buttonWidth), buttonStartY + 7 * buttonHeight, buttonWidth / 2, buttonHeight, UIStyle.NORMAL_FONT, true, "mid");
         this.add(save);
 
+        save.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                boolean checkPass = true;
+                if(!Toolbox.getInstance().isGender(gender_lower.getText()))
+                {
+                    PersonalPanel.reminder.WRONG("Gender should be " + Toolbox.getInstance().genderFormat);
+                    checkPass = false;
+                }
+                else if(!Toolbox.getInstance().isEmail(email_lower.getText()))
+                {
+                    PersonalPanel.reminder.WRONG("Email should be " + Toolbox.getInstance().emailFormat);
+                    checkPass = false;
+                }
+                if(checkPass) {
+                    coach.setName(name_lower.getText());
+                    coach.setGender(gender_lower.getText().charAt(0));
+                    coach.setEmail(email_lower.getText());
+                    coach.setPhoneNo(phone_lower.getText());
+                    PersonalController.getController().updateCoach(coach);
+                    PersonalPanel.reminder.OK("Save Success!");
+                }
+            }
+        });
+
     }
 }
 class CoachLivePanel extends JPanel {

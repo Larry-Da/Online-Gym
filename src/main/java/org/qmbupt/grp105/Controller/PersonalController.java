@@ -211,6 +211,16 @@ public class PersonalController implements CustomerUtils, AdminUtils, CoachUtils
 
         return -1;
     }
+    public void updateCoach(Coach coach)
+    {
+        try {
+            CoachManager.writeCoachInfo(coach.convert());
+        }
+        catch (Exception e)
+        {
+
+        }
+    }
     public void updateCustomer(Customer customer) {
         try {
             if(customer.getCusId().equals(""))
