@@ -113,12 +113,12 @@ public class VideoDetailPanel extends JPanel
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 boolean checkPass = true;
-                if(!Toolbox.isCategory(category_lower.getText()))
+                if(!Toolbox.getInstance().getInstance().isCategory(category_lower.getText()))
                 {
                     TempContentPanel.reminder.WRONG("Category not exist");
                     checkPass = false;
                 }
-                else if(!Toolbox.isMembership(level_lower.getText()))
+                else if(!Toolbox.getInstance().isMembership(level_lower.getText()))
                 {
                     TempContentPanel.reminder.WRONG("Level not exist");
                     checkPass = false;
@@ -151,21 +151,21 @@ public class VideoDetailPanel extends JPanel
                 super.mouseClicked(e);
 
                 boolean checkPass = true;
-                if(!Toolbox.isCategory(category_lower.getText()))
+                if(!Toolbox.getInstance().isCategory(category_lower.getText()))
                 {
                     TempContentPanel.reminder.WRONG("Category not exist");
                     checkPass = false;
                 }
-                else if(!Toolbox.isMembership(level_lower.getText()))
+                else if(!Toolbox.getInstance().isMembership(level_lower.getText()))
                 {
                     TempContentPanel.reminder.WRONG("Level not exist");
                     checkPass = false;
                 }
-                else if(!Toolbox.isPicture(file_lower.getText()))
+                else if(!Toolbox.getInstance().isPicture(file_lower.getText()))
                 {
                     TempContentPanel.reminder.WRONG("Not a picture");
                     System.out.println(file_lower.getText());
-                    System.out.println(Toolbox.isPicture(file_lower.getText()));
+                    System.out.println(Toolbox.getInstance().isPicture(file_lower.getText()));
                     checkPass = false;
                 }
                 else if(title_lower.getText().equals(""))

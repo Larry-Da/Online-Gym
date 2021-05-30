@@ -10,7 +10,7 @@ import org.qmbupt.grp105.backend.model.Session;
 import java.io.IOException;
 import java.util.*;
 
-public class LiveController {
+public class LiveController implements LiveUtils{
 
     private static LiveController liveController = new LiveController();
     private LiveController() {}

@@ -2,6 +2,7 @@ package org.qmbupt.grp105.UI;
 
 import org.qmbupt.grp105.Controller.LiveController;
 import org.qmbupt.grp105.Controller.PersonalController;
+import org.qmbupt.grp105.Controller.ToolRequired;
 import org.qmbupt.grp105.Controller.Toolbox;
 import org.qmbupt.grp105.Entity.LiveSession;
 import org.qmbupt.grp105.UI.MyUIComponent.*;
@@ -316,17 +317,18 @@ class LiveDetailPanel extends JPanel
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 boolean checkPass = true;
-                if(Toolbox.isDateForm2(start_lower.getText()))
+
+                if(Toolbox.getInstance().isDateForm2(start_lower.getText()))
                 {
-                    TempContentPanel.reminder.WRONG("Start time should be " + Toolbox.dateForm2Format);
+                    TempContentPanel.reminder.WRONG("Start time should be " + Toolbox.getInstance().dateForm2Format);
                     checkPass = false;
                 }
-                else if(Toolbox.isDateForm2(end_lower.getText()))
+                else if(Toolbox.getInstance().isDateForm2(end_lower.getText()))
                 {
-                    TempContentPanel.reminder.WRONG("End time should be " + Toolbox.dateForm2Format);
+                    TempContentPanel.reminder.WRONG("End time should be " + Toolbox.getInstance().dateForm2Format);
                     checkPass = false;
                 }
-                else if(Toolbox.isCategory(category_lower.getText()))
+                else if(Toolbox.getInstance().isCategory(category_lower.getText()))
                 {
                     TempContentPanel.reminder.WRONG("Category not exist");
                     checkPass = false;
@@ -347,22 +349,22 @@ class LiveDetailPanel extends JPanel
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 boolean checkPass = true;
-                if(!Toolbox.isDateForm2(start_lower.getText()))
+                if(!Toolbox.getInstance().isDateForm2(start_lower.getText()))
                 {
-                    TempContentPanel.reminder.WRONG("Start time should be " + Toolbox.dateForm2Format);
+                    TempContentPanel.reminder.WRONG("Start time should be " + Toolbox.getInstance().dateForm2Format);
                     checkPass = false;
                 }
-                else if(!Toolbox.isDateForm2(end_lower.getText()))
+                else if(!Toolbox.getInstance().isDateForm2(end_lower.getText()))
                 {
-                    TempContentPanel.reminder.WRONG("End time should be " + Toolbox.dateForm2Format);
+                    TempContentPanel.reminder.WRONG("End time should be " + Toolbox.getInstance().dateForm2Format);
                     checkPass = false;
                 }
-                else if(!Toolbox.isCategory(category_lower.getText()))
+                else if(!Toolbox.getInstance().isCategory(category_lower.getText()))
                 {
                     TempContentPanel.reminder.WRONG("Category not exist");
                     checkPass = false;
                 }
-                else if(!Toolbox.isCoachID(coachId_lower.getText()))
+                else if(!Toolbox.getInstance().isCoachID(coachId_lower.getText()))
                 {
                     TempContentPanel.reminder.WRONG("Coach not exist");
                     checkPass = false;

@@ -16,108 +16,68 @@ public class Customer extends Person
     private int points; //积分
     private ArrayList<String> videosHistory;
     private ArrayList<String> favouriteVideos;
+    private ArrayList<String> bookedSessions;
     //private String exerciseLevel;
 
 
-    public ArrayList<String> getFavouriteVideos() {
-        return favouriteVideos;
-    }
-
-    public void setFavouriteVideos(ArrayList<String> favouriteVideos) {
-        this.favouriteVideos = favouriteVideos;
-    }
-
     public String getCusId() {
         return cusId;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public String getPhoneNo() {
-        return phoneNo;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public char getGender() {
-        return gender;
-    }
-
-    public Date getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    public String getMembershipLevel() {
-        return membershipLevel;
-    }
-
-    public String getExpiredTime() {
-
-        return expiredTime;
-    }
-
-    public int getBalance() {
-        return balance;
-    }
-
-    public int getPoints() {
-        return points;
     }
 
     public void setCusId(String cusId) {
         this.cusId = cusId;
     }
 
+    public int getAge() {
+        return age;
+    }
+
     public void setAge(int age) {
         this.age = age;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void setPhoneNo(String phoneNo) {
-        this.phoneNo = phoneNo;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+    public char getGender() {
+        return gender;
     }
 
     public void setGender(char gender) {
         this.gender = gender;
     }
 
+    public Date getDateOfBirth() {
+        return dateOfBirth;
+    }
+
     public void setDateOfBirth(Date dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
+    }
+
+    public String getMembershipLevel() {
+        return membershipLevel;
     }
 
     public void setMembershipLevel(String membershipLevel) {
         this.membershipLevel = membershipLevel;
     }
 
-    public void setRemainTime(String remainTime) {
-        this.expiredTime = remainTime;
+    public String getExpiredTime() {
+        return expiredTime;
+    }
+
+    public void setExpiredTime(String expiredTime) {
+        this.expiredTime = expiredTime;
+    }
+
+    public int getBalance() {
+        return balance;
     }
 
     public void setBalance(int balance) {
         this.balance = balance;
+    }
+
+    public int getPoints() {
+        return points;
     }
 
     public void setPoints(int points) {
@@ -130,6 +90,22 @@ public class Customer extends Person
 
     public void setVideosHistory(ArrayList<String> videosHistory) {
         this.videosHistory = videosHistory;
+    }
+
+    public ArrayList<String> getFavouriteVideos() {
+        return favouriteVideos;
+    }
+
+    public void setFavouriteVideos(ArrayList<String> favouriteVideos) {
+        this.favouriteVideos = favouriteVideos;
+    }
+
+    public ArrayList<String> getBookedSessions() {
+        return bookedSessions;
+    }
+
+    public void setBookedSessions(ArrayList<String> bookedSessions) {
+        this.bookedSessions = bookedSessions;
     }
 
     public Customer(String cusId, int age, String name, String password, String phoneNo, String email, char gender,
@@ -147,15 +123,8 @@ public class Customer extends Person
         this.balance = balance;
         this.points = points;
     }
-    private ArrayList<String> bookedSessions;
 
-    public ArrayList<String> getBookedSessions() {
-        return bookedSessions;
-    }
 
-    public void setBookedSessions(ArrayList<String> bookedSessions) {
-        this.bookedSessions = bookedSessions;
-    }
 
     public static Customer getSample()
     {

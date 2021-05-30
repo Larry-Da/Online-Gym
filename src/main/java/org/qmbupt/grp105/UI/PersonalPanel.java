@@ -508,14 +508,14 @@ class CustomerMembershipPanel extends JPanel
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 boolean checkPass = true;
-                if(!Toolbox.isGender(gender_lower.getText()))
+                if(!Toolbox.getInstance().isGender(gender_lower.getText()))
                 {
-                    PersonalPanel.reminder.WRONG("Gender should be " + Toolbox.genderFormat);
+                    PersonalPanel.reminder.WRONG("Gender should be " + Toolbox.getInstance().genderFormat);
                     checkPass = false;
                 }
-                else if(!Toolbox.isEmail(email_lower.getText()))
+                else if(!Toolbox.getInstance().isEmail(email_lower.getText()))
                 {
-                    PersonalPanel.reminder.WRONG("Email should be " + Toolbox.emailFormat);
+                    PersonalPanel.reminder.WRONG("Email should be " + Toolbox.getInstance().emailFormat);
                     checkPass = false;
                 }
                 if(checkPass) {

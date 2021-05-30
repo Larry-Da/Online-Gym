@@ -14,7 +14,7 @@ import org.qmbupt.grp105.backend.dblayer.VideoManager;
  * @version 1.2
  * @author Wenrui Zhao
  */
-public class PersonalController {
+public class PersonalController implements CustomerUtils, AdminUtils, CoachUtils{
 
     private static PersonalController personalController = new PersonalController();
     private PersonalController() {};

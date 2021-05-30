@@ -146,24 +146,24 @@ class RegisterPanel extends JPanel
 
                 boolean checkPass = true;
                 // check gender
-                if(!Toolbox.isGender(gender_lower.getText()))
+                if(!Toolbox.getInstance().isGender(gender_lower.getText()))
                 {
-                    TempContentPanel.reminder.WRONG("Gender should be " + Toolbox.genderFormat);
+                    TempContentPanel.reminder.WRONG("Gender should be " + Toolbox.getInstance().genderFormat);
                     checkPass = false;
                 }
-                else if(!Toolbox.isDateForm1(dateOfBirth_lower.getText()))
+                else if(!Toolbox.getInstance().isDateForm1(dateOfBirth_lower.getText()))
                 {
-                    TempContentPanel.reminder.WRONG("Date of birth should be " + Toolbox.dateForm1Format);
+                    TempContentPanel.reminder.WRONG("Date of birth should be " + Toolbox.getInstance().dateForm1Format);
                     checkPass = false;
                 }
-                else if(!Toolbox.isEmail(email_lower.getText()))
+                else if(!Toolbox.getInstance().isEmail(email_lower.getText()))
                 {
-                    TempContentPanel.reminder.WRONG("Email should be " + Toolbox.emailFormat);
+                    TempContentPanel.reminder.WRONG("Email should be " + Toolbox.getInstance().emailFormat);
                     checkPass = false;
                 }
-                else if(!Toolbox.isPassword(password_lower.getText()))
+                else if(!Toolbox.getInstance().isPassword(password_lower.getText()))
                 {
-                    TempContentPanel.reminder.WRONG("Password should be " + Toolbox.passwordFormat);
+                    TempContentPanel.reminder.WRONG("Password should be " + Toolbox.getInstance().passwordFormat);
                     checkPass = false;
                 }
                 else if(name_lower.getText().equals(""))
