@@ -29,18 +29,7 @@ public class VideoManager {
     public static ArrayList<Video> getVideos() throws IOException {
         return DataManager.getInstance().videos;
     }
-
-    public static ArrayList<String> getVideoIds() throws IOException {
-        ArrayList<Video> videos = DataManager.getInstance().videos;
-
-        ArrayList<String> ret = new ArrayList<>();
-
-        for (Video video : videos) {
-            ret.add(video.videoId);
-        }
-
-        return ret;
-    }
+    
 
     private static void writeOrDeleteVideo(Video video, String videoId) throws IOException {
         if (video != null) videoId = video.videoId;

@@ -1,22 +1,14 @@
 package org.qmbupt.grp105.Controller;
 
-import org.qmbupt.grp105.Entity.*;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import org.qmbupt.grp105.Entity.Customer;
 import org.qmbupt.grp105.Entity.Video;
-import org.qmbupt.grp105.backend.BackendServer;
 import org.qmbupt.grp105.backend.dblayer.*;
 import org.qmbupt.grp105.backend.dblayer.VideoManager;
 import java.io.IOException;
 import java.util.*;
 
 public class VideoController {
-    private static Map<String, Object> param = new HashMap<>();
-    private static Gson gson = new Gson();
-    private static Request request;
-    private static Response response;
-    private static BackendServer backendServer;
+
     private static VideoController videoController = new VideoController();
     private VideoController() {};
     public static VideoController getController()
@@ -135,17 +127,17 @@ public class VideoController {
      * @param cusId customer ID
      * @return a list of videos
      */
-//    public ArrayList<Video> getVideosByCusId(String cusId) {
-//        PersonalController personalController = new PersonalController();
-//        Customer customer = personalController.getCusInfoByCusId(cusId);
-//        ArrayList<String> videoIds = customer.getVideosHistory();
-//        ArrayList<Video> videos = new ArrayList<>();
-//        for(String videoId : videoIds) {
-//            Video video = getVideoByVideoId(videoId);
-//            videos.add(video);
-//        }
-//        return videos;
-//    }
+    public ArrayList<Video> getVideosByCusId(String cusId) {
+        PersonalController personalController = PersonalController.getController();
+        Customer customer = personalController.getCusInfoByCusId(cusId);
+        ArrayList<String> videoIds = customer.getVideosHistory();
+        ArrayList<Video> videos = new ArrayList<>();
+        for(String videoId : videoIds) {
+            Video video = getVideoByVideoId(videoId);
+            videos.add(video);
+        }
+        return videos;
+    }
     /**
      * <p>
      *     This function adds a new video
@@ -192,81 +184,8 @@ public class VideoController {
         }
     }
 
-    /**
-     * filter videos by categories
-     * @param categories filter
-     * @return
-     */
-    public ArrayList<Video> getVideosByCategory(List<String> categories) {
-        ArrayList<Video> videos = getAllVideos();
-        ArrayList<Video> videoList = new ArrayList<>();
-        for(Video video : videos) {
-            if(categories.contains(video.getCategory())) {
-                videoList.add(video);
-            }
-        }
-        return videoList;
-    }
-    public ArrayList<Video> getVideosByCusId(String cusId) {
-        ArrayList<Video> videos = new ArrayList<>();
-        param.put("cusId",cusId);
-        request = new Request("getVideoIdsByCusId", param);
-        response = new Response(backendServer.execute(request.toJsonString()));
-        String status = response.getStatus();
-        if(status.equals("success")) {
-            JsonArray jsonArray = response.getPayload().getAsJsonArray("VideoIds");
-            List<String> videoIds = gson.fromJson(jsonArray, List.class);
-            for(String videoId : videoIds) {
-                Video video = getVideoByVideoId(videoId);
 
-                videos.add(video);
-            }
-            return videos;
-        }
-        return null;
-    }
-    public boolean likeVideo(String videoId) {
-        param.put("videoId",videoId);
-        request = new Request("liekeVideo",param);
-        //        response = new Response(backend.likeVideo(request));
-        response = new Response("{\"status\":\"success\"}");
-        String status = response.getStatus();
-        if(status.equalsIgnoreCase("success")) {
-            param.clear();
-            return true;
-        }
-        param.clear();
-        return false;
-    }
-    public boolean addVideoToFavourite(String cusId, String videoId) {
-        param.put("videoId",videoId);
-        param.put("cusId",cusId);
-        request = new Request("addVideoToFavourite",param);
-        //        response = new Response(backend.addVideoToFavourite(request));
-        response = new Response("{\"status\":\"success\"}");
-        String status = response.getStatus();
-        if(status.equalsIgnoreCase("success")) {
-            param.clear();
-            return true;
-        }
-        param.clear();
-        return false;
-    }
-    public boolean commentOnVideo(String comment, String cusId, String videoId) {
-        param.put("comment",comment);
-        param.put("cusId",cusId);
-        param.put("videoId",videoId);
-        request = new Request("commentOnVideo",param);
-        //        response = new Response(backend.addVideoToFavourite(request));
-        response = new Response("{\"status\":\"success\"}");
-        String status = response.getStatus();
-        if(status.equalsIgnoreCase("success")) {
-            param.clear();
-            return true;
-        }
-        param.clear();
-        return false;
-    }
+
 
     public ArrayList<Video> getHotVideo(int threshold) {
         ArrayList<Video> videos = getAllVideos();

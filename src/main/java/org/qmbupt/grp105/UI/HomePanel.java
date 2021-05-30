@@ -78,14 +78,14 @@ public class HomePanel extends JLayeredPane
 }
 class RegisterPanel extends JPanel
 {
-    InputText gender_lower;
-    InputText name_lower;
-    InputText dateOfBirth_lower;
-    InputText email_lower;
-    InputText phoneNo_lower;
-    InputText password_lower;
-    InputText age_lower;
-    TextButton save;
+    private InputText gender_lower;
+    private InputText name_lower;
+    private InputText dateOfBirth_lower;
+    private InputText email_lower;
+    private InputText phoneNo_lower;
+    private InputText password_lower;
+    private InputText age_lower;
+    private TextButton save;
 
 
     public RegisterPanel() {

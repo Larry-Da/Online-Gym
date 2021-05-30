@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Customer
+public class Customer extends Person
 {
     private String cusId;
     private int age;
@@ -17,10 +17,7 @@ public class Customer
     private ArrayList<String> videosHistory;
     private ArrayList<String> favouriteVideos;
     //private String exerciseLevel;
-    protected String name;
-    protected String password;
-    protected String phoneNo;
-    protected String email;
+
 
     public ArrayList<String> getFavouriteVideos() {
         return favouriteVideos;
@@ -134,9 +131,7 @@ public class Customer
     public void setVideosHistory(ArrayList<String> videosHistory) {
         this.videosHistory = videosHistory;
     }
-    public static String[] getAllAttibutes() {
-        return new String[]{"cusId","age","name","password","phoneNo","email","gender","dateOfBirth","membershipLevel","remainTime","balance","points"};
-    }
+
     public Customer(String cusId, int age, String name, String password, String phoneNo, String email, char gender,
                     Date dateOfBirth, String membershipLevel, String expiredTime, int balance, int points) {
         this.name = name;

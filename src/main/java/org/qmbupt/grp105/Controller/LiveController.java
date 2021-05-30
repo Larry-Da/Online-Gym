@@ -11,10 +11,7 @@ import java.io.IOException;
 import java.util.*;
 
 public class LiveController {
-    private static Map<String, Object> param = new HashMap<>();
-    private static Gson gson = new Gson();
-    private static Request request;
-    private static Response response;
+
     private static LiveController liveController = new LiveController();
     private LiveController() {}
     public static LiveController getController(){
@@ -124,10 +121,7 @@ public class LiveController {
         }
         return res;
     }
-    public int getAvailableNumOfSession(String liveSessionId) {
-        LiveSession liveSession = getLiveSessionBySessionId(liveSessionId);
-        return liveSession.getAvailableNum();
-    }
+
     public void addSession(LiveSession liveSession) {
         try {
             SessionManager.addSession(liveSession.converter());

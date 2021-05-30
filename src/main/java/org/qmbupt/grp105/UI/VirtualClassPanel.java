@@ -18,6 +18,8 @@ import javax.swing.plaf.basic.BasicSliderUI;
 
 public class VirtualClassPanel extends JPanel
 {
+    private SearchPanel searchPanel;
+    private CategoryPanel categoryPanel;
     public VirtualClassPanel(CardLayout cards, MainPanel mainPanel)
     {
         MenuBar menuBar = new MenuBar(cards, mainPanel, "Classes");
@@ -34,10 +36,10 @@ public class VirtualClassPanel extends JPanel
         CardLayout searchCards = new CardLayout();
         contentPanel.setLayout(searchCards);
 
-        SearchPanel searchPanel = new SearchPanel(searchCards, contentPanel, cards, mainPanel);
+        searchPanel = new SearchPanel(searchCards, contentPanel, cards, mainPanel);
         contentPanel.add(searchPanel, "searchPanel");
 
-        CategoryPanel categoryPanel = new CategoryPanel(searchCards, contentPanel, searchPanel);
+        categoryPanel = new CategoryPanel(searchCards, contentPanel, searchPanel);
         contentPanel.add(categoryPanel, "categoryPanel");
 
         searchCards.show(contentPanel, "categoryPanel");

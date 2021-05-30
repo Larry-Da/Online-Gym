@@ -69,13 +69,13 @@ public class PersonalControllerTest {
         System.out.println("");
     }
 
-    @Test
-    public void getMonthlyIncome() {
-        System.out.println("begin to test getMonthlyIncome()");
-        System.out.println(personalController.getMonthlyIncome(2));
-        System.out.println("test for getMonthlyIncome() end");
-        System.out.println("");
-    }
+//    @Test
+//    public void getMonthlyIncome() {
+//        System.out.println("begin to test getMonthlyIncome()");
+//        System.out.println(personalController.getMonthlyIncome(2));
+//        System.out.println("test for getMonthlyIncome() end");
+//        System.out.println("");
+//    }
 
     @Test
     public void getExpireTimeByCusId() {

@@ -1,13 +1,10 @@
 package org.qmbupt.grp105.Entity;
-public class Coach
+public class Coach extends Person
 {
     private String coachId;
     private int age;
     private char gender;
-    protected String name;
-    protected String password;
-    protected String phoneNo;
-    protected String email;
+
 
     public Coach(String coachId, int age, String name, String password, String phoneNo, String email, char gender) {
         this.name = name;

@@ -23,7 +23,7 @@ public class CustomerBookedLivePanel extends JPanel
     private FilterBox expired;
     private FilterBox categoryFilter;
     private JPanel contentPanel;
-    CardLayout innerCards = new CardLayout();
+    private CardLayout innerCards = new CardLayout();
     public CustomerBookedLivePanel()
     {
         this.setLayout(null);

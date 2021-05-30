@@ -15,7 +15,4 @@ public class SettingsManager {
         }
         return new ArrayList<>();
     }
-    public static void main(String[] args) throws IOException {
-        System.out.println(getSetting("category").get(0));
-    }
 }

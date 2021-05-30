@@ -65,18 +65,18 @@ public class PersonalPanel extends JPanel
 class CustomerPanel extends JPanel
 {
 
-    CustomerLeftPanel customerLeftPanel;
-    private CustomerRightPanel personalRightPanel;
+    private CustomerLeftPanel customerLeftPanel;
+    private CustomerRightPanel customerRightPanel;
     public CustomerPanel(CardLayout loginCards, JPanel contentPanel, CardLayout mainCards, MainPanel mainPanel)
     {
         this.setLayout(null);
         int barHeight = (int)(UIStyle.height) / 10;
         this.setBounds(0, 0, (int)(UIStyle.width), (int)(UIStyle.height - barHeight));
         CardLayout innerCards = new CardLayout();
-        personalRightPanel = new CustomerRightPanel(innerCards, mainCards, mainPanel);
-        this.add(personalRightPanel);
+        customerRightPanel = new CustomerRightPanel(innerCards, mainCards, mainPanel);
+        this.add(customerRightPanel);
 
-        customerLeftPanel = new CustomerLeftPanel(loginCards, contentPanel, innerCards, personalRightPanel);
+        customerLeftPanel = new CustomerLeftPanel(loginCards, contentPanel, innerCards, customerRightPanel);
         this.add(customerLeftPanel);
         customerLeftPanel.setVisible(true);
 
@@ -84,7 +84,7 @@ class CustomerPanel extends JPanel
     }
     public void updateCus(String id)
     {
-        personalRightPanel.update(id);
+        customerRightPanel.update(id);
         customerLeftPanel.updateInfo();
 
     }
@@ -185,10 +185,10 @@ class SignInPanel extends JPanel
 
 class CustomerLeftPanel extends JPanel
 {
-    int panelWidth;
-    int panelHeight;
-    Picture circleIcon;
-    DynamicText name;
+    private int panelWidth;
+    private int panelHeight;
+    private Picture circleIcon;
+    private DynamicText name;
     public CustomerLeftPanel(final CardLayout loginCards, final JPanel contentPanel, CardLayout contentCards, JPanel rightPanel)
     {
         panelWidth = (int)(UIStyle.width * 0.24);
@@ -306,12 +306,12 @@ class CustomerRightPanel extends JPanel
     private CardLayout innerCards;
     private CardLayout mainCards;
     private MainPanel mainPanel;
-    CustomerMembershipPanel membership;
-    CustomerBookedLivePanel bookedLivePanel;
-    VideoHistoryPanel videoHistoryPanel;
-    PersonalController controller;
-    FavoritePanel favoritePanel;
-    EmailPanel emailPanel;
+    private CustomerMembershipPanel membership;
+    private CustomerBookedLivePanel bookedLivePanel;
+    private VideoHistoryPanel videoHistoryPanel;
+    private PersonalController controller;
+    private FavoritePanel favoritePanel;
+    private EmailPanel emailPanel;
     public CustomerRightPanel(CardLayout innerCards, CardLayout mainCards, MainPanel mainPanel) {
         this.innerCards = innerCards;
         this.mainCards = mainCards;
@@ -535,7 +535,7 @@ class CustomerMembershipPanel extends JPanel
 class EmailPanel extends JPanel
 {
     private int pageMax;
-    ArrayList<JPanel> resultPanels = new ArrayList<>();
+    private ArrayList<JPanel> resultPanels = new ArrayList<>();
     private TextButton send;
 
     public EmailPanel(ArrayList<Mail> emails, CardLayout cards, MainPanel mainPanel, boolean isAdvice)
@@ -644,7 +644,7 @@ class EmailPanel extends JPanel
 class VideoHistoryPanel extends JPanel
 {
     private int pageMax;
-    ArrayList<JPanel> resultPanels = new ArrayList<>();
+    private ArrayList<JPanel> resultPanels = new ArrayList<>();
 
     public VideoHistoryPanel(ArrayList<Video> videos, CardLayout cards, MainPanel mainPanel)
     {
@@ -720,7 +720,7 @@ class VideoHistoryPanel extends JPanel
 class FavoritePanel extends JPanel
 {
     private int pageMax;
-    ArrayList<JPanel> resultPanels = new ArrayList<>();
+    private ArrayList<JPanel> resultPanels = new ArrayList<>();
 
     public FavoritePanel(ArrayList<Video> videos, CardLayout cards, MainPanel mainPanel)
     {
@@ -805,6 +805,7 @@ class AdministratorPanel extends JPanel
 {
 
     private AdministratorRightPanel administratorRightPanel;
+    private AdministratorLeftPanel administratorLeftPanel;
     public AdministratorPanel(CardLayout loginCards, JPanel contentPanel, CardLayout mainCards, MainPanel mainPanel)
     {
         this.setLayout(null);
@@ -814,7 +815,7 @@ class AdministratorPanel extends JPanel
         administratorRightPanel = new AdministratorRightPanel(innerCards, contentPanel, mainCards, mainPanel);
         this.add(administratorRightPanel);
         administratorRightPanel.setVisible(true);
-        AdministratorLeftPanel administratorLeftPanel = new AdministratorLeftPanel(loginCards, contentPanel, innerCards, administratorRightPanel);
+        administratorLeftPanel = new AdministratorLeftPanel(loginCards, contentPanel, innerCards, administratorRightPanel);
         this.add(administratorLeftPanel);
         administratorLeftPanel.setVisible(true);
 
@@ -830,8 +831,8 @@ class AdministratorPanel extends JPanel
 
 class AdministratorLeftPanel extends JPanel
 {
-    int panelWidth;
-    int panelHeight;
+    private int panelWidth;
+    private int panelHeight;
     public AdministratorLeftPanel(final CardLayout loginCards, final JPanel contentPanel, CardLayout contentCards, JPanel rightPanel)
     {
         panelWidth = (int)(UIStyle.width * 0.24);
@@ -1151,14 +1152,14 @@ class AdministratorMembershipPanel extends JPanel
 class AdministratorVideoManagement extends JPanel
 {
     private int pageMax;
-    ArrayList<JPanel> resultPanels = new ArrayList<>();
-    JPanel contentPanel;
-    CardLayout cards;
-    MainPanel mainPanel;
-    CardLayout innerCards;
-    InputText searchBar;
-    FilterBox categoryFilter;
-    FilterBox sortFilter;
+    private ArrayList<JPanel> resultPanels = new ArrayList<>();
+    private JPanel contentPanel;
+    private CardLayout cards;
+    private MainPanel mainPanel;
+    private CardLayout innerCards;
+    private InputText searchBar;
+    private FilterBox categoryFilter;
+    private FilterBox sortFilter;
     private String[] sortString = {"Sort", "Like", "Rating", "View"};
 
 
@@ -1312,11 +1313,11 @@ class AdministratorVideoManagement extends JPanel
 class AdministratorLiveManagement extends JPanel
 {
     private int pageMax;
-    ArrayList<JPanel> resultPanels = new ArrayList<>();
-    JPanel contentPanel;
-    CardLayout cards;
-    MainPanel mainPanel;
-    CardLayout innerCards;
+    private ArrayList<JPanel> resultPanels = new ArrayList<>();
+    private JPanel contentPanel;
+    private CardLayout cards;
+    private MainPanel mainPanel;
+    private CardLayout innerCards;
 
 
     public AdministratorLiveManagement(CardLayout cards, MainPanel mainPanel)
@@ -1454,8 +1455,8 @@ class CoachPanel extends JPanel
 
 class CoachLeftPanel extends JPanel
 {
-    int panelWidth;
-    int panelHeight;
+    private int panelWidth;
+    private int panelHeight;
     private DynamicText name;
     private Picture circleIcon;
     public CoachLeftPanel(final CardLayout loginCards, final JPanel contentPanel, CardLayout contentCards, JPanel rightPanel)

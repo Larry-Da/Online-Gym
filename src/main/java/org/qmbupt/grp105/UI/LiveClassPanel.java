@@ -25,6 +25,7 @@ import java.util.Date;
 public class LiveClassPanel extends JPanel
 {
     public static MyReminder reminder;
+    ContentPanel contentPanel;
     public LiveClassPanel(CardLayout cards, MainPanel mainPanel)
     {
         MenuBar menuBar = new MenuBar(cards, mainPanel, "Live");
@@ -36,7 +37,7 @@ public class LiveClassPanel extends JPanel
         int barHeight = (int)(UIStyle.height) / 10;
 
 
-        ContentPanel contentPanel = new ContentPanel(cards, mainPanel);
+        contentPanel = new ContentPanel(cards, mainPanel);
         contentPanel.setBounds(0, barHeight, (int)UIStyle.width, (int)(UIStyle.height - barHeight));
         this.add(contentPanel);
         contentPanel.setVisible(true);
