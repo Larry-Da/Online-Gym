@@ -22,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+
 public class HomePanel extends JLayeredPane
 {
     public static MyReminder reminder;
@@ -45,6 +46,18 @@ public class HomePanel extends JLayeredPane
         int registerHeight = 150;
         Sticker register = new Sticker(registerWidth, registerHeight, "", "Register Now", (int)(UIStyle.width - registerWidth - 50), (int)(UIStyle.height - UIStyle.barHeight - registerHeight), UIStyle.HomePanel_register, Color.white);
         this.add(register);
+        Sticker hot = new Sticker(registerWidth, registerHeight, "", "Hottest 4 Videos", (int)(UIStyle.width - registerWidth - 450), (int)(UIStyle.height - UIStyle.barHeight - registerHeight), UIStyle.HomePanel_hot, Color.white);
+        this.add(hot);
+        hot.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                cards.show(mainPanel, "virtualClassPanel");
+                MainPanel.currentPanel = "virtualClassPanel";
+                mainPanel.updateHotVideo();
+
+            }
+        });
         setLayer(register, 0);
         setLayer(picture, -1);
         register.addMouseListener(new MouseListener() {

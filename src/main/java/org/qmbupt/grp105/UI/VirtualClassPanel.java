@@ -20,6 +20,8 @@ public class VirtualClassPanel extends JPanel
 {
     private SearchPanel searchPanel;
     private CategoryPanel categoryPanel;
+    private CardLayout searchCards;
+    private JPanel contentPanel;
     public VirtualClassPanel(CardLayout cards, MainPanel mainPanel)
     {
         MenuBar menuBar = new MenuBar(cards, mainPanel, "Classes");
@@ -29,11 +31,11 @@ public class VirtualClassPanel extends JPanel
         int barHeight = (int)(UIStyle.height) / 10;
 
 
-        JPanel contentPanel = new JPanel();
+        contentPanel = new JPanel();
         contentPanel.setBounds(0, barHeight, (int)UIStyle.width, (int)(UIStyle.height - barHeight));
         this.add(contentPanel);
         contentPanel.setVisible(true);
-        CardLayout searchCards = new CardLayout();
+        searchCards = new CardLayout();
         contentPanel.setLayout(searchCards);
 
         searchPanel = new SearchPanel(searchCards, contentPanel, cards, mainPanel);
@@ -44,8 +46,11 @@ public class VirtualClassPanel extends JPanel
 
         searchCards.show(contentPanel, "categoryPanel");
 
-
-
+    }
+    public void updateHotVideo()
+    {
+        searchCards.show(contentPanel, "searchPanel");
+        searchPanel.updateHottestVideos();
     }
 }
 
@@ -209,6 +214,23 @@ class SearchPanel extends JPanel
             }
             cnt++;
         }
+    }
+    public void updateHottestVideos()
+    {
+        ArrayList<Video> hot = VideoController.getController().getHotVideo(4);
+        pageMax = hot.size() / 4;
+        for(SearchResultPanel i : searchResultPanels)
+        {
+            resultContentPanel.remove(i);
+        }
+        searchResultPanels.clear();
+
+        for(int i = 0; i <= pageMax; i++)
+        {
+            searchResultPanels.add(new SearchResultPanel(hot, pageMax, resultCards, resultContentPanel, mainCards, mainPanel, i + 1));
+            resultContentPanel.add(searchResultPanels.get(i), i + 1 + "");
+        }
+        resultCards.first(resultContentPanel);
     }
     public void updateRes()
     {

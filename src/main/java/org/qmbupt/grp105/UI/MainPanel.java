@@ -66,6 +66,10 @@ public class MainPanel extends JPanel
     {
         UIStyle.updateSetting();
     }
+    public void updateHotVideo()
+    {
+        virtualClassPanel.updateHotVideo();
+    }
     public void updateLiveInfo()
     {
         UIStyle.updateSetting();

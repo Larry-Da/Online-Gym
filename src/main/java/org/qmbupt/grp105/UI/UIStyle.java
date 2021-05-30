@@ -58,6 +58,7 @@ public class UIStyle
     public static final String VirtualClass_pause = UIStyle.class.getClassLoader().getResource("pause.png").getPath();
     public static final String VirtualClass_favorite = UIStyle.class.getClassLoader().getResource("favorite.png").getPath();
     public static final String HomePanel_register = UIStyle.class.getClassLoader().getResource("register.png").getPath();
+    public static final String HomePanel_hot = UIStyle.class.getClassLoader().getResource("hot.png").getPath();
     public static String[] categories;
     public static String[] memberships;
 
