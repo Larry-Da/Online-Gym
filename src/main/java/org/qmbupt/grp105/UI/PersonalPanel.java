@@ -9,12 +9,14 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import org.qmbupt.grp105.Controller.*;
 import org.qmbupt.grp105.Entity.*;
 import org.qmbupt.grp105.UI.MyUIComponent.*;
 import org.qmbupt.grp105.UI.MyUIComponent.MenuBar;
+import org.qmbupt.grp105.backend.dblayer.TransactionManager;
 
 public class PersonalPanel extends JPanel
 {
@@ -154,6 +156,7 @@ class SignInPanel extends JPanel
             LoginToken.setId("root");
             LoginToken.setType("Admin");
             cards.show(contentPanel, "administratorPanel");
+            personalPanel.updateAdmin();
         } else if (status == 2) {
             String id = controller.getIdByEmail(acc);
             Coach co = controller.getCoachInfoById(id);
@@ -271,9 +274,11 @@ class CustomerLeftPanel extends JPanel
             @Override
             public void mouseClicked(MouseEvent e) {
                 //cards.next(mainPanel);
+
                 LoginToken.setType(null);
                 LoginToken.setId(null);
                 loginCards.show(contentPanel, "signInPanel");
+
             }
         });
     }
@@ -833,7 +838,7 @@ class AdministratorLeftPanel extends JPanel
 {
     private int panelWidth;
     private int panelHeight;
-    public AdministratorLeftPanel(final CardLayout loginCards, final JPanel contentPanel, CardLayout contentCards, JPanel rightPanel)
+    public AdministratorLeftPanel(final CardLayout loginCards, final JPanel contentPanel, CardLayout contentCards, AdministratorRightPanel rightPanel)
     {
         panelWidth = (int)(UIStyle.width * 0.24);
         panelHeight = (int)(UIStyle.height - UIStyle.barHeight);
@@ -918,31 +923,45 @@ class AdministratorRightPanel extends JPanel
 {
     private AdministratorVideoManagement videoManagement;
     private AdministratorLiveManagement liveManagement;
+    private AdministratorMembershipPanel membership;
+    private CardLayout mainCards;
+    private MainPanel mainPanel;
+    private EmailPanel advice;
     public AdministratorRightPanel(CardLayout innerCards, JPanel contentPanel, CardLayout mainCards, MainPanel mainPanel) {
         PersonalController controller = PersonalController.getController();
+        this.mainCards= mainCards;
+        this.mainPanel = mainPanel;
         int panelWidth = (int) (UIStyle.width * 0.76);
         int panelHeight = (int) (UIStyle.height - UIStyle.barHeight);
         setBounds((int) (UIStyle.width * 0.24), 0, panelWidth, panelHeight);
         setBackground(Color.WHITE);
         this.setLayout(innerCards);
+        updateRes();
 
-
-
-        AdministratorMembershipPanel membership = new AdministratorMembershipPanel();
-        this.add(membership, "Membership");
-
-        videoManagement = new AdministratorVideoManagement( mainCards, mainPanel);
-        this.add(videoManagement, "Video");
-
-        liveManagement = new AdministratorLiveManagement(mainCards, mainPanel);
-        this.add(liveManagement, "Live");
-
-        ArrayList<Mail> emails = MailController.getController().getMailsById("Admin");
-        EmailPanel advice = new EmailPanel(emails, mainCards, mainPanel, true);
-        this.add(advice, "Advice");
     }
     public void updateRes()
     {
+        if(membership != null)
+            this.remove(membership);
+        membership = new AdministratorMembershipPanel();
+        this.add(membership, "Membership");
+
+        if(videoManagement != null)
+            this.remove(videoManagement);
+        videoManagement = new AdministratorVideoManagement( mainCards, mainPanel);
+        this.add(videoManagement, "Video");
+
+        if(liveManagement != null)
+            this.remove(liveManagement);
+        liveManagement = new AdministratorLiveManagement(mainCards, mainPanel);
+        this.add(liveManagement, "Live");
+
+        if(advice != null)
+            this.remove(advice);
+        ArrayList<Mail> emails = MailController.getController().getMailsById("Admin");
+        advice = new EmailPanel(emails, mainCards, mainPanel, true);
+        this.add(advice, "Advice");
+
         videoManagement.updateRes();
         liveManagement.updateRes();
     }
@@ -1344,7 +1363,7 @@ class AdministratorLiveManagement extends JPanel
 
 
 
-        TextButton addSession = new TextButton((int)(panelWidth / 2), 40, UIStyle.BLUE_BUTTRESS, Color.white, "Add Session",  150, 40, "normal",true);
+        TextButton addSession = new TextButton((int)(panelWidth / 2) + 40, 60, UIStyle.BLUE_BUTTRESS, Color.white, "Add Session",  150, 40, "normal",true);
         this.add(addSession);
         addSession.addMouseListener(new MouseAdapter() {
             @Override
@@ -1355,12 +1374,26 @@ class AdministratorLiveManagement extends JPanel
             }
         });
 
+
+
         updateRes();
 
     }
     public void updateRes()
     {
 
+
+        try {
+            Calendar cal = Calendar.getInstance();
+            int month = cal.get(Calendar.MONTH )+1;
+            int income = TransactionManager.getMonthlyIncome(month);
+            Sticker monthlyIncome = new Sticker(200, 100, "Monthly Income", ""+income, 100, 20, UIStyle.CustomerMember_Money);
+            this.add(monthlyIncome);
+        }
+        catch(Exception e)
+        {
+
+        }
 
         ArrayList<LiveSession> liveSessions1 = LiveController.getController().getAllLiveSessions();
 
