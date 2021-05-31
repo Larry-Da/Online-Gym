@@ -2,6 +2,11 @@ package org.qmbupt.grp105.backend.model;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
+/**
+ * class for coach
+ * @author Lingsong Feng
+ * @version 5.3
+ */
 public class Coach {
     @JSONField(name = "coachId")
     public String coachId;

@@ -4,6 +4,11 @@ import java.util.ArrayList;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
+/**
+ * class for video
+ * @author Lingsong Feng
+ * @version 5.3
+ */
 public class Video {
 
     @JSONField(name = "videoId")
@@ -14,8 +19,6 @@ public class Video {
 
     @JSONField(name = "name")
     public String name;
-
-//  public String videoDescription;
 
     @JSONField(name = "rating")
     public Double rating;
