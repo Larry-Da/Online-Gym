@@ -1,11 +1,8 @@
 package org.qmbupt.grp105.UI;
 
-
 import org.qmbupt.grp105.Controller.PersonalController;
 import org.qmbupt.grp105.Controller.Toolbox;
-import org.qmbupt.grp105.Controller.VideoController;
 import org.qmbupt.grp105.Entity.Customer;
-import org.qmbupt.grp105.Entity.Video;
 import org.qmbupt.grp105.UI.MyUIComponent.*;
 import org.qmbupt.grp105.UI.MyUIComponent.MenuBar;
 
@@ -14,16 +11,18 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-
+/**
+ * <p>This class is the first page of GUI. Once the user open this application,
+ * he will see the homepage. Also, homepage contains two buttons, which is register &
+ * top 5 hottest videos</p>
+ * @version 5.3
+ * @author daliangrun
+ */
 public class HomePanel extends JLayeredPane
 {
     public static MyReminder reminder;
@@ -90,6 +89,13 @@ public class HomePanel extends JLayeredPane
         });
     }
 }
+
+/**
+ * <p>This class is used to register a customer account. Many data fields will be presented
+ * in this page and the customer can enter those data fields & save the data.</p>
+ * @version 5.3
+ * @author daliangrun
+ */
 class RegisterPanel extends JPanel
 {
     private InputText gender_lower;
@@ -216,12 +222,6 @@ class RegisterPanel extends JPanel
                 }
             }
         });
-
-
-
-
     }
-
-
 }
 

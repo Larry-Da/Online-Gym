@@ -21,6 +21,11 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * <p>It shows the detail information of the video. And player is embedded in this panel.</p>
+ * @author daliangrun
+ * @version 5.3
+ */
 public class VideoDetailPanel extends JPanel
 {
     private Video currentVideo = Video.getSampleVideo();
@@ -230,6 +235,11 @@ public class VideoDetailPanel extends JPanel
 
 
     }
+
+    /**
+     * Also this panel can be used to add new videos, just use this method
+     * @param isAdding set adding.
+     */
     public void setAdding(boolean isAdding)
     {
         this.isAdding = isAdding;
@@ -240,6 +250,12 @@ public class VideoDetailPanel extends JPanel
 
 
     }
+
+    /**
+     * <p>To show a new video, we do not need to create a new panel,
+     * just inject a video to this page.</p>
+     * @param currentVideo the video injected.
+     */
     public void setCurrentVideo(Video currentVideo) {
         if(!isAdding) {
             this.currentVideo = currentVideo;

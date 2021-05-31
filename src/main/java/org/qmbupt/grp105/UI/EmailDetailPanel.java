@@ -1,7 +1,6 @@
 package org.qmbupt.grp105.UI;
 
 import org.qmbupt.grp105.Controller.MailController;
-import org.qmbupt.grp105.Controller.PersonalController;
 import org.qmbupt.grp105.Entity.Mail;
 import org.qmbupt.grp105.UI.MyUIComponent.DynamicText;
 import org.qmbupt.grp105.UI.MyUIComponent.InputArea;
@@ -13,6 +12,12 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+/**
+ * <p>This panel is used to present the email content by others.
+ * Also, it can be used to send email to others.</p>
+ * @version 5.3
+ * @author daliangrun
+ */
 public class EmailDetailPanel extends JPanel
 {
     private Mail email;
@@ -63,6 +68,13 @@ public class EmailDetailPanel extends JPanel
         });
 
     }
+
+    /**
+     * <p>To change the email content of this page, we do not need to load this page again.
+     * Instead, just use setEmail method so that the email content can be changed.</p>
+     * @param email
+     * @param writeable
+     */
     public void setEmail(Mail email, boolean writeable)
     {
         this.email = email;

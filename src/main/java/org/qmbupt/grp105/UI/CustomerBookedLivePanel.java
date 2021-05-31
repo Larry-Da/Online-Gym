@@ -16,6 +16,12 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
+/**
+ * <p>This panel is used to check all the lives booked by the user, and it can be accessed by the Customer Panel
+ * so that any changes that made can be directly flushed</p>
+ * @author daliangrun
+ * @version 5.3
+ */
 public class CustomerBookedLivePanel extends JPanel
 {
     private int pageMax;
@@ -53,6 +59,10 @@ public class CustomerBookedLivePanel extends JPanel
         });
         updateRes();
     }
+
+    /**
+     * <p>It is used to flush the page, so that any changes made in files can be directly presented in the page</p>
+     */
     public void updateRes()
     {
         ArrayList<LiveSession> liveSessions = LiveController.getController().getLiveSessionByCusId(LoginToken.getId());

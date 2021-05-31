@@ -18,6 +18,11 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
+/**
+ * It is used to play the video.
+ * @author daliangrun
+ * @version 5.3
+ */
 public class VideoPlayerPanel extends JPanel
 {
     private CallbackMediaPlayerComponent mediaPlayerComponent;
@@ -142,10 +147,18 @@ public class VideoPlayerPanel extends JPanel
 
     }
 
+    /**
+     * inject a video here
+     * @param currentVideo video injected
+     */
     public void setCurrentVideo(Video currentVideo) {
         this.currentVideo = currentVideo;
-
     }
+
+    /**
+     * <p>since the customer can comment, and it should be presented immediately, this method
+     * is used to update the comment.</p>
+     */
     public void updateComment()
     {
         if(commentPanel != null)
