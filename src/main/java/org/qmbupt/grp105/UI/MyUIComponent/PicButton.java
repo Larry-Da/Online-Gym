@@ -4,6 +4,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
 
+/**
+ * <p>A picture acting as a button</p>
+ * @author daliangrun
+ * @version 5.3
+ */
 public class PicButton extends JLabel
 {
     private ImageIcon img;

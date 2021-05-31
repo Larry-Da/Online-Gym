@@ -16,6 +16,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 
+/**
+ * <p>Live session panel to be shown in the search result and booking result</p>
+ * @author daliangrun
+ * @version 5.3
+ */
 public class LivePanel extends JPanel
 {
     private int space;

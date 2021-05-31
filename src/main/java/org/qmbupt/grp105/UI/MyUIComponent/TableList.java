@@ -4,7 +4,11 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
 
-
+/**
+ * <p>A table that can pop a menu by right clicking</p>
+ * @author daliangrun
+ * @version 5.3
+ */
 public class TableList extends JTable
 {
     public JPopupMenu popmenu;
@@ -30,11 +34,6 @@ public class TableList extends JTable
         delMenItem.setText("Delete");
         delMenItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                //该操作需要做的事
-//                String userNo = (String)SellerTable.this.getValueAt(focusedRowIndex, 0);
-//                SQLExecute.DeleteUser.exec(userNo);
-//                SellerM.sellerInfos = SQLExecute.getSeller.exec();
-//                WelcomeGUI.slm.showPage(SellerM.currentPage);
             }
         });
         popmenu.add(delMenItem);

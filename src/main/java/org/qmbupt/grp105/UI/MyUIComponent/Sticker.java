@@ -6,6 +6,11 @@ import java.awt.*;
 import java.net.URL;
 import java.util.HashMap;
 
+/**
+ * <p>A sticker with a picture, a title and a text. Used in membership panel</p>
+ * @author daliangrun
+ * @version 5.3
+ */
 public class Sticker extends JLabel
 {
     int width;

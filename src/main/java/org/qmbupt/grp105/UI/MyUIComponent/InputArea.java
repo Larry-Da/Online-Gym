@@ -8,6 +8,11 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.util.*;
 
+/**
+ * <p>Multiple lines rectangle. It can changes the border once you click it </p>
+ * @author daliangrun
+ * @version 5.3
+ */
 public class InputArea extends JTextArea
 {
     private Color borderColor_unselected = Color.decode("#DEE2E6");
@@ -21,6 +26,7 @@ public class InputArea extends JTextArea
 
     private boolean arc = true;
 
+
     public InputArea(int width, int height, boolean autoVanish, int centerX, int centerY, String defaultText, boolean arc)
     {
 
@@ -33,6 +39,14 @@ public class InputArea extends JTextArea
         setEvent(autoVanish, defaultText);
     }
 
+    /**
+     * set all the parameters of the input area
+     * @param x x point
+     * @param y y point
+     * @param width width
+     * @param height height
+     * @param text text that will be shown initially
+     */
     void setParameters(int x, int y, int width, int height, String text)
     {
         setOpaque(false);
@@ -48,6 +62,12 @@ public class InputArea extends JTextArea
 
 
     }
+
+    /**
+     * set the type of the input area
+     * @param autoVanish decide if the default text will be auto removed once you click it
+     * @param defaultText default text shown initially
+     */
     void setEvent(boolean autoVanish, String defaultText)
     {
         this.addFocusListener(new FocusListener()

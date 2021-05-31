@@ -8,6 +8,11 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
 
+/**
+ * <p>The top bar that can change the page from one to another</p>
+ * @author daliangrun
+ * @version 5.3
+ */
 public class MenuBar extends JPanel
 {
 

@@ -7,6 +7,12 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.util.*;
 
+/**
+ * <p>one line input text. once you click it, it will change the border color and background color.
+ * And also there will be default texts shown.</p>
+ * @author daliangrun
+ * @version 5.3
+ */
 public class InputText extends JTextField
 {
     private Color borderColor_unselected = Color.decode("#DEE2E6");

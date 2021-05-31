@@ -11,6 +11,11 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 
+/**
+ * <p>It is used to filter the search result</p>
+ * @author daliangrun
+ * @version 5.3
+ */
 public class FilterBox extends JPanel
 {
     private Font font;
@@ -26,6 +31,11 @@ public class FilterBox extends JPanel
         this.isSingleSelected = isSingleSelected;
     }
 
+    /**
+     * change the selected items
+     * @param state indicates selected or not
+     * @param index indicates which one to be selected
+     */
     public void setState(boolean state, int index)
     {
         if(options2 != null)
@@ -33,6 +43,11 @@ public class FilterBox extends JPanel
         else
             options.get(index).setSelected(state);
     }
+
+    /**
+     * get all the states of the items
+     * @return boolean array to indicate the states
+     */
     public boolean[] getStates()
     {
         if(options2 != null)

@@ -3,6 +3,11 @@ package org.qmbupt.grp105.UI.MyUIComponent;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * <p>Label component parent. report use. :( just ignore it</p>
+ * @author daliangrun
+ * @version 5.3
+ */
 public class MyLabelComponent extends JLabel
 {
     protected int width;

@@ -12,6 +12,11 @@ import java.awt.event.MouseListener;
 import java.net.URL;
 import java.util.HashMap;
 
+/**
+ * <p>The video item to be shown in the search panel</p>
+ * @author daliangrun
+ * @version 5.3
+ */
 public class VideoPanel extends JPanel implements MouseListener
 {
     private int space;

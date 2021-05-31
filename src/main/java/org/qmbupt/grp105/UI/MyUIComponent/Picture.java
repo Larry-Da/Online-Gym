@@ -7,6 +7,11 @@ import java.awt.image.FilteredImageSource;
 import java.net.URL;
 import java.util.HashMap;
 
+/**
+ * <p>Picture that can cut the size automatically based on the x and y given</p>
+ * @author daliangrun
+ * @version 5.3
+ */
 public class Picture extends JLabel
 {
     int width;

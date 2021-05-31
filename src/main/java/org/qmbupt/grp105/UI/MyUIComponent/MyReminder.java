@@ -8,6 +8,13 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+/**
+ * <p>It is used to give a reminder in the top of the page.
+ * It is implemented by multi thread (one thread changing position and another
+ * present the UI)</p>
+ * @author daliangrun
+ * @version 5.3
+ */
 public class MyReminder
 {
     private JPanel bar;
@@ -15,15 +22,31 @@ public class MyReminder
     {
         this.bar = bar;
     }
+
+    /**
+     * Showing Green message
+     * @param message message to be shown
+     */
     public void OK(String message)
     {
         popup(message, UIStyle.GREEN_OK);
     }
+
+    /**
+     * Showing red alert message
+     * @param message
+     */
     public void WRONG(String message)
     {
         popup(message, Color.decode("#E04147"));
 
     }
+
+    /**
+     * choose different color message
+     * @param message text
+     * @param background color to be set
+     */
     public void popup(String message, Color background)
     {
         int space = 10;
@@ -56,6 +79,12 @@ public class MyReminder
     }
 
 }
+
+/**
+ * <p>The actual panel to be shown in the top menubar</p>
+ * @author daliangrun
+ * @version 5.3
+ */
 class ReminderPanel extends JPanel
 {
     private Color background;

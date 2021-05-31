@@ -5,6 +5,11 @@ import org.qmbupt.grp105.UI.UIStyle;
 import java.awt.*;
 import java.net.URL;
 
+/**
+ * <p>Choose which category you want to see</p>
+ * @author daliangrun
+ * @version 5.3
+ */
 public class CategoryButton extends Picture
 {
     private int x;

@@ -8,38 +8,17 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.*;
 
+/**
+ * <p>A button with text. It will change the color once the mouse move into it</p>
+ * @author daliangrun
+ * @version 5.3
+ */
 public class TextButton extends MyLabelComponent implements MouseListener
 {
 
     private Color[] originalColors = {Color.BLACK, Color.WHITE};
     private boolean backgroundChange;
-//
-//    public TextButton(Color background, Color foreground, String text, int x, int y, int width, int height, String size, boolean backgroundChange)
-//    {
-//        setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-//
-//        this.backgroundChange = backgroundChange;
-//        if(size.equals("small"))
-//        {
-//            this.font = UIStyle.SMALL_FONT;
-//        }
-//        else if(size.equals("normal"))
-//        {
-//            this.font = UIStyle.NORMAL_FONT;
-//        }
-//
-//        this.text = text;
-//        colors[0] = background;
-//        colors[1] = foreground;
-//
-//        originalColors[0] = background;
-//        originalColors[1] = foreground;
-//
-//        setBounds(x, y, width, height);
-//
-//        addMouseListener(this);
-//
-//    }
+
     public TextButton(int centerx, int centery, Color background, Color foreground, String text, int width, int height, String size, boolean backgroundChange)
     {
         super(width, height, centerx - width / 2, centery - height / 2, text, background, foreground, "mid");

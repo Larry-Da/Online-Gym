@@ -12,6 +12,11 @@ import java.awt.event.MouseListener;
 import java.net.URL;
 import java.util.ArrayList;
 
+/**
+ * <p>Every email item is a email entry showing the preview of the email</p>
+ * @author daliangrun
+ * @version 5.3
+ */
 public class EmailEntry extends JPanel implements MouseListener
 {
     int width;

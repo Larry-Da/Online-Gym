@@ -8,6 +8,11 @@ import java.awt.event.FocusListener;
 import java.util.*;
 import javax.swing.*;
 
+/**
+ * <p>The password filed, it will change the boarder color and background color once you click it</p>
+ * @author daliangrun
+ * @version 5.3
+ */
 public class Password extends JPasswordField
 {
     private Color borderColor_unselected = Color.decode("#DEE2E6");
