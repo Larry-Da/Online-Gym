@@ -3,13 +3,14 @@ package org.qmbupt.grp105.UI.MyUIComponent;
 import org.qmbupt.grp105.UI.UIStyle;
 
 import java.awt.*;
+import java.net.URL;
 
 public class CategoryButton extends Picture
 {
     private int x;
     private int y;
     private String text;
-    public CategoryButton(String path, int x, int y, String text)
+    public CategoryButton(URL path, int x, int y, String text)
     {
         super(path, x, y);
         this.x = x;

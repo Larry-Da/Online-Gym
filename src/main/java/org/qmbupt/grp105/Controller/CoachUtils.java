@@ -7,5 +7,4 @@ public interface CoachUtils {
 
     public Coach getCoachInfoById(String coId);
     public void updateCoach(Coach coach);
-
 }

@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -118,7 +119,7 @@ class SignInPanel extends JPanel
         loginPanel.add(Login);
 
 
-        String LoginPath = UIStyle.SignInPanel_Login;
+        URL LoginPath = UIStyle.SignInPanel_Login;
         Picture LoginPic = new Picture(LoginPath, (int)UIStyle.width / 3, (int)UIStyle.height / 3);
         LoginPic.setBounds((int)(UIStyle.width/2.5), (int)(UIStyle.height/5), (int)(UIStyle.width/3), (int)(UIStyle.height/3));
         loginPanel.add(LoginPic);
@@ -290,13 +291,13 @@ class CustomerLeftPanel extends JPanel
         this.add(name);
 
         this.remove(circleIcon);
-        String picPath = null;
+        URL picPath = null;
         try {
-            picPath = UIStyle.class.getClassLoader().getResource(cus.getCusId() + ".png").getPath();
+            picPath = UIStyle.class.getClassLoader().getResource(cus.getCusId() + ".png");
         }
         catch(Exception e)
         {
-            picPath = UIStyle.class.getClassLoader().getResource("default_user.png").getPath();
+            picPath = UIStyle.class.getClassLoader().getResource("default_user.png");
         }
         circleIcon = new Picture(picPath, (int)(panelWidth * 0.26), (int)(panelWidth * 0.26));
         circleIcon.setBounds((int)(UIStyle.width * 0.0875), (int)(UIStyle.height * 0.12), (int)(panelWidth * 0.26), (int)(panelWidth * 0.26));
@@ -1561,13 +1562,13 @@ class CoachLeftPanel extends JPanel
 
         if(circleIcon != null)
             this.remove(circleIcon);
-        String picPath = null;
+        URL picPath = null;
         try {
-            picPath = UIStyle.class.getClassLoader().getResource(coach.getCoachId() + ".png").getPath();
+            picPath = UIStyle.class.getClassLoader().getResource(coach.getCoachId() + ".png");
         }
         catch(Exception e)
         {
-            picPath = UIStyle.class.getClassLoader().getResource("default_user.png").getPath();
+            picPath = UIStyle.class.getClassLoader().getResource("default_user.png");
         }
         circleIcon = new Picture(picPath, (int)(panelWidth * 0.26), (int)(panelWidth * 0.26));
         circleIcon.setBounds((int)(UIStyle.width * 0.0875), (int)(UIStyle.height * 0.12), (int)(panelWidth * 0.26), (int)(panelWidth * 0.26));

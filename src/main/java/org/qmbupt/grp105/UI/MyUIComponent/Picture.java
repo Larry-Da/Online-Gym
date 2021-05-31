@@ -4,17 +4,18 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.CropImageFilter;
 import java.awt.image.FilteredImageSource;
+import java.net.URL;
 import java.util.HashMap;
 
 public class Picture extends JLabel
 {
     int width;
     int height;
-    String path;
+    URL path;
 
-    public Picture(String path, int x, int y)
+    public Picture(URL path, int x, int y)
     {
-        this.path = path.replace("%20", " ");
+        this.path = path;
         this.width = x;
         this.height = y;
     }

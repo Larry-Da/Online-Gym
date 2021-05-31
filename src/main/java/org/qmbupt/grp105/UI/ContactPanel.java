@@ -9,6 +9,7 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.net.URL;
 
 public class ContactPanel extends JLayeredPane
 {
@@ -21,7 +22,7 @@ public class ContactPanel extends JLayeredPane
         this.setLayout(null);
         this.add(mb);
 
-        String path = UIStyle.Contact_background;
+        URL path = UIStyle.Contact_background;
         int barHeight = (int)(UIStyle.height) / 10;
         int picHeight = (int) UIStyle.height - barHeight;
         JLabel picture = new Picture(path, (int) UIStyle.width, picHeight);

@@ -2,13 +2,14 @@ package org.qmbupt.grp105.UI.MyUIComponent;
 
 import javax.swing.*;
 import java.awt.*;
+import java.net.URL;
 
 public class PicButton extends JLabel
 {
     private ImageIcon img;
     private int width;
     private int height;
-    public PicButton(String path, int centerx, int centery, int width, int height)
+    public PicButton(URL path, int centerx, int centery, int width, int height)
     {
         img = new ImageIcon(path);
         this.width = width;

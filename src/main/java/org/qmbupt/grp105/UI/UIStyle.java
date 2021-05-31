@@ -4,6 +4,7 @@ import org.qmbupt.grp105.Controller.VideoController;
 import org.w3c.dom.ls.LSParserFilter;
 
 import java.awt.*;
+import java.net.URL;
 
 public class UIStyle
 {
@@ -37,28 +38,28 @@ public class UIStyle
     public static int ScreenWidth;
     public static int ScreenHeight;
 
-    public static final String HomePanel_BackGround = UIStyle.class.getClassLoader().getResource("Fitness-for-10-Home-Licensing-Information.jpg").getPath();
-    public static final String SignInPanel_Login = UIStyle.class.getClassLoader().getResource("LoginPic.jpg").getPath();
-    public static final String CustomerPanel_PersonIcon = UIStyle.class.getClassLoader().getResource("PersonalIcon.jpg").getPath();
-    public static final String CustomerMember_Money = UIStyle.class.getClassLoader().getResource("Money.png").getPath();
-    public static final String CustomerMember_Level = UIStyle.class.getClassLoader().getResource("level-icon.png").getPath();
-    public static final String CustomerMember_Time = UIStyle.class.getClassLoader().getResource("remainTime.png").getPath();
-    public static final String Administrator_PersonIcon = UIStyle.class.getClassLoader().getResource("adminstrator.png").getPath();
-    public static final String VirtualClass_bicycle = UIStyle.class.getClassLoader().getResource("bicycle.jpg").getPath();
-    public static final String VirtualClass_HITT = UIStyle.class.getClassLoader().getResource("HIIT.jpg").getPath();
-    public static final String VirtualClass_flexibility =  UIStyle.class.getClassLoader().getResource("FLEXIBILITY.jpg").getPath();
-    public static final String VirtualClass_yoga = UIStyle.class.getClassLoader().getResource("yoga.jpg").getPath();
-    public static final String VirtualClass_strength = UIStyle.class.getClassLoader().getResource("Strength.jpg").getPath();
-    public static final String VirtualClass_loseWeight =  UIStyle.class.getClassLoader().getResource("loseWeight.jpg").getPath();
-    public static final String VirtualClass_thumbUp = UIStyle.class.getClassLoader().getResource("thumbs-up-512.png").getPath();
-    public static final String VirtualClass_play = UIStyle.class.getClassLoader().getResource("media_play.png").getPath();
-    public static final String VirtualClass_rate = UIStyle.class.getClassLoader().getResource("rating.png").getPath();
-    public static final String VirtualClass_category = UIStyle.class.getClassLoader().getResource("category.png").getPath();
-    public static final String Contact_background = UIStyle.class.getClassLoader().getResource("Contact.jpeg").getPath();
-    public static final String VirtualClass_pause = UIStyle.class.getClassLoader().getResource("pause.png").getPath();
-    public static final String VirtualClass_favorite = UIStyle.class.getClassLoader().getResource("favorite.png").getPath();
-    public static final String HomePanel_register = UIStyle.class.getClassLoader().getResource("register.png").getPath();
-    public static final String HomePanel_hot = UIStyle.class.getClassLoader().getResource("hot.png").getPath();
+    public static final URL HomePanel_BackGround = UIStyle.class.getClassLoader().getResource("Fitness-for-10-Home-Licensing-Information.jpg");
+    public static final URL SignInPanel_Login = UIStyle.class.getClassLoader().getResource("LoginPic.jpg");
+    public static final URL CustomerPanel_PersonIcon = UIStyle.class.getClassLoader().getResource("PersonalIcon.jpg");
+    public static final URL CustomerMember_Money = UIStyle.class.getClassLoader().getResource("Money.png");
+    public static final URL CustomerMember_Level = UIStyle.class.getClassLoader().getResource("level-icon.png");
+    public static final URL CustomerMember_Time = UIStyle.class.getClassLoader().getResource("remainTime.png");
+    public static final URL Administrator_PersonIcon = UIStyle.class.getClassLoader().getResource("adminstrator.png");
+    public static final URL VirtualClass_bicycle = UIStyle.class.getClassLoader().getResource("bicycle.jpg");
+    public static final URL VirtualClass_HITT = UIStyle.class.getClassLoader().getResource("HIIT.jpg");
+    public static final URL VirtualClass_flexibility =  UIStyle.class.getClassLoader().getResource("FLEXIBILITY.jpg");
+    public static final URL VirtualClass_yoga = UIStyle.class.getClassLoader().getResource("yoga.jpg");
+    public static final URL VirtualClass_strength = UIStyle.class.getClassLoader().getResource("Strength.jpg");
+    public static final URL VirtualClass_loseWeight =  UIStyle.class.getClassLoader().getResource("loseWeight.jpg");
+    public static final URL VirtualClass_thumbUp = UIStyle.class.getClassLoader().getResource("thumbs-up-512.png");
+    public static final URL VirtualClass_play = UIStyle.class.getClassLoader().getResource("media_play.png");
+    public static final URL VirtualClass_rate = UIStyle.class.getClassLoader().getResource("rating.png");
+    public static final URL VirtualClass_category = UIStyle.class.getClassLoader().getResource("category.png");
+    public static final URL Contact_background = UIStyle.class.getClassLoader().getResource("Contact.jpeg");
+    public static final URL VirtualClass_pause = UIStyle.class.getClassLoader().getResource("pause.png");
+    public static final URL VirtualClass_favorite = UIStyle.class.getClassLoader().getResource("favorite.png");
+    public static final URL HomePanel_register = UIStyle.class.getClassLoader().getResource("register.png");
+    public static final URL HomePanel_hot = UIStyle.class.getClassLoader().getResource("hot.png");
     public static String[] categories;
     public static String[] memberships;
 

@@ -9,6 +9,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class EmailEntry extends JPanel implements MouseListener
@@ -30,13 +31,13 @@ public class EmailEntry extends JPanel implements MouseListener
         int space = 20;
 
         String a = email.getFrom()+".png";
-        String picPath = null;
+        URL picPath = null;
         try {
-            picPath = UIStyle.class.getClassLoader().getResource(a).getPath();
+            picPath = UIStyle.class.getClassLoader().getResource(a);
         }
         catch (Exception e)
         {
-            picPath = UIStyle.class.getClassLoader().getResource("default_user.png").getPath();
+            picPath = UIStyle.class.getClassLoader().getResource("default_user.png");
         }
 
 

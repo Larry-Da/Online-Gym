@@ -9,6 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.net.URL;
 import java.util.HashMap;
 
 public class VideoPanel extends JPanel implements MouseListener
@@ -49,8 +50,8 @@ public class VideoPanel extends JPanel implements MouseListener
 
         int width;
         int height;
-        String picPath = UIStyle.class.getClassLoader().getResource(video.getUrl()).getPath();
-        picPath = picPath.replaceAll("%20", " ");
+        URL picPath = UIStyle.class.getClassLoader().getResource(video.getUrl());
+        //picPath = picPath.replaceAll("%20", " ");
         //String picPath = UIStyle.class.getClassLoader().getResource(video.getURl())
 
         if(size.equals("small"))

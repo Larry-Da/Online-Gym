@@ -11,6 +11,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -169,9 +170,9 @@ public class LivePanel extends JPanel
         this.add(button);
 
         String a = live.getCoach_coachId()+".png";
-        String picPath = null;
+        URL picPath = null;
         try {
-            picPath = UIStyle.class.getClassLoader().getResource(a).getPath();
+            picPath = UIStyle.class.getClassLoader().getResource(a);
         }
         catch (Exception e)
         {

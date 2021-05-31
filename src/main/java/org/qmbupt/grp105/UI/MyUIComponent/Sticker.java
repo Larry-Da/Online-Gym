@@ -3,6 +3,7 @@ import org.qmbupt.grp105.UI.UIStyle;
 
 import javax.swing.*;
 import java.awt.*;
+import java.net.URL;
 import java.util.HashMap;
 
 public class Sticker extends JLabel
@@ -11,15 +12,15 @@ public class Sticker extends JLabel
     int height;
     String title;
     String contents;
-    String imagePath;
+    URL imagePath;
     Color fontColor = null;
-    public Sticker(int width, int height, String title, String contents, int x, int y, String imagePath, Color fontColor)
+    public Sticker(int width, int height, String title, String contents, int x, int y, URL imagePath, Color fontColor)
     {
         this(width,  height,  title,  contents,  x,  y,  imagePath);
         this.fontColor = fontColor;
         setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
     }
-    public Sticker(int width, int height, String title, String contents, int x, int y, String imagePath)
+    public Sticker(int width, int height, String title, String contents, int x, int y, URL imagePath)
     {
         this.width = width;
         this.height = height;

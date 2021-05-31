@@ -16,6 +16,7 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.net.URL;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -261,7 +262,7 @@ public class VideoDetailPanel extends JPanel
             if(pic != null)
                 this.remove(pic);
             try {
-                String path = UIStyle.class.getClassLoader().getResource(currentVideo.getUrl()).getPath();
+                URL path = UIStyle.class.getClassLoader().getResource(currentVideo.getUrl());
                 pic = new Picture(path, picWidth, picHeight);
                 this.add(pic);
                 pic.setBounds((int) (buttonStartX + 2.5 * buttonWidth - (picWidth - buttonWidth / 2)), buttonStartY, picWidth, picHeight);

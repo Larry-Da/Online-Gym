@@ -19,6 +19,7 @@ import java.io.BufferedOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.lang.reflect.Array;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -452,7 +453,7 @@ class LiveDetailPanel extends JPanel
             if(pic != null)
                 this.remove(pic);
             try {
-                String path = UIStyle.class.getClassLoader().getResource(currentLive.getCoach_coachId() + ".png").getPath();
+                URL path = UIStyle.class.getClassLoader().getResource(currentLive.getCoach_coachId() + ".png");
                 pic = new Picture(path, picWidth, picHeight);
                 this.add(pic);
                 pic.setBounds((int) (buttonStartX + 2.5 * buttonWidth - (picWidth - buttonWidth / 2)), buttonStartY + 200, picWidth, picHeight);

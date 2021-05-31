@@ -18,6 +18,7 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -35,7 +36,7 @@ public class HomePanel extends JLayeredPane
 
         this.add(mb);
 
-        String path = UIStyle.HomePanel_BackGround;
+        URL path = UIStyle.HomePanel_BackGround;
         int barHeight = (int)(UIStyle.height) / 10;
         int picHeight = (int) UIStyle.height - barHeight;
         JLabel picture = new Picture(path, (int) UIStyle.width, picHeight);
