@@ -11,7 +11,7 @@ import org.qmbupt.grp105.backend.dblayer.DataManager;
 import org.qmbupt.grp105.backend.dblayer.VideoManager;
 
 /**
- * @version 1.2
+ * @version 5.3
  * @author Wenrui Zhao
  */
 public class PersonalController implements CustomerUtils, AdminUtils, CoachUtils{
@@ -22,6 +22,16 @@ public class PersonalController implements CustomerUtils, AdminUtils, CoachUtils
     {
         return personalController;
     }
+
+    /**
+     * <p>
+     *     Filter customers based on keywords, if a customer's name or id has
+     *     the keyword, it will be collected.
+     * </p>
+     * @param customers A list of customers
+     * @param key any keyword
+     * @return A list of customers who have the keyword
+     */
     public ArrayList<Customer> filterByKeyword(ArrayList<Customer> customers, String key)
     {
         ArrayList<Customer> res = new ArrayList<>();
@@ -36,6 +46,15 @@ public class PersonalController implements CustomerUtils, AdminUtils, CoachUtils
         }
         return res;
     }
+
+    /**
+     * <p>
+     *     Filter all customers based on gender
+     * </p>
+     * @param customers A list of customers
+     * @param gender Gender ('M' for male and 'F' for female)
+     * @return A list of customers who have the same gender
+     */
     public ArrayList<Customer> filterByGender(ArrayList<Customer> customers, char gender)
     {
         ArrayList<Customer> res = new ArrayList<>();
@@ -48,6 +67,15 @@ public class PersonalController implements CustomerUtils, AdminUtils, CoachUtils
         }
         return res;
     }
+
+    /**
+     * <p>
+     *     Filter the customers by level
+     * </p>
+     * @param customers A list of customers
+     * @param levelKeys a certain level (e.g. 2)
+     * @return A list of customers who have the same level
+     */
     public ArrayList<Customer> filterByCusLevel(ArrayList<Customer> customers,ArrayList<String> levelKeys)
     {
         ArrayList<Customer> res = new ArrayList<>();
@@ -66,9 +94,9 @@ public class PersonalController implements CustomerUtils, AdminUtils, CoachUtils
 
     /**
      * <p>
-     *     This function gets all information of all customers
+     *     Get all information of all customers
      * </p>
-     * @return a list of all customers
+     * @return A List of all customers
      */
     public ArrayList<Customer> getAllCustomer() {
         ArrayList<org.qmbupt.grp105.backend.model.Customer> customers = null;
@@ -90,10 +118,10 @@ public class PersonalController implements CustomerUtils, AdminUtils, CoachUtils
 
     /**
      * <p>
-     *     This function gets all information of a given customer
+     *     Get all information of a given customer
      * </p>
-     * @param cusId customer ID
-     * @return  an customer entity
+     * @param cusId customer ID (e.g. cusId:"cs2")
+     * @return  A customer entity
      */
     public Customer getCusInfoByCusId(String cusId) {
         try {
@@ -105,6 +133,14 @@ public class PersonalController implements CustomerUtils, AdminUtils, CoachUtils
         }
         return null;
     }
+
+    /**
+     * <p>
+     *     Get all information of a given coach
+     * </p>
+     * @param coId coach ID (e.g. coId:"co3")
+     * @return A coach entity
+     */
     public Coach getCoachInfoById(String coId)
     {
         ArrayList<Coach> coaches = this.getAllCoaches();
@@ -121,10 +157,10 @@ public class PersonalController implements CustomerUtils, AdminUtils, CoachUtils
 
     /**
      * <p>
-     *     This function gets the customer by his name
+     *     Get the customer by his name
      * </p>
-     * @param name
-     * @return a specific customer entity
+     * @param name Customer name
+     * @return A customer entity
      */
     public Customer getCusInfoByName(String name) {
         ArrayList<Customer> customers = getAllCustomer();
@@ -138,7 +174,7 @@ public class PersonalController implements CustomerUtils, AdminUtils, CoachUtils
 
     /**
      * <p>
-     *     This function gets a list of customers of the same gender
+     *     Get a list of customers of the same gender
      * </p>
      * @param gender male or female
      * @return a list of customers
@@ -156,10 +192,10 @@ public class PersonalController implements CustomerUtils, AdminUtils, CoachUtils
 
     /**
      * <p>
-     *     This function gets the number of customer for a given membership level
+     *     Get the number of customer for a given membership level
      * </p>
-     * @param level a specific level, such as L1
-     * @return the number of customer
+     * @param level A specific level (e.g. level:"1")
+     * @return Number of customer
      */
     public int getCusNumByLevel(String level) {
         ArrayList<Customer> customers = getAllCustomer();
@@ -173,10 +209,12 @@ public class PersonalController implements CustomerUtils, AdminUtils, CoachUtils
     }
 
     /**
-     * check the username and the password
-     * @param username
-     * @param pass
-     * @return
+     * <p>
+     *     Check the username and the password
+     * </p>
+     * @param username username
+     * @param pass password
+     * @return Return 1 for legal customer, 4 for illegal customer(wrong password) and illegal coach(wrong password), 2 for legal coach, 3 for non-existed customer and coach
      */
     public int check(String username, String pass) {
         try {
@@ -211,6 +249,13 @@ public class PersonalController implements CustomerUtils, AdminUtils, CoachUtils
 
         return -1;
     }
+
+    /**
+     * <p>
+     *     Update coach information
+     * </p>
+     * @param coach A coach entity
+     */
     public void updateCoach(Coach coach)
     {
         try {
@@ -221,6 +266,13 @@ public class PersonalController implements CustomerUtils, AdminUtils, CoachUtils
 
         }
     }
+
+    /**
+     * <p>
+     *     Update customer information
+     * </p>
+     * @param customer A customer entity
+     */
     public void updateCustomer(Customer customer) {
         try {
             if(customer.getCusId().equals(""))
@@ -234,6 +286,14 @@ public class PersonalController implements CustomerUtils, AdminUtils, CoachUtils
             e.printStackTrace();
         }
     }
+
+    /**
+     * <p>
+     *     Increase a specific customer's balance
+     * </p>
+     * @param cusId Customer ID (e.g. cusId="cs2")
+     * @param num Amount of money
+     */
     public void increaseBalance(String cusId, int num) {
         try {
             CustomerManager.increaseBalance(cusId, num);
@@ -242,6 +302,15 @@ public class PersonalController implements CustomerUtils, AdminUtils, CoachUtils
         }
 
     }
+
+    /**
+     *
+     * <p>
+     *     Decrease a specific customer's balance
+     * </p>
+     * @param cusId Customer ID (e.g. cusId="cs2")
+     * @param num Amount of money
+     */
     public void decreaseBalance(String cusId, int num) {
         try {
             CustomerManager.decreaseBalance(cusId, num);
@@ -250,6 +319,15 @@ public class PersonalController implements CustomerUtils, AdminUtils, CoachUtils
         }
 
     }
+
+    /**
+     * <p>
+     *     Book specific live sessions of a given customer
+     * </p>
+     * @param cusId Customer ID (e.g. cusId="cs2")
+     * @param sessionId Live session ID (e.g. sessionId="lvs1")
+     * @return True for booking successfully, False for booking unsuccessfully
+     */
     public boolean bookLiveSession(String cusId, String sessionId) {
         boolean res = false;
         try {
@@ -259,6 +337,14 @@ public class PersonalController implements CustomerUtils, AdminUtils, CoachUtils
         }
         return res;
     }
+
+    /**
+     * <p>
+     *     Remove specific live sessions of a given customer
+     * </p>
+     * @param cusId Customer ID (e.g. cusId="cs2")
+     * @param sessionId Live session ID (e.g. sessionId="lvs1")
+     */
     public void removeBookedSession(String cusId, String sessionId) {
         try {
             Customer customer = getCusInfoByCusId(cusId);
@@ -272,6 +358,14 @@ public class PersonalController implements CustomerUtils, AdminUtils, CoachUtils
             e.printStackTrace();
         }
     }
+
+    /**
+     * <p>
+     *     Watch a specific video
+     * </p>
+     * @param cusId Customer ID (e.g. cusId="cs2")
+     * @param videoId Video ID (e.g. videoId="v001")
+     */
     public void watchVideo(String cusId, String videoId) {
         try {
             Customer customer = CustomerManager.getCustomerById(cusId).converter();
@@ -293,9 +387,11 @@ public class PersonalController implements CustomerUtils, AdminUtils, CoachUtils
     }
 
     /**
-     * add the video to personal favourite list
-     * @param cusId
-     * @param videoId
+     * <p>
+     *     Add the video to personal favourite list
+     * </p>
+     * @param cusId Customer ID (e.g. cusId="cs2")
+     * @param videoId Video ID (e.g. videoId="v001")
      */
     public void addToFavourite(String cusId, String videoId) {
         try {
@@ -306,9 +402,11 @@ public class PersonalController implements CustomerUtils, AdminUtils, CoachUtils
     }
 
     /**
-     * remove the video from personal favourite list
-     * @param cusId
-     * @param videoId
+     * <p>
+     *     Remove the video from personal favourite list
+     * </p>
+     * @param cusId Customer ID (e.g. cusId="cs2")
+     * @param videoId Video ID (e.g. videoId="v001")
      */
     public void removeFromFavourite(String cusId, String videoId) {
         try {
@@ -322,15 +420,23 @@ public class PersonalController implements CustomerUtils, AdminUtils, CoachUtils
 
     /**
      * <p>
-     *     This function returns the expire time of a given customer' membership
+     *     Get the expire time of a given customer' membership
      * </p>
-     * @param cusId customer ID
-     * @return  expire time of a given customer's membership
+     * @param cusId Customer ID (e.g. cusId="cs2")
+     * @return  Expire time of a given customer
      */
     public String getExpireTimeByCusId(String cusId) {
         Customer customer = getCusInfoByCusId(cusId);
         return customer.getExpiredTime();
     }
+
+    /**
+     * <p>
+     *     Get the favourite video list of a given customer
+     * </p>
+     * @param cusId Customer ID (e.g. cusId="cs2")
+     * @return A favourite video list of a given customer
+     */
     public ArrayList<Video> getFavouriteVideoByCusId(String cusId) {
         Customer customer = getCusInfoByCusId(cusId);
         ArrayList<Video> res = new ArrayList<>();
@@ -344,6 +450,13 @@ public class PersonalController implements CustomerUtils, AdminUtils, CoachUtils
         return res;
 
     }
+
+    /**
+     * <p>
+     *     Get all information of all coaches
+     * </p>
+     * @return A list of all coaches
+     */
     public ArrayList<Coach> getAllCoaches() {
         ArrayList<org.qmbupt.grp105.backend.model.Coach> coaches = new ArrayList<>();
         ArrayList<Coach> res = new ArrayList<>();
@@ -358,9 +471,11 @@ public class PersonalController implements CustomerUtils, AdminUtils, CoachUtils
         return res;
     }
     /**
-     * get customer's id by his email
-     * @param email
-     * @return
+     * <p>
+     *     Get customer's ID or coach's ID by his email
+     * </p>
+     * @param email Customer's or coach's email
+     * @return Customer ID or coach ID
      */
     public String getIdByEmail(String email)
     {
@@ -380,8 +495,10 @@ public class PersonalController implements CustomerUtils, AdminUtils, CoachUtils
     }
 
     /**
-     * extend the membership
-     * @param cusId
+     * <p>
+     *     Extend the membership
+     * </p>
+     * @param cusId Customer ID (e.g. cusId="cs2")
      */
     public void extendMembership(String cusId) {
         try {

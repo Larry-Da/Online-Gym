@@ -11,6 +11,10 @@ import org.qmbupt.grp105.backend.dblayer.VideoManager;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * @Version 5.3
+ * @author Wenrui Zhao
+ */
 public interface CustomerUtils
 {
     public Customer getCusInfoByCusId(String cusId);

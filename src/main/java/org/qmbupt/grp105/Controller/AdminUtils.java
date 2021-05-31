@@ -4,6 +4,10 @@ import org.qmbupt.grp105.Entity.Coach;
 import org.qmbupt.grp105.Entity.Customer;
 import java.util.ArrayList;
 
+/**
+ * @Version 5.3
+ * @author Liangrun Da
+ */
 public interface AdminUtils {
     public ArrayList<Customer> filterByKeyword(ArrayList<Customer> customers, String key);
     public ArrayList<Customer> filterByGender(ArrayList<Customer> customers, char gender);

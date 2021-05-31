@@ -1,6 +1,9 @@
 package org.qmbupt.grp105.Controller;
 
-
+/**
+ * @Version 5.3
+ * @author Liangrun Da
+ */
 public interface ToolRequired
 {
     public boolean isDateForm1(String date);
