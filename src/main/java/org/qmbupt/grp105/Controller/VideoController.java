@@ -7,6 +7,10 @@ import org.qmbupt.grp105.backend.dblayer.VideoManager;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * @Version 5.3
+ * @author Wenrui Zhao
+ */
 public class VideoController {
 
     private static VideoController videoController = new VideoController();
@@ -17,8 +21,12 @@ public class VideoController {
     }
 
 
-
-
+    /**
+     * <p>
+     *     Get all videos
+     * </p>
+     * @return A list of all videos
+     */
     public ArrayList<Video> getAllVideos() {
         ArrayList<Video> videos = new ArrayList<>();
 
@@ -35,6 +43,14 @@ public class VideoController {
         }
         return videos;
     }
+
+    /**
+     * <p>
+     *     Get video by its id
+     * </p>
+     * @param videoId Video ID (e.g. videoId="v001")
+     * @return A video entity
+     */
     public Video getVideoByVideoId(String videoId) {
         Video video = null;
         try {
@@ -45,6 +61,15 @@ public class VideoController {
         return video;
 
     }
+
+    /**
+     * <p>
+     *     Sort the video by given parameters (View: viewCounts, Rating: rating, Like: likes)
+     * </p>
+     * @param videos A list of videos
+     * @param param parameter (View: viewCounts, Rating: rating)
+     * @return Sorted video list
+     */
     public ArrayList<Video> sort(ArrayList<Video> videos, String param) {
         if(param == null)
             return videos;
@@ -79,6 +104,14 @@ public class VideoController {
         }
         return videos;
     }
+
+    /**
+     * <p>
+     *     Get video by its name
+     * </p>
+     * @param videoName Video name
+     * @return A video entity
+     */
     public Video getVideoByName(String videoName) {
         ArrayList<Video> videos = getAllVideos();
         for(Video video : videos) {
@@ -89,6 +122,13 @@ public class VideoController {
         return null;
     }
 
+    /**
+     * <p>
+     *     Get A video list by keyword (i.e. Video name has the keyword)
+     * </p>
+     * @param keyword keyword
+     * @return A list of videos
+     */
     public ArrayList<Video> getVideosByName(String keyword) {
         ArrayList<Video> videos = getAllVideos();
         if(keyword == null)
@@ -102,6 +142,14 @@ public class VideoController {
         return res;
     }
 
+    /**
+     * <p>
+     *     Filter videos by some categories
+     * </p>
+     * @param videos A list of videos
+     * @param category A list of categories
+     * @return A list of videos
+     */
     public ArrayList<Video> filterByCategory(ArrayList<Video> videos, List<String> category) {
         ArrayList<Video> videos1 = null;
         if(videos == null) {
@@ -122,10 +170,10 @@ public class VideoController {
     }
     /**
      *<p>
-     *     This function gets all videos which a given customer has watched before
+     *     Get all videos which a given customer has watched before
      *</p>
-     * @param cusId customer ID
-     * @return a list of videos
+     * @param cusId Customer ID (e.g. cusId="cs2")
+     * @return A list of videos
      */
     public ArrayList<Video> getVideosByCusId(String cusId) {
         PersonalController personalController = PersonalController.getController();
@@ -140,10 +188,10 @@ public class VideoController {
     }
     /**
      * <p>
-     *     This function adds a new video
+     *     Add a new video
      * </p>
-     * @param video a video entity
-     * @return return true if add successfully, otherwise return false
+     * @param video A video entity
+     * @return Return true if add successfully, otherwise return false
      */
     public void AddVideo(Video video) {
         int num = getAllVideos().size();
@@ -157,8 +205,10 @@ public class VideoController {
     }
 
     /**
-     * delete video by videoId
-     * @param videoId
+     * <p>
+     *     Delete video by videoId
+     * </p>
+     * @param videoId Video ID (e.g. videoId="v001")
      */
     public void deleteVideo(String videoId) {
         try {
@@ -171,10 +221,10 @@ public class VideoController {
 
     /**
      * <p>
-     *     This function modifies a given video
+     *     Modify a given video
      * </p>
-     * @param video a modified video entity
-     * @return  return true if modification works, otherwise return false
+     * @param video A modified video entity
+     * @return  Return true if modification works, otherwise return false
      */
     public void modifyVideo(Video video) {
         try {
@@ -185,8 +235,13 @@ public class VideoController {
     }
 
 
-
-
+    /**
+     * <p>
+     *     Get hot videos if its viewCounts is higher than the threshold
+     * </p>
+     * @param threshold threshold
+     * @return A list of hot videos
+     */
     public ArrayList<Video> getHotVideo(int threshold) {
         ArrayList<Video> videos = getAllVideos();
         ArrayList<Video> hotVideos = new ArrayList<>();
@@ -203,6 +258,13 @@ public class VideoController {
         });
         return hotVideos;
     }
+
+    /**
+     * <p>
+     *     Get all categories
+     * </p>
+     * @return A list of categories
+     */
     public String[] getCategories()
     {
         ArrayList<String> res = null;
@@ -223,6 +285,13 @@ public class VideoController {
         String[] ret = new String[temp.size()];
         return temp.toArray(ret);
     }
+
+    /**
+     * <p>
+     *     Get all memberships
+     * </p>
+     * @return A list of all memberships
+     */
     public String[] getMemberships() {
         {
             ArrayList<String> res = null;
