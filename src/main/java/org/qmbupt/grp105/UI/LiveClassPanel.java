@@ -24,6 +24,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+/**
+ * <p>This class is used to show all the live sessions. And customer can choose the live session to
+ * see the details and decide if he will book it</p>
+ * @author daliangrun
+ * @version 5.3
+ */
 public class LiveClassPanel extends JPanel
 {
     public static MyReminder reminder;
@@ -44,18 +50,14 @@ public class LiveClassPanel extends JPanel
         this.add(contentPanel);
         contentPanel.setVisible(true);
 
-
-
-//        SignInPanel signInPanel = new SignInPanel(loginCards, contentPanel);
-//        contentPanel.add(signInPanel, "signInPanel");
-//        CustomerPanel customerPanel = new CustomerPanel(loginCards, contentPanel);
-//        contentPanel.add(customerPanel, "customerPanel");
-//        AdministratorPanel administratorPanel = new AdministratorPanel(loginCards, contentPanel);
-//        contentPanel.add(administratorPanel, "administratorPanel");
-
     }
 }
 
+/**
+ * <p>This is used to show the real items of the live sessions</p>
+ * @version 5.3
+ * @author daliangrun
+ */
 class ContentPanel extends JPanel
 {
     private int pageMax;
@@ -109,6 +111,11 @@ class ContentPanel extends JPanel
         resultContentPanel.setVisible(true);
 
     }
+
+    /**
+     * <p>It is used to flush the page, so that any changes made by users or administrator will be
+     * directly presented in the page</p>
+     */
     public void updateRes()
     {
         String key = searchBar.getText();
@@ -148,6 +155,11 @@ class ContentPanel extends JPanel
 
     }
 }
+
+/**
+ * <p>It is the search result panel of the live session. To be more specific, it contains
+ * all the search results made by the user.</p>
+ */
 class ResultPanel extends JPanel {
     public ResultPanel(ArrayList<LiveSession> liveSessions, int pageMax, CardLayout resultCards, JPanel resultContentPanel, int page, MainPanel mainPanel, CardLayout cards) {
         this.setLayout(null);
@@ -203,7 +215,10 @@ class ResultPanel extends JPanel {
     }
 }
 
-
+/**
+ * <p>It is used to show the detail of the live session. Once the user click one item,
+ * the application will transfer to this page.</p>
+ */
 class LiveDetailPanel extends JPanel
 {
     private LiveSession currentLive;
@@ -412,6 +427,11 @@ class LiveDetailPanel extends JPanel
 
 
     }
+
+    /**
+     * <p>It is used to set if the page can be used to add new live session</p>
+     * @param isAdding true means this page is adding new session.
+     */
     public void setAdding(boolean isAdding)
     {
         this.isAdding = isAdding;
@@ -420,10 +440,19 @@ class LiveDetailPanel extends JPanel
         }
     }
 
+    /**
+     * <p>It is used to set if the page can be edited</p>
+     * @param editable true if teh page can edited.
+     */
     public void setEditable(boolean editable) {
         this.editable = editable;
     }
 
+    /**
+     * <p>Once we need to change the live session, we do not need to create a new panel.
+     * All we need to do is use this method to update the new live session</p>
+     * @param currentLive
+     */
     public void setCurrentLive(LiveSession currentLive) {
         if(!isAdding) {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:SS");

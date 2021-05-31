@@ -6,6 +6,13 @@ import org.w3c.dom.ls.LSParserFilter;
 import java.awt.*;
 import java.net.URL;
 
+/**
+ * <p>It is used to store all the UI fonts, size, image resources, colors and settings
+ * so that any page uses color should directly reference this static variable and the page
+ *  style will be consistent.</p>
+ * @author daliangrun
+ * @version 5.3
+ */
 public class UIStyle
 {
     public static final Font NORMAL_FONT = new Font("Arial", Font.PLAIN, 18);
@@ -71,6 +78,10 @@ public class UIStyle
         width = 1120;
         height = 700;
     }
+
+    /**
+     * <p>update video categories and membership settings from config file</p>
+     */
     public static void updateSetting()
     {
         categories = VideoController.getController().getCategories();

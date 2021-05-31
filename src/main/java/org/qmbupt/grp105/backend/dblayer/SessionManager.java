@@ -1,13 +1,16 @@
 package org.qmbupt.grp105.backend.dblayer;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import org.qmbupt.grp105.backend.model.Customer;
 import org.qmbupt.grp105.backend.model.Session;
 
 import java.io.*;
 import java.util.ArrayList;
 
+/**
+ * manage sessions
+ * @author Lingsong Feng
+ * @version 5.3
+ */
 public class SessionManager {
 
     /**
@@ -117,7 +120,11 @@ public class SessionManager {
 
 
 
-
+    /**
+     * generate next session id
+     * @return next session id
+     * @throws IOException
+     */
     private static String getNextId() throws IOException {
         ArrayList<String> ids = getSessionIds();
         int max = 0;
@@ -128,7 +135,4 @@ public class SessionManager {
         return "lvs" + (max + 1);
     }
 
-    public static void main(String[] args) throws IOException {
-        System.out.println(getAllSessions());
-    }
 }

@@ -1,12 +1,16 @@
 package org.qmbupt.grp105.backend.model;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
+/**
+ * class for customer
+ * @author Lingsong Feng
+ * @version 5.3
+ */
 public class Customer {
 
     @JSONField(name = "cusId")

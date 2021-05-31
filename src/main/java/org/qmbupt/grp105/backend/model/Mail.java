@@ -4,6 +4,11 @@ import com.alibaba.fastjson.annotation.JSONField;
 
 import java.util.Date;
 
+/**
+ * class for mail
+ * @author Lingsong Feng
+ * @version 5.3
+ */
 public class Mail {
     @JSONField(name = "from")
     public String from;

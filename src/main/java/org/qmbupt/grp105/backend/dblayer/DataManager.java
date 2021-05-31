@@ -6,9 +6,19 @@ import org.qmbupt.grp105.backend.model.*;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * manage for data
+ * @author Lingsong Feng
+ * @version 5.3
+ */
 public class DataManager {
     private static DataManager instance = null;
 
+    /**
+     * get the unique instance of DataManager
+     * @return reference of DataManager object
+     * @throws IOException
+     */
     public static DataManager getInstance() throws IOException {
         if (instance == null) {
             instance = new DataManager();
@@ -24,6 +34,10 @@ public class DataManager {
     public ArrayList<Mail>        mails;
     public ArrayList<Setting>     settings;
 
+    /**
+     * DataManager constructor
+     * @throws IOException
+     */
     private DataManager() throws IOException {
 
         /**
@@ -38,6 +52,10 @@ public class DataManager {
         settings     = (ArrayList<Setting>)     JSON.parseArray(IO.read("settings_config.json"), Setting.class);
     }
 
+    /**
+     * write all data from memory into disk (files)
+     * @throws IOException
+     */
     public void commit() throws IOException {
         IO.write("customer.json",    JSON.toJSONString(customers));
         IO.write("video.json",       JSON.toJSONString(videos));

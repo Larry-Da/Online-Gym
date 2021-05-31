@@ -6,12 +6,15 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import com.alibaba.fastjson.*;
-
 import org.qmbupt.grp105.backend.model.Customer;
 import org.qmbupt.grp105.backend.model.Session;
 import org.qmbupt.grp105.backend.model.Transaction;
 
+/**
+ * CustomerManager is for managing customers
+ * @author Lingsong Feng
+ * @version 5.3
+ */
 public class CustomerManager {
 
     /**
@@ -115,6 +118,12 @@ public class CustomerManager {
         DataManager.getInstance().commit();
     }
 
+    /**
+     * remove a stored video in customer's favorite videos
+     * @param cusId
+     * @param videoId
+     * @throws IOException
+     */
     public static void removeFavoriteVideo(String cusId, String videoId) throws IOException {
         Customer customer = getCustomerById(cusId);
         for (int i = 0; i < customer.favoriteVideos.size(); i++) {
@@ -275,8 +284,4 @@ public class CustomerManager {
         DataManager.getInstance().commit();
     }
 
-
-    public static void main(String[] args) throws Exception {
-        //addFavoriteVideo("cs2", "v001");
-    }
 }

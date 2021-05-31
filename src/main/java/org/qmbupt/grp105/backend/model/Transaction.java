@@ -4,6 +4,11 @@ import com.alibaba.fastjson.annotation.JSONField;
 
 import java.util.Date;
 
+/**
+ * class for transaction
+ * @author Lingsong Feng
+ * @version 5.3
+ */
 public class Transaction {
     @JSONField(name = "transactionId")
     public String transactionId;

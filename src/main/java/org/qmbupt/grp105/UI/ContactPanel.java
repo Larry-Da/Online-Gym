@@ -6,11 +6,16 @@ import org.qmbupt.grp105.UI.MyUIComponent.MenuBar;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.net.URL;
 
+/**
+ * <p>This class is used for the user to submit advice to the gym system, and the administrator can see
+ * it in the administrator page</p>
+ * @author daliangrun
+ * @version 5.3
+ */
 public class ContactPanel extends JLayeredPane
 {
     public static MyReminder reminder;

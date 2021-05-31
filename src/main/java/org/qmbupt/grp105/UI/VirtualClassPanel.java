@@ -16,6 +16,11 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.plaf.basic.BasicSliderUI;
 
+/**
+ * <p>Showing all the videos. And customer can search, comment and sort videos here</p>
+ * @author daliangrun
+ * @version 5.3
+ */
 public class VirtualClassPanel extends JPanel
 {
     private SearchPanel searchPanel;
@@ -47,6 +52,10 @@ public class VirtualClassPanel extends JPanel
         searchCards.show(contentPanel, "categoryPanel");
 
     }
+
+    /**
+     * show the top 4 hottest video
+     */
     public void updateHotVideo()
     {
         searchCards.show(contentPanel, "searchPanel");
@@ -54,6 +63,11 @@ public class VirtualClassPanel extends JPanel
     }
 }
 
+/**
+ * Showing 6 categories for the customer to choose.
+ * @author daliangrun
+ * @version 5.3
+ */
 class CategoryPanel extends JPanel
 {
     public CategoryPanel(CardLayout cards, JPanel contentPanel, SearchPanel searchPanel) {
@@ -150,6 +164,12 @@ class CategoryPanel extends JPanel
 
     }
 }
+
+/**
+ * <p>search panel is used for the customer to enter key words and give filter conditions</p>
+ * @author daliangrun
+ * @version 5.3
+ */
 class SearchPanel extends JPanel
 {
     private int pageMax;
@@ -203,6 +223,11 @@ class SearchPanel extends JPanel
 
 
     }
+
+    /**
+     * set category to be shown
+     * @param cate category
+     */
     public void setCate(String cate)
     {
         int cnt = 0;
@@ -215,6 +240,10 @@ class SearchPanel extends JPanel
             cnt++;
         }
     }
+
+    /**
+     * show the hottest videos in the search result
+     */
     public void updateHottestVideos()
     {
         ArrayList<Video> hot = VideoController.getController().getHotVideo(4);
@@ -232,6 +261,10 @@ class SearchPanel extends JPanel
         }
         resultCards.first(resultContentPanel);
     }
+
+    /**
+     * update the search result by keywords, filter condition.
+     */
     public void updateRes()
     {
         String key = searchBar.getText();
@@ -281,6 +314,12 @@ class SearchPanel extends JPanel
 
     }
 }
+
+/**
+ * <p>It is used to show the search result that customers want to see</p>
+ * @author daliangrun
+ * @version 5.3
+ */
 class SearchResultPanel extends JPanel
 {
     public SearchResultPanel(ArrayList<Video> videos, int pageMax, CardLayout resultCards, JPanel resultContentPanel, CardLayout cards, MainPanel mainPanel, int page)

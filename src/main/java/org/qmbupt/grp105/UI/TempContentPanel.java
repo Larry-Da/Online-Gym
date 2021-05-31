@@ -13,6 +13,12 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+/**
+ * <p>It is used to show some temporary page, for example, live session, video,
+ * register and email details.</p>
+ * @author daliangrun
+ * @version 5.3
+ */
 public class TempContentPanel extends JPanel
 {
     private JPanel contentContainer;
@@ -66,6 +72,11 @@ public class TempContentPanel extends JPanel
 
 
     }
+
+    /**
+     * It is used to inject a register page
+     * @param type indicates register
+     */
     public void setContent(String type)
     {
         if(type.equals("register"))
@@ -74,6 +85,12 @@ public class TempContentPanel extends JPanel
             innerCards.show(contentContainer, "register");
         }
     }
+
+    /**
+     * Inject a email
+     * @param type indicates email
+     * @param email email that we want to show.
+     */
     public void setContent(String type, Mail email)
     {
         if(type.equals("emailRead"))
@@ -103,6 +120,12 @@ public class TempContentPanel extends JPanel
             }
         }
     }
+
+    /**
+     * Inject a video or a live session to be shown
+     * @param type indicates video or live session
+     * @param id video or live id
+     */
     public void setContent(String type, String id)
     {
         updateUI();
