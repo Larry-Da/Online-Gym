@@ -2,6 +2,11 @@ package org.qmbupt.grp105.backend.model;
 import com.alibaba.fastjson.annotation.JSONField;
 import java.util.Date;
 
+/**
+ * class for session
+ * @author Lingsong Feng
+ * @version 5.3
+ */
 public class Session {
 
     @JSONField(name = "sessionId")
