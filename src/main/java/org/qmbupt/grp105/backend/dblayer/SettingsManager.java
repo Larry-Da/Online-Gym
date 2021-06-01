@@ -13,9 +13,9 @@ import org.qmbupt.grp105.backend.model.Setting;
 public class SettingsManager {
     /**
      * get fields of a setting
-     * @param setting_name
-     * @return
-     * @throws IOException
+     * @param setting_name  setting_name
+     * @return Arraylist of string
+     * @throws IOException IOException
      */
     public static ArrayList<String> getSetting(String setting_name) throws IOException {
         ArrayList<Setting> settings =  DataManager.getInstance().settings;

@@ -15,9 +15,9 @@ public class SessionManager {
 
     /**
      * get a MUTABLE reference of a Session specified by sessionId
-     * @param sessionId
+     * @param sessionId sessionId
      * @return reference of that session
-     * @throws IOException
+     * @throws IOException IOException
      */
     public static Session getSessionById(String sessionId) throws IOException {
         ArrayList<Session> sessions = DataManager.getInstance().sessions;
@@ -31,8 +31,8 @@ public class SessionManager {
 
     /**
      * add a session with auto-generated sessionId
-     * @param session
-     * @throws IOException
+     * @param session session
+     * @throws IOException IOException
      */
     public static void addSession(Session session) throws IOException {
         session.sessionId = getNextId();
@@ -43,7 +43,7 @@ public class SessionManager {
     /**
      * get all sessionIds of sessions
      * @return array of sessionIds
-     * @throws IOException
+     * @throws IOException IOException
      */
     public static ArrayList<String> getSessionIds() throws IOException {
         ArrayList<String> ret = new ArrayList<>();
@@ -56,9 +56,9 @@ public class SessionManager {
 
     /**
      * get CusIds who booked thhe specified session
-     * @param sessionId
+     * @param sessionId sessionId
      * @return array of CusId
-     * @throws IOException
+     * @throws IOException IOException
      */
     public static ArrayList<String> getCusIdsBySessionId(String sessionId) throws IOException {
         ArrayList<Customer> customers = DataManager.getInstance().customers;
@@ -73,7 +73,9 @@ public class SessionManager {
 
     /**
      * remove session by its id
+     * @param sessionId sessionId
      * @return succeed or not
+     * @throws IOException IOException
      */
     public static boolean removeSession(String sessionId) throws IOException {
         ArrayList<Session> sessions = DataManager.getInstance().sessions;
@@ -90,7 +92,9 @@ public class SessionManager {
 
     /**
      * update session information
+     * @param newSession newSession
      * @return succeed or not
+     * @throws IOException IOException
      */
     public static boolean updateSession(Session newSession) throws IOException {
         ArrayList<Session> sessions = DataManager.getInstance().sessions;
@@ -108,8 +112,8 @@ public class SessionManager {
 
     /**
      * get all sessions
-     * @return
-     * @throws IOException
+     * @return arraylist of session
+     * @throws IOException IOException
      */
     public static ArrayList<Session> getAllSessions() throws IOException {
         return DataManager.getInstance().sessions;
@@ -123,7 +127,7 @@ public class SessionManager {
     /**
      * generate next session id
      * @return next session id
-     * @throws IOException
+     * @throws IOException IOException
      */
     private static String getNextId() throws IOException {
         ArrayList<String> ids = getSessionIds();

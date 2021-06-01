@@ -17,7 +17,7 @@ public class DataManager {
     /**
      * get the unique instance of DataManager
      * @return reference of DataManager object
-     * @throws IOException
+     * @throws IOException IOException
      */
     public static DataManager getInstance() throws IOException {
         if (instance == null) {
@@ -36,7 +36,7 @@ public class DataManager {
 
     /**
      * DataManager constructor
-     * @throws IOException
+     * @throws IOException IOException
      */
     private DataManager() throws IOException {
 
@@ -54,7 +54,7 @@ public class DataManager {
 
     /**
      * write all data from memory into disk (files)
-     * @throws IOException
+     * @throws IOException IOException
      */
     public void commit() throws IOException {
         IO.write("customer.json",    JSON.toJSONString(customers));

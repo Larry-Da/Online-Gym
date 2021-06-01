@@ -17,7 +17,7 @@ public class MailManager {
      * get mails by receiver's id
      * @param id receiver's id
      * @return an array of mails
-     * @throws IOException
+     * @throws IOException IOException
      */
     public static ArrayList<Mail> getMailsById(String id) throws IOException {
         ArrayList<Mail> ret = new ArrayList<>();
@@ -34,10 +34,10 @@ public class MailManager {
 
     /**
      * write a mail
-     * @param fromId
-     * @param toId
-     * @param content
-     * @throws IOException
+     * @param fromId fromId
+     * @param toId toId
+     * @param content content
+     * @throws IOException IOException
      */
     public static void writeMail(String fromId, String toId, String content) throws IOException {
 

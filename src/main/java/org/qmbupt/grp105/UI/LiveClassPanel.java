@@ -451,7 +451,7 @@ class LiveDetailPanel extends JPanel
     /**
      * <p>Once we need to change the live session, we do not need to create a new panel.
      * All we need to do is use this method to update the new live session</p>
-     * @param currentLive
+     * @param currentLive live we will inject
      */
     public void setCurrentLive(LiveSession currentLive) {
         if(!isAdding) {

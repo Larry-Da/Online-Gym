@@ -11,9 +11,9 @@ public class IO {
 
     /**
      * read file from disk
-     * @param fileName
+     * @param fileName fileName
      * @return the content of that file
-     * @throws IOException
+     * @throws IOException IOException
      */
     protected static String read(String fileName) throws IOException {
         try (
@@ -32,9 +32,9 @@ public class IO {
 
     /**
      * write to disk
-     * @param fileName
+     * @param fileName fileName
      * @param str content of file
-     * @throws IOException
+     * @throws IOException IOException
      */
     protected static void write(String fileName, String str) throws IOException {
         File file = new File("./db/" + fileName);

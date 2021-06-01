@@ -5,7 +5,7 @@ import org.qmbupt.grp105.Entity.Customer;
 import java.util.ArrayList;
 
 /**
- * @Version 5.3
+ * @version 5.3
  * @author Liangrun Da
  */
 public interface AdminUtils {

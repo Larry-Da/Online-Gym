@@ -14,9 +14,9 @@ public class CoachManager {
 
     /**
      * get a Coach object by its id
-     * @param coachId
+     * @param coachId coachId
      * @return the reference of that Coach object
-     * @throws IOException
+     * @throws IOException IOException
      */
     public static Coach getCoachById(String coachId) throws IOException {
         ArrayList<Coach> coaches = DataManager.getInstance().coaches;
@@ -32,7 +32,7 @@ public class CoachManager {
     /**
      * return an array of coaches
      * @return array of coaches
-     * @throws IOException
+     * @throws IOException IOException
      */
     public static ArrayList<Coach> getAllCoaches() throws IOException {
         return DataManager.getInstance().coaches;
@@ -40,8 +40,8 @@ public class CoachManager {
 
     /**
      * write (add and modify) coach information into file
-     * @param coach
-     * @throws IOException
+     * @param coach coach
+     * @throws IOException IOException
      */
     public static void writeCoachInfo(Coach coach) throws IOException {
         ArrayList<Coach> coaches = DataManager.getInstance().coaches;

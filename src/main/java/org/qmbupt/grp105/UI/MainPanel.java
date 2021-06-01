@@ -62,7 +62,7 @@ public class MainPanel extends JPanel
     }
 
     /**
-     * <p>It is need to show the video detail & live session detail by invoking this
+     * <p>It is need to show the video detail and live session detail by invoking this
      * method</p>
      * @param content "live" if showing live session, "video" if showing videos
      * @param id live or video id that needs to be shown

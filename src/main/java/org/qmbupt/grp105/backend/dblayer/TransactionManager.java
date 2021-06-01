@@ -17,7 +17,7 @@ public class TransactionManager {
      * get income group by month
      * @param month number of month (from 1 to 12)
      * @return the income of that month
-     * @throws IOException
+     * @throws IOException IOException
      */
     public static int getMonthlyIncome(int month) throws IOException {
         int ret = 0;
@@ -35,8 +35,8 @@ public class TransactionManager {
 
     /**
      * write a transaction into file. The number of transaction is automatically allocated
-     * @param transaction
-     * @throws IOException
+     * @param transaction transaction
+     * @throws IOException IOException
      */
     public static void writeTransaction(Transaction transaction) throws IOException {
         transaction.transactionId = getNextTransactionId();
@@ -47,7 +47,7 @@ public class TransactionManager {
     /**
      * generate the next number of transaction
      * @return next number of transaction
-     * @throws IOException
+     * @throws IOException IOException
      */
     public static String getNextTransactionId() throws IOException {
         ArrayList<Transaction> transactions = DataManager.getInstance().transactions;

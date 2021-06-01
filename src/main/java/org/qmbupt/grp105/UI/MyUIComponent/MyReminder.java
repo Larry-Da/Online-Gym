@@ -34,7 +34,7 @@ public class MyReminder
 
     /**
      * Showing red alert message
-     * @param message
+     * @param message message to be shown
      */
     public void WRONG(String message)
     {

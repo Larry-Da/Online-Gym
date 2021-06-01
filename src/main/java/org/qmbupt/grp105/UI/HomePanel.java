@@ -18,7 +18,7 @@ import java.util.Date;
 
 /**
  * <p>This class is the first page of GUI. Once the user open this application,
- * he will see the homepage. Also, homepage contains two buttons, which is register &
+ * he will see the homepage. Also, homepage contains two buttons, which is register and
  * top 5 hottest videos</p>
  * @version 5.3
  * @author daliangrun
@@ -92,7 +92,7 @@ public class HomePanel extends JLayeredPane
 
 /**
  * <p>This class is used to register a customer account. Many data fields will be presented
- * in this page and the customer can enter those data fields & save the data.</p>
+ * in this page and the customer can enter those data fields and save the data.</p>
  * @version 5.3
  * @author daliangrun
  */

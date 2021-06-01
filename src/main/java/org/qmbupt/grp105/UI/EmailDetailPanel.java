@@ -72,8 +72,8 @@ public class EmailDetailPanel extends JPanel
     /**
      * <p>To change the email content of this page, we do not need to load this page again.
      * Instead, just use setEmail method so that the email content can be changed.</p>
-     * @param email
-     * @param writeable
+     * @param email email injected
+     * @param writeable true if writeable
      */
     public void setEmail(Mail email, boolean writeable)
     {

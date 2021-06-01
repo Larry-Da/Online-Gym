@@ -8,7 +8,7 @@ import javax.swing.*;
 /**
  * <p>The text that can change style and dynamic showing different text</p>
  * @author daliangrun
- * @verision 5.3
+ * @version 5.3
  */
 public class DynamicText extends MyLabelComponent
 {

@@ -14,8 +14,8 @@ public class VideoManager {
 
     /**
      * write (add and modify) video information into disk
-     * @param video
-     * @throws IOException
+     * @param video video
+     * @throws IOException IOException
      */
     public static void writeVideoInfo(Video video) throws IOException {
         writeOrDeleteVideo(video, null);
@@ -23,8 +23,8 @@ public class VideoManager {
 
     /**
      * delete an video from disk
-     * @param videoId
-     * @throws IOException
+     * @param videoId videoId
+     * @throws IOException  IOException
      */
     public static void deleteVideo(String videoId) throws IOException {
         writeOrDeleteVideo(null, videoId);
@@ -32,9 +32,9 @@ public class VideoManager {
 
     /**
      * get an video by its id
-     * @param videoId
+     * @param videoId videoId
      * @return the reference of that Video object
-     * @throws IOException
+     * @throws IOException IOException
      */
     public static Video getVideoById(String videoId) throws IOException {
         ArrayList<Video> videos = DataManager.getInstance().videos;
@@ -49,7 +49,7 @@ public class VideoManager {
     /**
      * get all videos
      * @return an array of videos
-     * @throws IOException
+     * @throws IOException IOException
      */
     public static ArrayList<Video> getVideos() throws IOException {
         return DataManager.getInstance().videos;
@@ -57,9 +57,9 @@ public class VideoManager {
     
     /**
      * write or delete video
-     * @param video
-     * @param videoId
-     * @throws IOException
+     * @param video video
+     * @param videoId videoId
+     * @throws IOException IOException
      */
     private static void writeOrDeleteVideo(Video video, String videoId) throws IOException {
         if (video != null) videoId = video.videoId;

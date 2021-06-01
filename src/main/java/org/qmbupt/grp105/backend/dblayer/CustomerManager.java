@@ -22,10 +22,10 @@ public class CustomerManager {
      */
     /**
      * increase customer's balance
-     * @param cusId
-     * @param addition
+     * @param cusId cusId
+     * @param addition addition
      * @return the actual balance increased. If the value doesn't match the addition, it indicates the operation failed.
-     * @throws IOException
+     * @throws IOException IOException
      */
     public static int increaseBalance(String cusId, int addition) throws IOException {
 
@@ -44,10 +44,10 @@ public class CustomerManager {
 
     /**
      * decrease customer's balance
-     * @param cusId
-     * @param reduction
+     * @param cusId cusId
+     * @param reduction reduction
      * @return the actual balance decreased. If the value doesn't match the reduction, it indicates the operation failed.
-     * @throws IOException
+     * @throws IOException IOException
      */
     public static int decreaseBalance(String cusId, int reduction) throws IOException {
 
@@ -74,9 +74,9 @@ public class CustomerManager {
      */
     /**
      * add a video to customer's videosHistory
-     * @param cusId
-     * @param videoId
-     * @throws IOException
+     * @param cusId cusId
+     * @param videoId videoId
+     * @throws IOException IOException
      */
     public static void addVideoHistory(String cusId, String videoId) throws IOException {
 
@@ -89,9 +89,9 @@ public class CustomerManager {
 
     /**
      * watching a video involves (1) increasing viewsCount of a video and (2) add that video to customer's videosHistory
-     * @param cusId
-     * @param videoId
-     * @throws IOException
+     * @param cusId cusId
+     * @param videoId videoId
+     * @throws IOException IOException
      */
     public static void watchVideo(String cusId, String videoId) throws IOException {
 
@@ -102,9 +102,9 @@ public class CustomerManager {
 
     /**
      * add a video to favorites
-     * @param cusId
-     * @param videoId
-     * @throws IOException
+     * @param cusId cusId
+     * @param videoId videoId
+     * @throws IOException IOException
      */
     public static void addFavoriteVideo(String cusId, String videoId) throws IOException {
         Customer customer = getCustomerById(cusId);
@@ -120,9 +120,9 @@ public class CustomerManager {
 
     /**
      * remove a stored video in customer's favorite videos
-     * @param cusId
-     * @param videoId
-     * @throws IOException
+     * @param cusId cusId
+     * @param videoId videoId
+     * @throws IOException IOException
      */
     public static void removeFavoriteVideo(String cusId, String videoId) throws IOException {
         Customer customer = getCustomerById(cusId);
@@ -142,9 +142,9 @@ public class CustomerManager {
      */
     /**
      * book a specified session for a customer
-     * @param cusId
-     * @param sessionId
-     * @throws IOException
+     * @param cusId cusId
+     * @param sessionId sessionId
+     * @throws IOException IOException
      */
     public static boolean bookSession(String cusId, String sessionId) throws IOException {
 
@@ -200,8 +200,9 @@ public class CustomerManager {
      */
     /**
      * extend customer's membership for 30 days by reducing 100 of balance
-     * @param cusId
+     * @param cusId cusId
      * @return does operation succeed
+     * @throws IOException IOException
      */
     public static boolean extendMembership(String cusId) throws IOException {
         int reduceMount = 100;
@@ -250,9 +251,9 @@ public class CustomerManager {
      */
     /**
      * get a MUTABLE reference of a customer specified by cusId
-     * @param cusId
+     * @param cusId cusId
      * @return reference of that customer
-     * @throws IOException
+     * @throws  IOException IOException
      */
     public static Customer getCustomerById(String cusId) throws IOException {
         ArrayList<Customer> customers = DataManager.getInstance().customers;
@@ -266,8 +267,8 @@ public class CustomerManager {
 
     /**
      * create or modify a customer's information
-     * @param customer
-     * @throws IOException
+     * @param customer customer
+     * @throws IOException IOException
      */
     public static void writeCustomerInfo(Customer customer) throws IOException {
         ArrayList<Customer> customers = DataManager.getInstance().customers;

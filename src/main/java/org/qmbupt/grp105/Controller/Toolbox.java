@@ -8,8 +8,8 @@ import java.util.regex.*;
 import static org.qmbupt.grp105.Controller.PersonalController.getController;
 
 /**
- * @Version 5.3
- * @Author Liangrun Da
+ * @version 5.3
+ * @author Liangrun Da
  */
 public class Toolbox implements ToolRequired
 {
@@ -27,10 +27,10 @@ public class Toolbox implements ToolRequired
 
     /**
      * <p>
-     *
+     * isDataFormat
      * </p>
-     * @param date
-     * @return
+     * @param date date
+     * @return boolean
      */
     public boolean isDateForm1(String date)
     {
@@ -134,7 +134,7 @@ public class Toolbox implements ToolRequired
      * <p>
      *     Check whether the coachID belongs to the system coach list
      * </p>
-     * @param coachID
+     * @param coachID coachID
      * @return True for valid input, False for invalid input
      */
     public boolean isCoachID(String coachID)

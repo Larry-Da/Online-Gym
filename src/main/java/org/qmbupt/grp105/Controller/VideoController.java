@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.*;
 
 /**
- * @Version 5.3
+ * @version 5.3
  * @author Wenrui Zhao
  */
 public class VideoController {
@@ -191,7 +191,6 @@ public class VideoController {
      *     Add a new video
      * </p>
      * @param video A video entity
-     * @return Return true if add successfully, otherwise return false
      */
     public void AddVideo(Video video) {
         int num = getAllVideos().size();
@@ -224,7 +223,6 @@ public class VideoController {
      *     Modify a given video
      * </p>
      * @param video A modified video entity
-     * @return  Return true if modification works, otherwise return false
      */
     public void modifyVideo(Video video) {
         try {

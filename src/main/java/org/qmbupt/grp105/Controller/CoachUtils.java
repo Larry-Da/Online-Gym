@@ -3,7 +3,7 @@ package org.qmbupt.grp105.Controller;
 import org.qmbupt.grp105.Entity.Coach;
 
 /**
- * @Version 5.3
+ * @version 5.3
  * @author Wenrui Zhao
  */
 public interface CoachUtils {

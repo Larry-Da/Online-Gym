@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * @Version 5.3
+ * @version 5.3
  * @author Wenrui Zhao
  */
 public interface LiveUtils {

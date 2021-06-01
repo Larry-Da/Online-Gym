@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 /**
- * @Version 5.3
+ * @version 5.3
  * @author Wenrui Zhao
  */
 public interface CustomerUtils
