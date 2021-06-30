@@ -25,9 +25,8 @@ import java.util.ArrayList;
  */
 public class VideoPlayerPanel extends JPanel
 {
-    private CallbackMediaPlayerComponent mediaPlayerComponent;
+    //private CallbackMediaPlayerComponent mediaPlayerComponent;
     private TextButton pauseButton;
-    private String path = "/Users/daliangrun/Downloads/vue-vr/demos/assets/ClashofClans.mp4";
     private Video currentVideo;
     private ArrayList<InputArea> commentList = new ArrayList<>();
     private JPanel commentPanel;
@@ -46,9 +45,9 @@ public class VideoPlayerPanel extends JPanel
         videoPanel.setBounds(10, 10,videoPanelWidth, videoPanelHeight);
         videoPanel.setLayout(null);
 
-        mediaPlayerComponent = new CallbackMediaPlayerComponent();
-        videoPanel.add(mediaPlayerComponent);
-        mediaPlayerComponent.setBounds(0, 0, videoPanelWidth, (int)(videoPanelHeight / 10.0 * 9));
+//        mediaPlayerComponent = new CallbackMediaPlayerComponent();
+//        videoPanel.add(mediaPlayerComponent);
+//        mediaPlayerComponent.setBounds(0, 0, videoPanelWidth, (int)(videoPanelHeight / 10.0 * 9));
         JPanel controlsPane = new JPanel();
         controlsPane.setBounds(0, (int)(videoPanelHeight / 10.0 * 9), videoPanelWidth, (int)(videoPanelHeight / 10.0));
         controlsPane.setLayout(null);
@@ -63,7 +62,7 @@ public class VideoPlayerPanel extends JPanel
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                mediaPlayerComponent.mediaPlayer().controls().play();
+                //mediaPlayerComponent.mediaPlayer().controls().play();
             }
         });
         PicButton pauseButton = new PicButton(UIStyle.VirtualClass_pause,(int)(buttonWidth * 2.5), (int)(videoPanelHeight / 10.0 /2), buttonWidth, buttonHeight);
@@ -72,8 +71,8 @@ public class VideoPlayerPanel extends JPanel
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                if(mediaPlayerComponent.mediaPlayer().status().isPlaying())
-                    mediaPlayerComponent.mediaPlayer().controls().pause();
+//                if(mediaPlayerComponent.mediaPlayer().status().isPlaying())
+//                    mediaPlayerComponent.mediaPlayer().controls().pause();
             }
         });
 
@@ -108,7 +107,7 @@ public class VideoPlayerPanel extends JPanel
         });
 
         videoPanel.add(controlsPane);
-        mediaPlayerComponent.mediaPlayer().media().startPaused(path);
+//        mediaPlayerComponent.mediaPlayer().media().startPaused(path);
         this.setVisible(true);
         this.add(videoPanel);
 
